@@ -23,3 +23,13 @@ html, body, #root {
   margin: 0;
   padding: 0;
 }
+
+/* 스크롤바 숨김 (*/
+.scrollbar-hide {
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; 
+}
