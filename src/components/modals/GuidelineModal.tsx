@@ -4,8 +4,8 @@ interface GuidelineModalProps {
 
 function GuidelineModal({ onClose }: GuidelineModalProps) {
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/30 "> {/* 모달 배경 + 가운데 정렬*/}
-      <div className="max-w-[40vh] max-h-[80vh] overflow-y-auto rounded-2xl bg-white p-8 leading-relaxed border shadow-xl
+    <div className="fixed inset-0 z-1000 flex items-center justify-center bg-black/30 "> 
+      <div className="max-w-[60vh] max-h-[80vh] overflow-y-auto rounded-2xl bg-white p-8 leading-relaxed border shadow-xl
 ">
 
 
