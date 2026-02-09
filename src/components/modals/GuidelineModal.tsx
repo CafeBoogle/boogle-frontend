@@ -5,7 +5,8 @@ interface GuidelineModalProps {
 function GuidelineModal({ onClose }: GuidelineModalProps) {
   return (
     <div className="fixed inset-0 z-1000 flex items-center justify-center bg-black/30">
-      <div className="scrollbar-hide max-w-[60vh] max-h-[80vh] overflow-y-auto rounded-2xl bg-white p-10 border shadow-xl">
+      <div className="scrollbar-hide max-w-[60vh] max-h-[80vh] overflow-y-auto rounded-2xl bg-white px-10 pt-16 pb-10 border shadow-xl">
+
         {/* Title */}
         <h2 className="mb-10 text-center text-2xl font-semibold text-brown-4 leading-snug">
           행복한 카페 문화를 만들기 위한 <br />
