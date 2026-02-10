@@ -1,12 +1,15 @@
 import { useNavigate } from "react-router-dom";
 
-function CategoryPage () {
+function CategoryPage() {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <button onClick={() => navigate("/filter")}>
-         선택 완료 (이후 세부 분류 페이지로 이동)
+    <div className="min-h-screen  flex flex-col items-center justify-center px-6 py-12">
+      <button
+        className="px-4 py-2 bg-black text-white rounded-md"
+        onClick={() => navigate("/filter")}
+      >
+        선택 완료
       </button>
     </div>
   );
