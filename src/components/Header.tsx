@@ -10,7 +10,7 @@ export default function Header() {
     <header className="h-14 px-4 flex items-center justify-between bg-[#EEE9E5]">
       <div
         className="flex items-center gap-3 cursor-pointer"
-        onClick={() => navigate('/mainpage')}
+        onClick={() => navigate('/')}
       >
         <img src={mainLogo} alt="Boogle Logo" className="h-7" />
         <span className="text-lg font-bold tracking-tight">Boogle</span>
