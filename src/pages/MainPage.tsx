@@ -21,7 +21,7 @@ export default function MainPage() {
           신촌 및 홍대 지역 대학생을 위한 <br />
           맞춤형 카페 추천 서비스
         </p>
-        <Button size = "large" onClick={() => navigate("/filter")}>
+        <Button size = "large" onClick={() => navigate("/category")}>
          로그인하기
         </Button>
       </div>
