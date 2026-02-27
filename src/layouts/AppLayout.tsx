@@ -1,7 +1,7 @@
 // 화면 프레임 / 모바일 폭 / 공통 UI 제공하는 역할 
 
 import type { ReactNode } from 'react';
-import Header from '../components/Header';
+import Header from './Header';
 
 interface AppLayoutProps {
   children: ReactNode;
