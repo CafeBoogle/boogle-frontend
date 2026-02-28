@@ -67,7 +67,7 @@ function SignUp() {
         />
       </div>
 
-      <Button size = "large" variant="brown4" onClick={handleSignUp}>
+      <Button size = "lg" variant="brown4" onClick={handleSignUp}>
         회원가입하기
       </Button>
     </div>

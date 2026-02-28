@@ -15,8 +15,11 @@ const buttonVariants = cva(
         brown6: 'bg-brown-6 hover:opacity-90 text-white',
       },
       size: {
-        normal: 'px-8 py-3 text-body-medium',
-        large: 'px-15 py-3 text-body-large',
+        xs: 'px-3 py-1 text-xs',
+        sm: 'px-4 py-2 text-sm',
+        md: 'px-8 py-3 text-body-medium', // 기존 normal
+        lg: 'px-12 py-4 text-body-large',
+        full: 'w-full py-4 text-body-large',
       },
       textColor: {
         white: 'text-white',
@@ -25,7 +28,7 @@ const buttonVariants = cva(
     },
     defaultVariants: {
       variant: 'brown2', 
-      size: 'normal',
+      size: 'md',
       textColor: 'white',
     },
   }
