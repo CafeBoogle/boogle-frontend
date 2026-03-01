@@ -53,7 +53,7 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center px-6 py-8">
-      <h1 className="text-3xl font-semibold text-center mt-8 mb-16">
+      <h1 className="text-2xl font-semibold text-center mt-8 mb-12 text-brown-4">
         원하는 지역을 선택해주세요 !
       </h1>
 
@@ -104,9 +104,9 @@ export default function CategoryPage() {
       </div>
 
       <Button
-        size="large"
+        size="full"
         textColor="white"
-        className="mt-20"
+        className="mt-15 text-lg"        
         onClick={() => navigate("/filter", { state: { region: selected } })}
       >
         선택 완료

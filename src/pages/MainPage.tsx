@@ -30,12 +30,11 @@ export default function MainPage() {
           </p>
         </div>
 
-        {/* 4. 버튼 섹션: 아래쪽에 배치하여 시각적 여유 제공 */}
         <div className="w-full max-w-[320px] mt-15">
           <Button 
-            size="large" 
+            size="full" 
             onClick={() => navigate(isLoggedIn ? "/category" : "/loginpage")}
-            className="w-full text-xl shadow-lg shadow-brown-200/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            className = "text-lg"
           >
             {isLoggedIn ? "오늘의 공간 찾기" : "로그인하기"}
           </Button>
