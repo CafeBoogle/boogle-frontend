@@ -18,10 +18,10 @@ export default function CafeCard({ cafe }: CafeCardProps) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between gap-4">
-        <div className="flex flex-col gap-2 flex-1">
+        <div className="flex flex-col gap-3 flex-1">
           <div
             onClick={() => navigate(`/cafe/${cafe.name}`)}
-            className="cursor-pointer"
+            className="cursor-pointer font-bold"
           >
             {cafe.name}
           </div>
@@ -40,7 +40,7 @@ export default function CafeCard({ cafe }: CafeCardProps) {
           </div>
         </div>
 
-        <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+        <div className="w-24 h-24 rounded-lg overflow-hidden ">
           <img
             src={cafe.imageUrl}
             alt={cafe.name}
@@ -49,7 +49,7 @@ export default function CafeCard({ cafe }: CafeCardProps) {
         </div>
       </div>
 
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-3 items-center">
         <span className="text-sm font-bold shrink-0">한줄리뷰</span>
         <span className="text-sm text-gray-700 truncate">{cafe.review}</span>
       </div>
