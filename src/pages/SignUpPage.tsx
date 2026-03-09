@@ -1,77 +1,124 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "@/components/common/Button";
+import React, { useState, ChangeEvent } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom'; // useLocation 추가
+import axiosInstance from '@/api/axios';
+import { useAuth } from '@/contexts/AuthContext';
 
-import sogangCat from "../assets/images/SignUp/sogangCat.png";
-import yonseiCat from "../assets/images/SignUp/yonseiCat.png";
-import hongikCat from "../assets/images/SignUp/hongikCat.png";
-import ewhaCat from "../assets/images/SignUp/ewhaCat.png";
+const SignUpPage: React.FC = () => {
+  const [nickname, setNickname] = useState<string>('');
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
 
-function SignUp() {
-  const [selected, setSelected] = useState<string | null>(null);
-  const [nickname, setNickname] = useState("");
   const navigate = useNavigate();
+  const location = useLocation(); // URL 정보를 가져옴
+  const { checkAuth } = useAuth();
 
-  const cats = [
-    { id: "SG", src: sogangCat, alt: "서강대" },
-    { id: "Y", src: yonseiCat, alt: "연세대" },
-    { id: "H", src: hongikCat, alt: "홍익대" },
-    { id: "E", src: ewhaCat, alt: "이화여대" },
-  ];
+  const queryParams = new URLSearchParams(location.search);
+  const provider = queryParams.get('provider'); // NAVER 또는 KAKAO
+  const providerUserId = queryParams.get('userId');
 
-  const handleSignUp = () => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.size > 10 * 1024 * 1024) {
+        alert('파일이 너무 커요! 10MB 이하로 올려주세요.');
+        return;
+      }
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewUrl(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSignUpSubmit = async () => {
     if (!nickname.trim()) {
-      alert("닉네임을 입력해주세요!");
+      alert('닉네임을 입력해주세요.');
       return;
     }
-    navigate("/");
+
+    // provider 정보가 없으면 비정상적인 접근
+    if (!provider || !providerUserId) {
+      alert('인증 정보가 만료되었습니다. 다시 로그인해주세요.');
+      navigate('/login');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('nickname', nickname);
+    if (profileImage) {
+      formData.append('profileImage', profileImage);
+    }
+
+    // 2. 동적으로 읽어온 정보 전달
+    formData.append('provider', provider);
+    formData.append('providerUserId', providerUserId);
+
+    try {
+      await axiosInstance.post('/api/signup', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      alert('가입이 완료되었습니다!');
+      await checkAuth(); // 로그인 상태 갱신
+      navigate('/');
+    } catch (err) {
+      console.error('회원가입 요청 실패:', err);
+      alert('가입에 실패했습니다.');
+    }
   };
 
   return (
-    <div className="min-h-screen  flex flex-col items-center px-12 py-10">
-      <h1 className="text-3xl font-bold text-[#160101] mb-12">간편 회원가입</h1>
-      <div className="w-full max-w-sm mb-12">
-        <h2 className="text-xl font-bold text-[#4A3A2E] mb-2">학교 선택하기</h2>
-        <p className="text-sm text-[#8C7A6B] mb-8">
-          선택하지 않으면 기본 캐릭터로 설정됩니다 !
-        </p>
+    <div style={{ padding: '20px', textAlign: 'center' }}>
+      <h2>추가 정보 입력</h2>
+      <p>서비스 이용을 위해 정보를 입력해주세요.</p>
 
-        <div className="grid grid-cols-2 gap-6 mt-14">
-          {cats.map((cat) => (
-            <div
-              key={cat.id}
-              onClick={() => setSelected(cat.id)}
-              className={`relative cursor-pointer transition-all duration-200 
-                ${selected === cat.id ? "scale-112" : "hover:opacity-80"}
-              `}
-            >
-              <img
-                src={cat.src}
-                alt={cat.alt}
-                className={`w-full h-auto rounded-2xl ${
-                  selected === cat.id ? "border-[#A68966]" : "border-transparent"
-                }`}
-              />
-            </div>
-          ))}
+      <div style={{ marginBottom: '20px' }}>
+        <div
+          style={{
+            width: '100px',
+            height: '100px',
+            borderRadius: '50%',
+            backgroundColor: '#eee',
+            margin: '0 auto',
+            overflow: 'hidden',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {previewUrl ? (
+            <img
+              src={previewUrl}
+              alt="Preview"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          ) : (
+            <span style={{ fontSize: '12px', color: '#999' }}>이미지 없음</span>
+          )}
         </div>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          style={{ marginTop: '10px' }}
+        />
       </div>
 
-      <div className="w-full max-w-sm mb-12">
+      <div style={{ marginBottom: '20px' }}>
         <input
           type="text"
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
-          className="w-full bg-transparent border-b-2 border-[#8C7A6B] py-2 outline-none text-center text-sm text-[#4A3A2E]"
-          placeholder="Boogle에서 사용할 닉네임을 입력해주세요 (필수)"
+          placeholder="사용할 닉네임 입력"
+          style={{ padding: '8px', width: '200px' }}
         />
       </div>
 
-      <Button size = "lg" variant="brown4" onClick={handleSignUp}>
-        회원가입하기
-      </Button>
+      <button onClick={handleSignUpSubmit} style={{ padding: '8px 16px', cursor: 'pointer' }}>
+        가입 완료
+      </button>
     </div>
   );
-}
+};
 
-export default SignUp;
+export default SignUpPage;

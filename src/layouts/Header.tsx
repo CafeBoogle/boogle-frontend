@@ -19,7 +19,7 @@ export default function Header() {
         {user ? (
           <div className="relative group">
             <span className="cursor-pointer text-l mr-5 font-semibold text-[#30251c]">
-              {user.name} 님
+              {user.nickname} 님
             </span>
             <div
               className=" absolute right-0 top-full mt-2 w-36 bg-[#FDFCFB]  border border-[#E5DED8] 
