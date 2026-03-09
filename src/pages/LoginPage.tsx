@@ -11,14 +11,13 @@ function LoginPage() {
   }
 
   return (
-    <div style={{ padding: '50px', textAlign: 'center' }}>
-      <h2>Boogle 로그인</h2>
+    <div className="flex flex-col items-center justify-center mt-20 px-6">
+      <h2 className="text-2xl font-bold mb-8 text-brown-4">Boogle 로그인</h2>
 
-      <div style={{ marginBottom: '15px' }}>
+      <div className="flex flex-col gap-4 w-full max-w-xs">
         <KakaoLoginButton />
+        <NaverLoginButton />
       </div>
-
-      <NaverLoginButton />
     </div>
   );
 }

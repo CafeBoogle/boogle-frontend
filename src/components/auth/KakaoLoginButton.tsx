@@ -17,7 +17,7 @@ function KakaoLoginButton() {
         padding: '12px 24px',
         borderRadius: '5px',
         cursor: 'pointer',
-        width: '222px',
+        width: '100%',
         fontWeight: 'bold',
       }}
     >
