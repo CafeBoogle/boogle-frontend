@@ -1,3 +1,5 @@
+import kakaoLoginImg from '@/assets/images/login/kakao_login_medium_wide.png';
+
 const KAKAO_CLIENT_ID = 'b6638b255ebf5d503bd755eb7d27aac3';
 const KAKAO_REDIRECT_URI = 'http://localhost:8080/api/oauth/kakao/callback';
 
@@ -10,18 +12,23 @@ function KakaoLoginButton() {
 
   return (
     <button
+      type="button"
       onClick={handleKakaoLogin}
       style={{
-        backgroundColor: '#FEE500',
+        padding: 0,
         border: 'none',
-        padding: '12px 24px',
-        borderRadius: '5px',
+        borderRadius: 12,
         cursor: 'pointer',
         width: '100%',
-        fontWeight: 'bold',
+        overflow: 'hidden',
+        background: 'transparent',
       }}
     >
-      카카오로 로그인하기
+      <img
+        src={kakaoLoginImg}
+        alt="카카오 로그인"
+        style={{ display: 'block', width: '100%', height: 'auto', verticalAlign: 'middle' }}
+      />
     </button>
   );
 }

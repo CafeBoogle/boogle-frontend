@@ -11,8 +11,8 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center mt-20 px-6">
-      <h2 className="text-2xl font-bold mb-8 text-brown-4">Boogle 로그인</h2>
+    <div className="flex flex-col items-center justify-center mt-30 px-6">
+      <h2 className="text-3xl font-bold mb-10 text-brown-4">로그인하기</h2>
 
       <div className="flex flex-col gap-4 w-full max-w-xs">
         <KakaoLoginButton />
