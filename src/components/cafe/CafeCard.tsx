@@ -19,12 +19,12 @@ export default function CafeCard({ cafe }: CafeCardProps) {
     <div className="flex flex-col gap-4">
       <div className="flex justify-between gap-4">
         <div className="flex flex-col gap-2 flex-1">
-          <h3
-            onClick={() => navigate(`/cafe/${cafe.id}`)}
+          <div
+            onClick={() => navigate(`/cafe/${cafe.name}`)}
             className="cursor-pointer"
           >
             {cafe.name}
-          </h3>
+          </div>
 
           <div className="flex flex-wrap gap-2">
             {cafe.tags.map((tag, idx) => (

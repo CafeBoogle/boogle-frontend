@@ -25,7 +25,7 @@ export default function App() {
             <Route path="/category" element={<CategoryPage />} />
             <Route path="/filter" element={<FilterPage />} />
             <Route path="/cafelist" element={<CafeListPage />} />
-            <Route path="/cafe/:id" element={<CafeInfoPage />} />
+            <Route path="/cafe/:name" element={<CafeInfoPage />} />
             <Route path="/addreview" element={<AddReviewPage />} />
           </Routes>
         </AppLayout>
