@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import Button from "@/components/common/Button";
+
 import CafeCard from "@/components/cafe/CafeCard";
 
 interface LocationState {
@@ -28,6 +28,13 @@ const MOCK_CAFES = [
   {
     id: 2,
     name: "커피브레이크 서강대점2",
+    tags: ["콘센트가 있는 카페", "50석 이상 대형 카페"],
+    review: "카공하기 좋고 음료 맛있었어요",
+    imageUrl: "https://via.placeholder.com/100",
+  },
+  {
+    id: 3,
+    name: "커피브레이크 서강대점3",
     tags: ["콘센트가 있는 카페", "50석 이상 대형 카페"],
     review: "카공하기 좋고 음료 맛있었어요",
     imageUrl: "https://via.placeholder.com/100",

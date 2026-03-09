@@ -1,4 +1,5 @@
 import Button from "@/components/common/Button";
+import { useNavigate } from "react-router-dom";
 
 interface Cafe {
   id: number;
@@ -13,11 +14,17 @@ interface CafeCardProps {
 }
 
 export default function CafeCard({ cafe }: CafeCardProps) {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between gap-4">
         <div className="flex flex-col gap-2 flex-1">
-          <h3 className="text-lg font-bold">{cafe.name}</h3>
+          <h3
+            onClick={() => navigate(`/cafe/${cafe.id}`)}
+            className="cursor-pointer"
+          >
+            {cafe.name}
+          </h3>
 
           <div className="flex flex-wrap gap-2">
             {cafe.tags.map((tag, idx) => (
