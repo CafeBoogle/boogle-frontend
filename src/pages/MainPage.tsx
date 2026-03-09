@@ -1,27 +1,26 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "@/components/common/Button";
-import Logo from "@/assets/images/mainLogo.png";
-import GuidelineModal from "@/components/modals/GuidelineModal";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Button from '@/components/common/Button';
+import Logo from '@/assets/images/mainLogo.png';
+import GuidelineModal from '@/components/modals/GuidelineModal';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function MainPage() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
-  
-   {/* 로직 추가필요 */}
-  const isLoggedIn = true;
+
+  // const { user } = useAuth();
+  const user = true;
 
   return (
     <>
       {open && <GuidelineModal onClose={() => setOpen(false)} />}
       <div className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center px-10 pb-10">
         <div className="mt-50 mb-8 transform transition-transform hover:rotate-3">
-          <img src={Logo} alt="Boogle 로고"  className="w-44 drop-shadow-md"  />
+          <img src={Logo} alt="Boogle 로고" className="w-44 drop-shadow-md" />
         </div>
 
-        <h1 className="text-5xl font-extrabold text-[#4A3A2E] tracking-tight mt-5 mb-6">
-          Boogle
-        </h1>
+        <h1 className="text-5xl font-extrabold text-[#4A3A2E] tracking-tight mt-5 mb-6">Boogle</h1>
 
         <div className="text-center">
           <p className="text-lg text-[#6D5D50] font-medium leading-relaxed">
@@ -31,12 +30,12 @@ export default function MainPage() {
         </div>
 
         <div className="w-full max-w-[320px] mt-15">
-          <Button 
-            size="full" 
-            onClick={() => navigate(isLoggedIn ? "/category" : "/loginpage")}
-            className = "text-lg"
+          <Button
+            size="full"
+            onClick={() => navigate(user ? '/category' : '/loginpage')}
+            className="text-lg"
           >
-            {isLoggedIn ? "오늘의 공간 찾기" : "로그인하기"}
+            {user ? '오늘의 공간 찾기' : '로그인하기'}
           </Button>
         </div>
       </div>
