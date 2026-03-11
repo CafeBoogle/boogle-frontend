@@ -1,5 +1,5 @@
-import Button from "@/components/common/Button";
-import { useNavigate } from "react-router-dom";
+import Button from '@/components/common/Button';
+import { useNavigate } from 'react-router-dom';
 
 interface Cafe {
   id: number;
@@ -19,10 +19,7 @@ export default function CafeCard({ cafe }: CafeCardProps) {
     <div className="flex flex-col gap-4">
       <div className="flex justify-between gap-4">
         <div className="flex flex-col gap-3 flex-1">
-          <div
-            onClick={() => navigate(`/cafe/${cafe.name}`)}
-            className="cursor-pointer font-bold"
-          >
+          <div onClick={() => navigate(`/cafe/${cafe.name}`)} className="cursor-pointer font-bold">
             {cafe.name}
           </div>
 
@@ -41,11 +38,7 @@ export default function CafeCard({ cafe }: CafeCardProps) {
         </div>
 
         <div className="w-24 h-24 rounded-lg overflow-hidden ">
-          <img
-            src={cafe.imageUrl}
-            alt={cafe.name}
-            className="w-full h-full object-cover"
-          />
+          <img src={cafe.imageUrl} alt={cafe.name} className="w-full h-full object-cover" />
         </div>
       </div>
 

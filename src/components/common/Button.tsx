@@ -8,7 +8,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         // #D9D4CF (미선택 상태) 를 brown1에 할당
-        brown1: 'bg-[#D9D4CF]  hover:bg-[#c4beb8]', 
+        brown1: 'bg-[#D9D4CF]  hover:bg-[#c4beb8]',
         brown2: 'bg-brown-2 hover:bg-brown-3 ',
         brown3: 'bg-brown-3 hover:bg-brown-4 ',
         // #8B7368 (선택 상태) 를 brown4에 할당
@@ -26,15 +26,15 @@ const buttonVariants = cva(
       },
       textColor: {
         white: 'text-white',
-        brown: 'text-brown-4', 
+        brown: 'text-brown-4',
       },
     },
     defaultVariants: {
-      variant: 'brown2', 
+      variant: 'brown2',
       size: 'md',
       textColor: 'white',
     },
-  }
+  },
 );
 
 type ButtonProps = PropsWithChildren<

@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "@/components/common/Button";
-import sogangImg from "@/assets/images/Category/sogang.png";
-import yonseiImg from "@/assets/images/Category/yonsei.png";
-import hongikImg from "@/assets/images/Category/hongik.png";
-import ewhaImg from "@/assets/images/Category/ewha.png";
-import hapjeongImg from "@/assets/images/Category/hapjeong.png";
-import boogleCatImg from "@/assets/images/Category/boogleCat.png";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Button from '@/components/common/Button';
+import sogangImg from '@/assets/images/Category/sogang.png';
+import yonseiImg from '@/assets/images/Category/yonsei.png';
+import hongikImg from '@/assets/images/Category/hongik.png';
+import ewhaImg from '@/assets/images/Category/ewha.png';
+import hapjeongImg from '@/assets/images/Category/hapjeong.png';
+import boogleCatImg from '@/assets/images/Category/boogleCat.png';
 
-type CategoryId = "sogang" | "yonsei" | "hongik" | "ewha" | "nearby" | "all";
+type CategoryId = 'sogang' | 'yonsei' | 'hongik' | 'ewha' | 'nearby' | 'all';
 
 interface CircleImageButtonProps {
   id: CategoryId;
@@ -18,13 +18,7 @@ interface CircleImageButtonProps {
   alt: string;
 }
 
-function CircleImageButton({
-  id,
-  selected,
-  onSelect,
-  imgSrc,
-  alt,
-}: CircleImageButtonProps) {
+function CircleImageButton({ id, selected, onSelect, imgSrc, alt }: CircleImageButtonProps) {
   const isActive = selected === id;
 
   return (
@@ -32,13 +26,9 @@ function CircleImageButton({
       type="button"
       onClick={() => onSelect(id)}
       className={`w-36 h-36 rounded-full overflow-hidden border-4 flex items-center justify-center transition
-        ${isActive ? "border-black" : "border-transparent"}`}
+        ${isActive ? 'border-black' : 'border-transparent'}`}
     >
-      <img
-        src={imgSrc}
-        alt={alt}
-        className="w-full h-full object-cover"
-      />
+      <img src={imgSrc} alt={alt} className="w-full h-full object-cover" />
     </button>
   );
 }
@@ -106,12 +96,11 @@ export default function CategoryPage() {
       <Button
         size="full"
         textColor="white"
-        className="mt-15 text-lg"        
-        onClick={() => navigate("/filter", { state: { region: selected } })}
+        className="mt-15 text-lg"
+        onClick={() => navigate('/filter', { state: { region: selected } })}
       >
         선택 완료
       </Button>
     </div>
   );
 }
-

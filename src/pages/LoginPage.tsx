@@ -1,6 +1,8 @@
 import { useAuth } from '../contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
-
+import { useEffect } from 'react';
+import NaverLoginButton from '@/components/auth/NaverLoginButton';
+import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
 declare global {
   interface Window {
     naver: any;
