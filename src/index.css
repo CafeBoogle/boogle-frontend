@@ -1,0 +1,35 @@
+@import "tailwindcss";
+@import "./assets/fonts/pretendardvariable.css";
+
+@layer base {
+  html {
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+  }
+}
+
+
+/* 대표 색상 지정 */
+@theme {
+  --color-brown-1: #4e392b;
+  --color-brown-2: #8d6e63;
+  --color-brown-3: #a68a6d;
+  --color-brown-4: #3b2f2f;
+  --color-brown-5: #7a5230;
+  --color-brown-6: #c1a17a;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* 스크롤바 숨김 (*/
+.scrollbar-hide {
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; 
+}
