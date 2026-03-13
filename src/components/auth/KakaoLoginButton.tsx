@@ -1,14 +1,11 @@
 import kakaoLoginImg from '@/assets/images/login/kakao_login_medium_wide.png';
 
-const KAKAO_CLIENT_ID = 'b6638b255ebf5d503bd755eb7d27aac3';
-const KAKAO_REDIRECT_URI = 'http://localhost:8080/api/oauth/kakao/callback';
-
+const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_CLIENT_ID;
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
-function KakaoLoginButton() {
-  const handleKakaoLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
-  };
+const handleKakaoLogin = () => {
+  window.location.href = KAKAO_AUTH_URL;
 
   return (
     <button
@@ -31,6 +28,6 @@ function KakaoLoginButton() {
       />
     </button>
   );
-}
+};
 
-export default KakaoLoginButton;
+export default handleKakaoLogin;
