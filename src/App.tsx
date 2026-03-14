@@ -27,7 +27,6 @@ export default function App() {
             <Route path="/cafelist" element={<CafeListPage />} />
             <Route path="/cafe/:name" element={<CafeInfoPage />} />
             <Route path="/filter" element={<FilterPage />} />
-
             {/* 반드시 로그인이 필요한 페이지들 */}
             <Route
               path="/mypage"
@@ -37,7 +36,6 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/addreview"
               element={
@@ -46,10 +44,16 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-
+            <Route
+              path="/addreview/:cafeId" // 카페 ID를 경로에 포함
+              element={
+                <ProtectedRoute>
+                  <AddReviewPage />
+                </ProtectedRoute>
+              }
+            />
             {/* 카카오 인증 직후 닉네임 설정하러 오는 곳 */}
             <Route path="/signup" element={<SignUpPage />} />
-
             <Route path="/auth/success" element={<AuthSuccess />} />
           </Routes>
         </AppLayout>
