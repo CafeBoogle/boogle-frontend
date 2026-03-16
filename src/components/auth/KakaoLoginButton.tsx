@@ -4,13 +4,15 @@ const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_CLIENT_ID;
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
-const handleKakaoLogin = () => {
-  window.location.href = KAKAO_AUTH_URL;
+const KakaoLoginButton = () => {
+  const onLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
 
   return (
     <button
       type="button"
-      onClick={handleKakaoLogin}
+      onClick={onLogin}
       style={{
         padding: 0,
         border: 'none',
@@ -30,4 +32,4 @@ const handleKakaoLogin = () => {
   );
 };
 
-export default handleKakaoLogin;
+export default KakaoLoginButton;

@@ -5,13 +5,13 @@ declare global {
     naver: any;
   }
 }
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function NaverLoginButton() {
   useEffect(() => {
     if (window.naver) {
       const naverLogin = new window.naver.LoginWithNaverId({
-        clientId: 'Hp3wT4d6Ecem36NtFuCc',
-        callbackUrl: 'http://localhost:8080/api/oauth/naver/callback',
+        clientId: import.meta.env.VITE_NAVER_CLIENT_ID,
+        callbackUrl: `${API_BASE_URL}/api/oauth/naver/callback`, // 하드코딩 제거!
         isPopup: false,
         loginButton: { color: 'green', type: 3, height: 50 },
       });
