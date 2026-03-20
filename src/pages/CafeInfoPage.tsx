@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Button from '@/components/common/Button';
 import CafeImageList from '@/components/cafe/CafeImageList';
 import ImageModal from '@/components/cafe/ImageModal';
+import CafeReviewChart from '@/components/cafe/CafeReviewChart';
 
 function CafeInfoPage() {
   const { name } = useParams<{ name: string }>();
@@ -17,8 +18,8 @@ function CafeInfoPage() {
         <a href="#" className="text-blue-800 text-lg text-center font-medium">
           {name} 알아보기
         </a>
-        <div className="w-full h-52 bg-white flex items-center justify-center border border-gray-200 shadow-inner rounded-sm ">
-          <span className="text-3xl font-light text-gray-500">그래프</span>
+        <div className="w-full bg-white border border-gray-200 shadow-inner rounded-sm p-4">
+          <CafeReviewChart />
         </div>
         <div className="break-keep text-center text-neutral-600 leading-relaxed text-xs mb-2">
           실제 리뷰를 바탕으로 카페의 분위기와 작업 환경을 분석한 리포트입니다. <br />
