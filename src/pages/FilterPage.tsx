@@ -1,13 +1,7 @@
-<<<<<<< HEAD
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import Button from '@/components/common/Button';
-=======
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "@/components/common/Button";
 import Map from "../components/map/map";
->>>>>>> 3938ecc (지도추가, 카페 리스트, 찜하기 api 연결 (#39))
 
 interface LocationState {
   region: string | null;
@@ -63,15 +57,9 @@ export default function FilterPage() {
 
   return (
     <div className="px-8 mt-10 pb-10">
-<<<<<<< HEAD
-      {/* 지도 영역 (Placeholder) */}
-      <div className="w-full h-52 bg-white flex items-center justify-center border border-gray-200 shadow-inner rounded-sm mb-10">
-        <span className="text-3xl font-light text-gray-500">{regionLabel} 지도</span>
-=======
       {/* 지도 영역 - currentCenter를 props로 전달 */}
       <div className="w-full h-52 bg-white border border-gray-200 shadow-inner rounded-sm mb-10 overflow-hidden">
         <Map center={currentCenter} />
->>>>>>> 3938ecc (지도추가, 카페 리스트, 찜하기 api 연결 (#39))
       </div>
 
       <section className="mb-8">
