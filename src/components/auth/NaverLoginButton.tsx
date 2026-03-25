@@ -6,27 +6,14 @@ declare global {
   }
 }
 
+const NAVER_AUTH_URL = 'http://localhost:8080/api/oauth/naver'
+
 function NaverLoginButton() {
-  useEffect(() => {
-    if (window.naver) {
-      const naverLogin = new window.naver.LoginWithNaverId({
-        clientId: 'Hp3wT4d6Ecem36NtFuCc',
-        callbackUrl: 'http://localhost:8080/api/oauth/naver/callback',
-        isPopup: false,
-        loginButton: { color: 'green', type: 3, height: 50 },
-      });
-
-      naverLogin.init();
-    }
-  }, []);
-
+  // 이거 백엔드에서 code랑 status를 받고 쿠키에 저장해야해서 리다이렉트형식으로 변경함.
   const handleNaverLogin = () => {
-    const hiddenButton = document.getElementById('naverIdLogin')
-      ?.firstElementChild as HTMLElement | null;
-
-    hiddenButton?.click();
+    window.location.href = NAVER_AUTH_URL;
   };
-
+  
   return (
     <>
       <button

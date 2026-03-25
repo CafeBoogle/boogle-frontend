@@ -1,10 +1,19 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "@/components/common/Button";
+import Map from "../components/map/map";
 
 interface LocationState {
   region: string | null;
 }
+
+// 1. 대학교별 중심 좌표 데이터
+const regionCoordinates: Record<string, { lat: number; lng: number }> = {
+  sogang: { lat: 37.5509, lng: 126.9411 }, // 서강대 정문
+  yonsei: { lat: 37.5612, lng: 126.9368 }, // 연세대 정문
+  hongik: { lat: 37.5507, lng: 126.9255 }, // 홍익대 정문
+  ewha: { lat: 37.5591, lng: 126.9454 },   // 이화여대 정문
+};
 
 export default function FilterPage() {
   const navigate = useNavigate();
@@ -12,8 +21,7 @@ export default function FilterPage() {
   const state = (location.state as LocationState) || { region: null };
 
   const regionId = state.region;
-  const isLoggedIn = true;
-
+  
   const [selectedDoor, setSelectedDoor] = useState<string | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -27,6 +35,9 @@ export default function FilterPage() {
   };
 
   const regionLabel = (regionId && regionLabels[regionId]) || "지역 정보 없음";
+
+  // 2. 현재 선택된 지역 ID에 맞는 좌표 가져오기 (없으면 서강대 기본값)
+  const currentCenter = (regionId && regionCoordinates[regionId]) || regionCoordinates.sogang;
 
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
@@ -46,11 +57,9 @@ export default function FilterPage() {
 
   return (
     <div className="px-8 mt-10 pb-10">
-      {/* 지도 영역 (Placeholder) */}
-      <div className="w-full h-52 bg-white flex items-center justify-center border border-gray-200 shadow-inner rounded-sm mb-10">
-        <span className="text-3xl font-light text-gray-500">
-          {regionLabel} 지도
-        </span>
+      {/* 지도 영역 - currentCenter를 props로 전달 */}
+      <div className="w-full h-52 bg-white border border-gray-200 shadow-inner rounded-sm mb-10 overflow-hidden">
+        <Map center={currentCenter} />
       </div>
 
       <section className="mb-8">
