@@ -5,6 +5,7 @@ declare global {
     naver: any;
   }
 }
+<<<<<<< HEAD
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function NaverLoginButton() {
   useEffect(() => {
@@ -20,13 +21,17 @@ function NaverLoginButton() {
     }
   }, []);
 
+=======
+
+const NAVER_AUTH_URL = 'http://localhost:8080/api/oauth/naver'
+
+function NaverLoginButton() {
+  // 이거 백엔드에서 code랑 status를 받고 쿠키에 저장해야해서 리다이렉트형식으로 변경함.
+>>>>>>> 3938ecc (지도추가, 카페 리스트, 찜하기 api 연결 (#39))
   const handleNaverLogin = () => {
-    const hiddenButton = document.getElementById('naverIdLogin')
-      ?.firstElementChild as HTMLElement | null;
-
-    hiddenButton?.click();
+    window.location.href = NAVER_AUTH_URL;
   };
-
+  
   return (
     <>
       <button
