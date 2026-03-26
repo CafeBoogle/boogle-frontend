@@ -42,7 +42,7 @@ export default function CafeListPage() {
 
   const handleCafeClick = async (cafe: any) => {
   try {
-    const response = await axios.post("/api/cafes/save", {
+    const response = await axios.post("http://43.200.174.78:8080/api/cafes/save", {
       kakaoPlaceId: String(cafe.id),
       name: cafe.name,
       address: cafe.review, // 카카오의 address_name
