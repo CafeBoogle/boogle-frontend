@@ -4,6 +4,7 @@ import axios from 'axios';
 import Button from '@/components/common/Button';
 import CafeImageList from '@/components/cafe/CafeImageList';
 import ImageModal from '@/components/cafe/ImageModal';
+import CafeReviewChart from '@/components/cafe/CafeReviewChart';
 
 function CafeInfoPage() {
   const { name } = useParams<{ name: string }>();
@@ -68,10 +69,15 @@ function CafeInfoPage() {
         <a href={cafeData.placeUrl} target="_blank" rel="noreferrer" className="text-blue-800 text-lg text-center font-medium">
           {name} 알아보기
         </a>
+<<<<<<< HEAD
         
         {/* 그래프 영역 */}
         <div className="w-full h-52 bg-white flex items-center justify-center border border-gray-200 shadow-inner rounded-sm ">
           <span className="text-3xl font-light text-gray-500">그래프</span>
+=======
+        <div className="w-full bg-white border border-gray-200 shadow-inner rounded-sm p-4">
+          <CafeReviewChart />
+>>>>>>> a09673c9930d958bdd3dffa71ef2a08d362f7eac
         </div>
 
         <div className="break-keep text-center text-neutral-600 leading-relaxed text-xs mb-2">
