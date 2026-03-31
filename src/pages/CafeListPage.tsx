@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import CafeCard from "@/components/cafe/CafeCard";
-import axios from "axios";
+import axios from "@/api/axios";
 
 const UNIVERSITY_COORDS: Record<string, Record<string, { lat: number; lng: number }>> = {
   sogang: {
