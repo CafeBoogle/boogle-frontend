@@ -6,7 +6,7 @@ import yonseiImg from '@/assets/images/Category/yonsei.png';
 import hongikImg from '@/assets/images/Category/hongik.png';
 import ewhaImg from '@/assets/images/Category/ewha.png';
 import hapjeongImg from '@/assets/images/Category/hapjeong.png';
-import boogleCatImg from '@/assets/images/Category/boogleCat.png';
+import allSpotImg from '@/assets/images/Category/allspot.png';
 
 type CategoryId = 'sogang' | 'yonsei' | 'hongik' | 'ewha' | 'nearby' | 'all';
 
@@ -88,7 +88,7 @@ export default function CategoryPage() {
           id="all"
           selected={selected}
           onSelect={handleSelect}
-          imgSrc={boogleCatImg}
+          imgSrc={allSpotImg}
           alt="전체 모아보기"
         />
       </div>
