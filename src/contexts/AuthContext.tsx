@@ -45,13 +45,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://www.api.moonsunpower.com';
-
       const logoutUrl = `${baseUrl}/api/oauth/${user.provider}/logout`;
-
-      // 3. 브라우저 이동
-      window.location.href = logoutUrl;
-
       setUser(null);
+      window.location.href = logoutUrl;
     } catch (err) {
       console.error('로그아웃 과정 중 오류 발생', err);
     }
