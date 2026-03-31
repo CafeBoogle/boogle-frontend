@@ -28,7 +28,7 @@ function CircleImageButton({ id, selected, onSelect, imgSrc, alt }: CircleImageB
       className={`w-36 h-36 rounded-full border-4 flex items-center justify-center transition
         ${isActive ? 'border-black' : 'border-transparent'}`}
     >
-      <img src={imgSrc} alt={alt} className="w-full h-full object-cover" />
+      <img src={imgSrc} alt={alt} className="w-full h-full" />
     </button>
   );
 }
