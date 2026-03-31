@@ -5,7 +5,7 @@ interface User {
   id: number;
   nickname: string | null; // 닉네임이 없으면 null (추가정보 입력 대상)
   role: string;
-  provider: 'kakao' |'naver';
+  provider: 'kakao' | 'naver';
 }
 
 interface AuthContextValue {
@@ -41,24 +41,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = (user: User) => setUser(user);
 
   const logout = async () => {
-    if (!user) return; // 로그인 안 되어 있으면 ㄴㄴ
-  try {
-    // 1. (선택사항) 우리 서버에 로그아웃 알림 (쿠키 삭제는 백엔드 redirect 시 수행되므로 생략 가능하나 안전상 호출)
-    // await axiosInstance.post('/api/user/logout'); 
+    if (!user) return;
 
-    // 2. 백엔드에 새로 만들 카카오 로그아웃 엔드포인트로 브라우저 이동
-    // 이렇게 하면 [백엔드 로직] -> [카카오 로그아웃 주소] -> [카카오 세션 종료] -> [우리 서비스 복귀]가 한 번에 일어납니다.
-    const logoutUrl = user.provider === 'kakao' 
-      ? "http://43.200.174.78:8080/api/oauth/kakao/logout" 
-      : "http://localhost:8080/api/oauth/naver/logout";
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://www.api.moonsunpower.com';
+
+      const logoutUrl = `${baseUrl}/api/oauth/${user.provider}/logout`;
+
+      // 3. 브라우저 이동
       window.location.href = logoutUrl;
-    
-    // 상태 초기화
-    setUser(null);
-  } catch (err) {
-    console.error("로그아웃 과정 중 오류 발생", err);
-  }
-};
+
+      setUser(null);
+    } catch (err) {
+      console.error('로그아웃 과정 중 오류 발생', err);
+    }
+  };
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout, checkAuth }}>
