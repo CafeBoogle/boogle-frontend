@@ -1,6 +1,6 @@
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import axios from 'axios';
+import axios from "@/api/axios"
 import Button from '@/components/common/Button';
 import CafeImageList from '@/components/cafe/CafeImageList';
 import ImageModal from '@/components/cafe/ImageModal';
