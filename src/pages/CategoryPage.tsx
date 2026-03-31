@@ -24,6 +24,7 @@ function CircleImageButton({ id, selected, onSelect, imgSrc, alt }: CircleImageB
 
   return (
     <button
+<<<<<<< HEAD
   type="button"
   onClick={() => onSelect(id)}
   className={`
@@ -34,6 +35,14 @@ function CircleImageButton({ id, selected, onSelect, imgSrc, alt }: CircleImageB
   `}
 >
       <img src={imgSrc} alt={alt} className="w-full h-full" />
+=======
+      type="button"
+      onClick={() => onSelect(id)}
+      className={`w-36 h-36 rounded-full border-4 flex items-center justify-center transition
+        ${isActive ? 'border-black' : 'border-transparent'}`}
+    >
+      <img src={imgSrc} alt={alt} className="w-full h-full object-cover" />
+>>>>>>> 84be811 (합정역 로고 변경)
     </button>
   );
 }
