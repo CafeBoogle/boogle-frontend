@@ -6,7 +6,7 @@ declare global {
   }
 }
 
-const NAVER_AUTH_URL = 'http://43.200.174.78:8080/api/oauth/naver'
+const NAVER_AUTH_URL = 'https://www.api.moonsunpower.com/boogle/api/oauth/naver'
 
 function NaverLoginButton() {
   // 이거 백엔드에서 code랑 status를 받고 쿠키에 저장해야해서 리다이렉트형식으로 변경함.

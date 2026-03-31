@@ -37,7 +37,7 @@ function CafeInfoPage() {
       // 2. 이미 DB에 카페가 있으므로 PathVariable로 ID만 전달
       // 두 번째 인자는 body인데, ID를 URL로 보내므로 빈 객체({})를 보냅니다.
       const response = await axios.post(
-        `http://localhost:8080/api/cafes/${cafeId}/wish`, 
+        `/api/cafes/${cafeId}/wish`, 
         {}, 
         { withCredentials: true }
       );
