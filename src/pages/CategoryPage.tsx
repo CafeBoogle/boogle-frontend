@@ -43,8 +43,8 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center px-6 py-8">
-      <h1 className="text-2xl font-semibold text-center mt-8 mb-12 text-brown-4">
-        원하는 지역을 선택해주세요 !
+      <h1 className="text-2xl text-center mt-8 mb-8 text-gray-800">
+        오늘은 <span className="text-brown-2 font-bold">어디서</span> 공부하고 싶으신가요?
       </h1>
 
       <div className="grid grid-cols-2 gap-x-10 gap-y-8 mb-6">
