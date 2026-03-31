@@ -30,7 +30,7 @@ export default function FilterPage() {
     yonsei: '연세대학교',
     hongik: '홍익대학교',
     ewha: '이화여자대학교',
-    nearby: '근처 추천 카페',
+    hapjeong: '합정역 근처',
     all: '전체 모아보기',
   };
 
