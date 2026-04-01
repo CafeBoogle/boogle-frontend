@@ -2,17 +2,9 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@/components/common/Button';
 import Map from '../components/map/map';
+import { FILTER_TAGS } from '@/constants/filterTags';
 import type { Coordinates, RegionId } from '@/constants/regions';
 import { REGION_COORDINATES, REGION_LABELS, UNIVERSITY_COORDS } from '@/constants/regions';
-
-const FILTER_TAGS = [
-  '콘센트',
-  '넓은 카페',
-  '화장실',
-  '와이파이',
-  '24시 카페',
-  '조용한 카페',
-] as const;
 
 interface LocationState {
   region: string | null;
