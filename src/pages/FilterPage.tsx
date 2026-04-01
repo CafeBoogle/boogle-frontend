@@ -2,18 +2,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "@/components/common/Button";
 import Map from "../components/map/map";
+import { REGION_COORDINATES, REGION_LABELS } from "@/constants/regions";
 
 interface LocationState {
   region: string | null;
 }
-
-// 1. 대학교별 중심 좌표 데이터
-const regionCoordinates: Record<string, { lat: number; lng: number }> = {
-  sogang: { lat: 37.5509, lng: 126.9411 }, // 서강대 정문
-  yonsei: { lat: 37.5612, lng: 126.9368 }, // 연세대 정문
-  hongik: { lat: 37.5507, lng: 126.9255 }, // 홍익대 정문
-  ewha: { lat: 37.5591, lng: 126.9454 },   // 이화여대 정문
-};
 
 export default function FilterPage() {
   const navigate = useNavigate();
@@ -25,19 +18,12 @@ export default function FilterPage() {
   const [selectedDoor, setSelectedDoor] = useState<string | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const regionLabels: Record<string, string> = {
-    sogang: '서강대학교',
-    yonsei: '연세대학교',
-    hongik: '홍익대학교',
-    ewha: '이화여자대학교',
-    hapjeong: '합정역 근처',
-    all: '전체 모아보기',
-  };
-
-  const regionLabel = (regionId && regionLabels[regionId]) || '지역 정보 없음';
+  const regionLabel = (regionId && REGION_LABELS[regionId as keyof typeof REGION_LABELS]) || '지역 정보 없음';
 
   // 2. 현재 선택된 지역 ID에 맞는 좌표 가져오기 (없으면 서강대 기본값)
-  const currentCenter = (regionId && regionCoordinates[regionId]) || regionCoordinates.sogang;
+  const currentCenter =
+    (regionId && REGION_COORDINATES[regionId as keyof typeof REGION_COORDINATES]) ||
+    REGION_COORDINATES.sogang;
 
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>

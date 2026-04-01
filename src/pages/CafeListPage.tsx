@@ -1,74 +1,46 @@
-
-import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import CafeCard from "@/components/cafe/CafeCard";
-import axios from "@/api/axios";
-
-const UNIVERSITY_COORDS: Record<string, Record<string, { lat: number; lng: number }>> = {
-  sogang: {
-    "정문": { lat: 37.5509, lng: 126.9411 },
-    "후문": { lat: 37.5525, lng: 126.9425 },
-    "남문": { lat: 37.5495, lng: 126.9400 },
-    "대흥역": { lat: 37.5477, lng: 126.9423 },
-  },
-  yonsei: {
-    "정문": { lat: 37.5612, lng: 126.9368 },
-    "북문": { lat: 37.5677, lng: 126.9387 },
-    "서문": { lat: 37.5645, lng: 126.9285 },
-  },
-  hongik: {
-    "정문": { lat: 37.5507, lng: 126.9255 },
-  },
-  ewha: {
-    "정문": { lat: 37.5591, lng: 126.9454 },
-  },
-};
-
-const regionLabels: Record<string, string> = {
-  sogang: "서강대학교",
-  yonsei: "연세대학교",
-  hongik: "홍익대학교",
-  ewha: "이화여자대학교",
-};
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import CafeCard from '@/components/cafe/CafeCard';
+import axios from 'axios';
+import { REGION_LABELS, UNIVERSITY_COORDS } from '@/constants/regions';
 
 export default function CafeListPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [cafes, setCafes] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const state = location.state || { region: "sogang", door: "정문", tags: [] };
+  const state = location.state || { region: 'sogang', door: '정문', tags: [] };
   const { region, door, tags } = state;
-  const regionLabel = regionLabels[region as string] || "지역 정보 없음";
+  const regionLabel = REGION_LABELS[region as keyof typeof REGION_LABELS] || '지역 정보 없음';
 
   const handleCafeClick = async (cafe: any) => {
-  try {
-    const response = await axios.post("/api/cafes", {
-      kakaoPlaceId: String(cafe.id),
-      name: cafe.name,
-      address: cafe.review, // 카카오의 address_name
-      latitude: Number(cafe.lat),
-      longitude: Number(cafe.lng),
-    });
-
-    const dbCafeId = response.data;
-
-    // 변경 포인트: cafeId 외에 상세 정보들도 함께 넘깁니다.
-    navigate(`/cafe/${cafe.name}`, { 
-      state: { 
-        id: dbCafeId,            // 우리 DB의 PK
-        kakaoPlaceId: cafe.id,   // 카카오 ID
+    try {
+      const response = await axios.post('http://43.200.174.78:8080/api/cafes/save', {
+        kakaoPlaceId: String(cafe.id),
         name: cafe.name,
-        address: cafe.review,    // 주소 (에러 방지 핵심!)
-        lat: cafe.lat,
-        lng: cafe.lng,
-        placeUrl: cafe.placeUrl
-      } 
-    });
-    
-  } catch (error) {
-    console.error("카페 저장 중 에러:", error);
-  }
-};
+        address: cafe.review, // 카카오의 address_name
+        latitude: Number(cafe.lat),
+        longitude: Number(cafe.lng),
+      });
+
+      const dbCafeId = response.data;
+
+      // 변경 포인트: cafeId 외에 상세 정보들도 함께 넘깁니다.
+      navigate(`/cafe/${cafe.name}`, {
+        state: {
+          id: dbCafeId, // 우리 DB의 PK
+          kakaoPlaceId: cafe.id, // 카카오 ID
+          name: cafe.name,
+          address: cafe.review, // 주소 (에러 방지 핵심!)
+          lat: cafe.lat,
+          lng: cafe.lng,
+          placeUrl: cafe.placeUrl,
+        },
+      });
+    } catch (error) {
+      console.error('카페 저장 중 에러:', error);
+    }
+  };
 
   useEffect(() => {
     const searchCafes = () => {
@@ -80,33 +52,37 @@ export default function CafeListPage() {
       setIsLoading(true);
       const ps = new window.kakao.maps.services.Places();
 
-      const univCoords = UNIVERSITY_COORDS[region as string] || UNIVERSITY_COORDS.sogang;
-      const center = univCoords[door] || univCoords["정문"];
-      
+      const univCoords = UNIVERSITY_COORDS[region] || UNIVERSITY_COORDS.sogang;
+      const center = univCoords[door] || univCoords['정문'];
+
       const searchLocation = new window.kakao.maps.LatLng(center.lat, center.lng);
 
-      ps.categorySearch('CE7', (data: any, status: any) => {
-        if (status === window.kakao.maps.services.Status.OK) {
-          const mappedData = data.map((place: any) => ({
-            id: place.id,
-            name: place.place_name,
-            tags: [place.category_name.split('>').pop().trim(), ...tags],
-            review: place.address_name,
-            imageUrl: "https://via.placeholder.com/100",
-            placeUrl: place.place_url,
-            lat: place.y, // 위도
-            lng: place.x,  // 경도
-          }));
-          setCafes(mappedData);
-        } else {
-          setCafes([]);
-        }
-        setIsLoading(false);
-      }, {
-        location: searchLocation,
-        radius: 1000,
-        sort: window.kakao.maps.services.SortBy.DISTANCE
-      });
+      ps.categorySearch(
+        'CE7',
+        (data: any, status: any) => {
+          if (status === window.kakao.maps.services.Status.OK) {
+            const mappedData = data.map((place: any) => ({
+              id: place.id,
+              name: place.place_name,
+              tags: [place.category_name.split('>').pop().trim(), ...tags],
+              review: place.address_name,
+              imageUrl: 'https://via.placeholder.com/100',
+              placeUrl: place.place_url,
+              lat: place.y, // 위도
+              lng: place.x, // 경도
+            }));
+            setCafes(mappedData);
+          } else {
+            setCafes([]);
+          }
+          setIsLoading(false);
+        },
+        {
+          location: searchLocation,
+          radius: 1000,
+          sort: window.kakao.maps.services.SortBy.DISTANCE,
+        },
+      );
     };
 
     searchCafes();
@@ -129,7 +105,10 @@ export default function CafeListPage() {
       {tags.length > 0 && (
         <div className="flex gap-2 overflow-x-auto pb-2">
           {tags.map((tag: string, i: number) => (
-            <span key={i} className="whitespace-nowrap bg-[#EFEBE7] text-[#4A3F35] px-3 py-1 rounded-full text-xs font-medium">
+            <span
+              key={i}
+              className="whitespace-nowrap bg-[#EFEBE7] text-[#4A3F35] px-3 py-1 rounded-full text-xs font-medium"
+            >
               #{tag}
             </span>
           ))}
@@ -145,24 +124,22 @@ export default function CafeListPage() {
             </div>
           ) : cafes.length > 0 ? (
             cafes.map((cafe) => (
-              <div 
-                key={cafe.id} 
-                onClick={() => handleCafeClick(cafe)} 
+              <div
+                key={cafe.id}
+                onClick={() => handleCafeClick(cafe)}
                 className="cursor-pointer active:opacity-70 transition-opacity"
               >
                 <CafeCard cafe={cafe} />
               </div>
             ))
           ) : (
-            <div className="text-center py-20 text-gray-400">
-              주변에 카페 정보가 없습니다.
-            </div>
+            <div className="text-center py-20 text-gray-400">주변에 카페 정보가 없습니다.</div>
           )}
         </div>
       </main>
 
-      <button 
-        onClick={() => navigate("/map")}
+      <button
+        onClick={() => navigate('/map')}
         className="w-full py-4 bg-[#4A3F35] text-white rounded-xl font-bold shadow-lg hover:bg-[#3d342c] transition-colors"
       >
         지도로 자세히 보기

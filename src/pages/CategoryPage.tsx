@@ -7,8 +7,9 @@ import hongikImg from '@/assets/images/Category/hongik.png';
 import ewhaImg from '@/assets/images/Category/ewha.png';
 import hapjeongImg from '@/assets/images/Category/hapjeong.png';
 import allSpotImg from '@/assets/images/Category/allspot.png';
+import { REGION_LABELS, RegionId } from '@/constants/regions';
 
-type CategoryId = 'sogang' | 'yonsei' | 'hongik' | 'ewha' | 'hapjeong' | 'all';
+type CategoryId = RegionId;
 
 interface CircleImageButtonProps {
   id: CategoryId;
@@ -40,15 +41,6 @@ function CircleImageButton({ id, selected, onSelect, imgSrc, alt }: CircleImageB
 export default function CategoryPage() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<CategoryId | null>(null);
-
-  const regionNames: Record<CategoryId, string> = {
-    sogang: '서강대학교',
-    yonsei: '연세대학교',
-    hongik: '홍익대학교',
-    ewha: '이화여자대학교',
-    hapjeong: '합정역 근처',
-    all: '전체 모아보기',
-  };
 
   const handleSelect = (value: CategoryId) => {
     setSelected(value);
@@ -108,7 +100,7 @@ export default function CategoryPage() {
       </div>
       
       <div>
-        {selected && <p className="text-center text-lg mb-4 text-gray-700">선택한 지역: {regionNames[selected]}</p>}
+        {selected && <p className="text-center text-lg mb-4 text-gray-700">선택한 지역: {REGION_LABELS[selected]}</p>}
       </div>
 
       <Button
