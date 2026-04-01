@@ -1,11 +1,37 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Button from "@/components/common/Button";
-import Map from "../components/map/map";
-import { REGION_COORDINATES, REGION_LABELS } from "@/constants/regions";
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Button from '@/components/common/Button';
+import Map from '../components/map/map';
+import type { Coordinates, RegionId } from '@/constants/regions';
+import { REGION_COORDINATES, REGION_LABELS, UNIVERSITY_COORDS } from '@/constants/regions';
+
+const FILTER_TAGS = [
+  '콘센트',
+  '넓은 카페',
+  '화장실',
+  '와이파이',
+  '24시 카페',
+  '조용한 카페',
+] as const;
 
 interface LocationState {
   region: string | null;
+}
+
+function doorOptionsForRegion(regionId: string | null): string[] {
+  if (regionId == null) return [];
+  const coords = UNIVERSITY_COORDS[regionId];
+  return coords ? Object.keys(coords) : [];
+}
+
+function getRegionLabel(regionId: string | null): string {
+  if (regionId == null || !(regionId in REGION_LABELS)) return '지역 정보 없음';
+  return REGION_LABELS[regionId as RegionId];
+}
+
+function mapCenterForRegion(regionId: string | null): Coordinates {
+  if (regionId == null) return REGION_COORDINATES.sogang;
+  return REGION_COORDINATES[regionId as RegionId];
 }
 
 export default function FilterPage() {
@@ -14,16 +40,21 @@ export default function FilterPage() {
   const state = (location.state as LocationState) || { region: null };
 
   const regionId = state.region;
-  
+  const doorOptions = doorOptionsForRegion(regionId);
+  const regionLabel = getRegionLabel(regionId);
+  const mapCenter = mapCenterForRegion(regionId);
+
   const [selectedDoor, setSelectedDoor] = useState<string | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const regionLabel = (regionId && REGION_LABELS[regionId as keyof typeof REGION_LABELS]) || '지역 정보 없음';
-
-  // 2. 현재 선택된 지역 ID에 맞는 좌표 가져오기 (없으면 서강대 기본값)
-  const currentCenter =
-    (regionId && REGION_COORDINATES[regionId as keyof typeof REGION_COORDINATES]) ||
-    REGION_COORDINATES.sogang;
+  useEffect(() => {
+    const doors = doorOptionsForRegion(regionId);
+    if (doors.length === 0) {
+      setSelectedDoor(null);
+      return;
+    }
+    setSelectedDoor((prev) => (prev && doors.includes(prev) ? prev : doors[0]));
+  }, [regionId]);
 
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
@@ -31,7 +62,7 @@ export default function FilterPage() {
     );
   };
 
-  const handleApply = () => {
+  const handleNavigateToCafeList = () => {
     navigate('/cafelist', {
       state: {
         region: regionId,
@@ -43,23 +74,22 @@ export default function FilterPage() {
 
   return (
     <div className="px-8 mt-10 pb-10">
-      {/* 지도 영역 - currentCenter를 props로 전달 */}
       <div className="w-full h-52 bg-white border border-gray-200 shadow-inner rounded-sm mb-10 overflow-hidden">
-        <Map center={currentCenter} />
+        <Map center={mapCenter} />
       </div>
 
       <section className="mb-8">
-        <h2 className="text-lg font-semibold ml-2 mb-4 text-brown-4">선택 지역 : {regionLabel} </h2>
-        <div className="flex gap-3">
-          {['정문', '후문', '남문'].map((door) => {
-            const isSelected = selectedDoor === door;
+        <h2 className="text-lg font-semibold ml-2 mb-4 text-brown-4">선택 지역 : {regionLabel}</h2>
+        <div className="flex flex-wrap gap-3">
+          {doorOptions.map((door) => {
+            const selected = selectedDoor === door;
             return (
               <Button
                 key={door}
                 onClick={() => setSelectedDoor(door)}
-                variant={isSelected ? 'brown4' : 'brown1'}
+                variant={selected ? 'brown4' : 'brown1'}
                 size="tag"
-                textColor={isSelected ? 'white' : 'brown'}
+                textColor={selected ? 'white' : 'brown'}
               >
                 {door}
               </Button>
@@ -73,15 +103,15 @@ export default function FilterPage() {
           저한테는 이게 특히 중요해요! 🔍
         </h2>
         <div className="flex flex-wrap gap-2">
-          {['콘센트', '넓은 카페', '화장실', '와이파이', '24시 카페', '조용한 카페'].map((tag) => {
-            const isSelected = selectedTags.includes(tag);
+          {FILTER_TAGS.map((tag) => {
+            const selected = selectedTags.includes(tag);
             return (
               <Button
                 key={tag}
                 onClick={() => toggleTag(tag)}
-                variant={isSelected ? 'brown4' : 'brown1'}
+                variant={selected ? 'brown4' : 'brown1'}
                 size="tag"
-                textColor={isSelected ? 'white' : 'brown'}
+                textColor={selected ? 'white' : 'brown'}
               >
                 # {tag}
               </Button>
@@ -95,7 +125,7 @@ export default function FilterPage() {
           variant="brown4"
           size="full"
           textColor="white"
-          onClick={handleApply}
+          onClick={handleNavigateToCafeList}
           className="text-lg"
         >
           적용하기
