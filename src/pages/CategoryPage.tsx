@@ -41,8 +41,12 @@ function CircleImageButton({ id, selected, onSelect, imgSrc, alt }: CircleImageB
       className={`w-36 h-36 rounded-full border-4 flex items-center justify-center transition
         ${isActive ? 'border-black' : 'border-transparent'}`}
     >
+<<<<<<< HEAD
       <img src={imgSrc} alt={alt} className="w-full h-full object-cover" />
 >>>>>>> 84be811 (합정역 로고 변경)
+=======
+      <img src={imgSrc} alt={alt} className="w-full h-full" />
+>>>>>>> 4995e8d (홍대입구역 이미지 잘림 이슈  해결)
     </button>
   );
 }
