@@ -36,7 +36,7 @@ export default function CafeCard({ cafe }: CafeCardProps) {
       </div>
 
       <div className="flex gap-3 items-center">
-        <span className="text-sm font-bold shrink-0">한줄리뷰</span>
+        <span className="text-sm font-bold shrink-0">상세 주소</span>
         <span className="text-sm text-gray-700 truncate">{cafe.address}</span>
       </div>
     </div>

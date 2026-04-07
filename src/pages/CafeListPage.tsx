@@ -91,7 +91,7 @@ export default function CafeListPage() {
   }, [region, door, tags]);
 
   return (
-    <div className="p-4 font-sans flex flex-col gap-6 bg-[#FCFBF9] min-h-screen">
+    <div className="p-4 flex flex-col gap-6 bg-[#FCFBF9] min-h-screen">
       <header className="flex justify-between items-end">
         <div>
           <h2 className="text-xl font-bold text-[#4A3F35]">
