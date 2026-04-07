@@ -24,29 +24,16 @@ function CircleImageButton({ id, selected, onSelect, imgSrc, alt }: CircleImageB
 
   return (
     <button
-<<<<<<< HEAD
-  type="button"
-  onClick={() => onSelect(id)}
-  className={`
-    w-36 h-36 rounded-full flex items-center justify-center
-    transition-transform duration-300 ease-out
-    hover:scale-110
-    ${isActive ? 'scale-110' : 'scale-90'}
-  `}
->
-      <img src={imgSrc} alt={alt} className="w-full h-full" />
-=======
       type="button"
       onClick={() => onSelect(id)}
-      className={`w-36 h-36 rounded-full border-4 flex items-center justify-center transition
-        ${isActive ? 'border-black' : 'border-transparent'}`}
+      className={`
+        w-36 h-36 rounded-full flex items-center justify-center
+        transition-transform duration-300 ease-out
+        hover:scale-110
+        ${isActive ? 'scale-110' : 'scale-90'}
+      `}
     >
-<<<<<<< HEAD
-      <img src={imgSrc} alt={alt} className="w-full h-full object-cover" />
->>>>>>> 84be811 (합정역 로고 변경)
-=======
       <img src={imgSrc} alt={alt} className="w-full h-full" />
->>>>>>> 4995e8d (홍대입구역 이미지 잘림 이슈  해결)
     </button>
   );
 }
