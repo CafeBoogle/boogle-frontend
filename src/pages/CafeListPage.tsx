@@ -4,6 +4,7 @@ import CafeCard from '@/components/cafe/CafeCard';
 import api from '@/api/axios';
 import { REGION_LABELS, UNIVERSITY_COORDS } from '@/constants/regions';
 import type { KakaoCafe } from '@/types/cafe';
+import Button from '@/components/common/Button';
 
 export default function CafeListPage() {
   const navigate = useNavigate();
@@ -64,7 +65,8 @@ export default function CafeListPage() {
             const mappedData = data.map((place: any) => ({
               id: place.id,
               name: place.place_name,
-              tags: [place.category_name.split('>').pop().trim(), ...tags],
+              // TODO: 백엔드에 카페별 태그 API 생성 후 실제 태그로 교체
+              tags: [place.category_name.split('>').pop().trim()],
               address: place.address_name,
               imageUrl: 'https://via.placeholder.com/100',
               placeUrl: place.place_url,
@@ -138,12 +140,12 @@ export default function CafeListPage() {
         </div>
       </main>
 
-      <button
-        onClick={() => navigate('/map')}
-        className="w-full py-4 bg-[#4A3F35] text-white rounded-xl font-bold shadow-lg hover:bg-[#3d342c] transition-colors"
+      <Button
+        onClick={() => navigate('/filter')}
+        className="w-full"
       >
-        지도로 자세히 보기
-      </button>
+        카테고리 다시 선택하기
+      </Button>
     </div>
   );
 }
