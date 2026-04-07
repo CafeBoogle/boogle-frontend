@@ -4,6 +4,7 @@ import CafeCard from '@/components/cafe/CafeCard';
 import api from '@/api/axios';
 import { REGION_LABELS, UNIVERSITY_COORDS } from '@/constants/regions';
 import type { KakaoCafe } from '@/types/cafe';
+import Button from '@/components/common/Button';
 
 export default function CafeListPage() {
   const navigate = useNavigate();
@@ -64,7 +65,8 @@ export default function CafeListPage() {
             const mappedData = data.map((place: any) => ({
               id: place.id,
               name: place.place_name,
-              tags: [place.category_name.split('>').pop().trim(), ...tags],
+              // TODO: 백엔드에 카페별 태그 API 생성 후 실제 태그로 교체
+              tags: [place.category_name.split('>').pop().trim()],
               address: place.address_name,
               imageUrl: 'https://via.placeholder.com/100',
               placeUrl: place.place_url,
@@ -89,61 +91,59 @@ export default function CafeListPage() {
   }, [region, door, tags]);
 
   return (
-    <div className="p-4 font-sans flex flex-col gap-6 bg-[#FCFBF9] min-h-screen">
-      <header className="flex justify-between items-end">
-        <div>
-          <h2 className="text-xl font-bold text-[#4A3F35]">
-            {regionLabel} {door}
-          </h2>
-          <p className="text-sm text-gray-500 mt-1">주변 1km 이내의 카페 목록</p>
-        </div>
-        <span className="text-[10px] text-gray-400 bg-white px-2 py-1 rounded-full shadow-sm">
-          Kakao Map Data
-        </span>
+    <div className="flex flex-col h-[calc(100vh-56px)]">
+      {/* 헤더 */}
+      <header className="px-5 pt-6 pb-4 shrink-0">
+        <h2 className="text-lg font-bold text-gray-900">{regionLabel} · {door}</h2>
+        <p className="text-xs text-gray-400 mt-0.5">주변 1km 이내 카페</p>
+
+        {/* 필터 태그 */}
+        {tags.length > 0 && (
+          <div className="flex gap-1.5 overflow-x-auto mt-3 scrollbar-hide">
+            {tags.map((tag: string, i: number) => (
+              <span
+                key={i}
+                className="whitespace-nowrap bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full text-xs"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
       </header>
 
-      {tags.length > 0 && (
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {tags.map((tag: string, i: number) => (
-            <span
-              key={i}
-              className="whitespace-nowrap bg-[#EFEBE7] text-[#4A3F35] px-3 py-1 rounded-full text-xs font-medium"
-            >
-              #{tag}
-            </span>
-          ))}
-        </div>
-      )}
-
-      <main className="bg-white rounded-2xl p-6 shadow-sm flex-1 overflow-y-auto max-h-[60vh]">
-        <div className="flex flex-col gap-8">
-          {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-3">
-              <div className="w-8 h-8 border-4 border-[#4A3F35] border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-gray-400 text-sm">주변 카페를 찾는 중...</p>
-            </div>
-          ) : cafes.length > 0 ? (
-            cafes.map((cafe) => (
+      {/* 카페 목록 */}
+      <main className="flex-1 overflow-y-auto px-4 py-3">
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-32 gap-3">
+            <div className="w-7 h-7 border-4 border-brown-4 border-t-transparent rounded-full animate-spin" />
+            <p className="text-gray-400 text-sm">주변 카페를 찾는 중...</p>
+          </div>
+        ) : cafes.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            {cafes.map((cafe) => (
               <div
                 key={cafe.id}
                 onClick={() => handleCafeClick(cafe)}
-                className="cursor-pointer active:opacity-70 transition-opacity"
+                className="bg-white rounded-xl px-4 py-4 cursor-pointer active:opacity-70 transition-opacity"
               >
                 <CafeCard cafe={cafe} />
               </div>
-            ))
-          ) : (
-            <div className="text-center py-20 text-gray-400">주변에 카페 정보가 없습니다.</div>
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-32">
+            <p className="text-gray-400 text-sm">주변에 카페 정보가 없습니다.</p>
+          </div>
+        )}
       </main>
 
-      <button
-        onClick={() => navigate('/map')}
-        className="w-full py-4 bg-[#4A3F35] text-white rounded-xl font-bold shadow-lg hover:bg-[#3d342c] transition-colors"
-      >
-        지도로 자세히 보기
-      </button>
+      {/* 하단 버튼 */}
+      <div className="px-4 py-4 border-t border-gray-100 shrink-0">
+        <Button onClick={() => navigate('/filter')} className="w-full">
+          카테고리 다시 선택하기
+        </Button>
+      </div>
     </div>
   );
 }

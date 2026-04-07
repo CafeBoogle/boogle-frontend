@@ -1,5 +1,4 @@
-import Button from '@/components/common/Button';
-import { useNavigate } from 'react-router-dom';
+import cafeImg from '@/assets/images/CafeList/cafeimg.png';
 import type { KakaoCafe } from '@/types/cafe';
 
 interface CafeCardProps {
@@ -7,37 +6,29 @@ interface CafeCardProps {
 }
 
 export default function CafeCard({ cafe }: CafeCardProps) {
-  const navigate = useNavigate();
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex justify-between gap-4">
-        <div className="flex flex-col gap-3 flex-1">
-          <div onClick={() => navigate(`/cafe/${cafe.name}`)} className="cursor-pointer font-bold">
-            {cafe.name}
-          </div>
+    <div className="flex items-center gap-6">
+      {/* 카페 이미지 */}
+      <img
+        src={cafeImg}
+        alt="cafe"
+        className="w-16 h-16 rounded-xl object-cover shrink-0 ml-2"
+      />
 
-          <div className="flex flex-wrap gap-2">
-            {cafe.tags.map((tag, idx) => (
-              <Button
-                key={idx}
-                variant="brown1"
-                size="xs"
-                className="rounded-lg text-[#8B7368] font-normal px-2 py-1"
-              >
-                {tag}
-              </Button>
-            ))}
-          </div>
+      {/* 카페 정보 */}
+      <div className="flex flex-col gap-1.5 flex-1 min-w-0">
+        <p className="font-semibold text-gray-900 text-sm truncate">{cafe.name}</p>
+        <div className="flex gap-1 flex-wrap mt-1">
+          {cafe.tags.map((tag, idx) => (
+            <span
+              key={idx}
+              className="bg-gray-100 text-gray-500 text-xs px-3 py-1 rounded-full"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
-
-        <div className="w-24 h-24 rounded-lg overflow-hidden ">
-          <img src={cafe.imageUrl} alt={cafe.name} className="w-full h-full object-cover" />
-        </div>
-      </div>
-
-      <div className="flex gap-3 items-center">
-        <span className="text-sm font-bold shrink-0">한줄리뷰</span>
-        <span className="text-sm text-gray-700 truncate">{cafe.address}</span>
+        <p className="text-xs text-gray-800 truncate">{cafe.address}</p>
       </div>
     </div>
   );
