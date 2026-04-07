@@ -16,7 +16,7 @@ function AuthSuccess() {
       alert('로그인 되었습니다.');
       navigate('/category', { replace: true });
     } else {
-      navigate('/login', { replace: true });
+      navigate('/loginpage', { replace: true });
     }
   }, [searchParams, navigate]);
 

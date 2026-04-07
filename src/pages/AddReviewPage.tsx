@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
+import api from '@/api/axios';
 import { SearchInput } from '@/components/common/SearchInput';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { Slider } from '@/components/common/Slider';
@@ -39,7 +39,7 @@ const AddReviewPage = () => {
     if (selectedFile) formData.append('image', selectedFile);
 
     try {
-      const response = await axios.post('/api/reviews', formData, {
+      const response = await api.post('/api/reviews', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       alert('성공적으로 저장되었습니다! 리뷰 ID: ' + response.data);

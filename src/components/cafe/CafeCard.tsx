@@ -1,16 +1,9 @@
 import Button from '@/components/common/Button';
 import { useNavigate } from 'react-router-dom';
-
-interface Cafe {
-  id: number;
-  name: string;
-  tags: string[];
-  review: string;
-  imageUrl: string;
-}
+import type { KakaoCafe } from '@/types/cafe';
 
 interface CafeCardProps {
-  cafe: Cafe;
+  cafe: KakaoCafe;
 }
 
 export default function CafeCard({ cafe }: CafeCardProps) {
@@ -44,7 +37,7 @@ export default function CafeCard({ cafe }: CafeCardProps) {
 
       <div className="flex gap-3 items-center">
         <span className="text-sm font-bold shrink-0">한줄리뷰</span>
-        <span className="text-sm text-gray-700 truncate">{cafe.review}</span>
+        <span className="text-sm text-gray-700 truncate">{cafe.address}</span>
       </div>
     </div>
   );
