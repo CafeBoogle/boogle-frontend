@@ -1,15 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import api from "../../api/axios";
-
-interface Cafe {
-  id: number;
-  name: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  thumbnail: string;
-}
+import type { DbCafe } from "@/types/cafe";
 
 // 1. props로 center를 직접 받습니다.
 interface CafeMapProps {
@@ -17,7 +9,7 @@ interface CafeMapProps {
 }
 
 function CafeMap({ center }: CafeMapProps) {
-  const [cafes, setCafes] = useState<Cafe[]>([]);
+  const [cafes, setCafes] = useState<DbCafe[]>([]);
 
   const handleBoundsChange = async (map: kakao.maps.Map) => {
     const bounds = map.getBounds();

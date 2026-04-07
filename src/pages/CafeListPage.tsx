@@ -3,35 +3,35 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import CafeCard from '@/components/cafe/CafeCard';
 import api from '@/api/axios';
 import { REGION_LABELS, UNIVERSITY_COORDS } from '@/constants/regions';
+import type { KakaoCafe } from '@/types/cafe';
 
 export default function CafeListPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [cafes, setCafes] = useState<any[]>([]);
+  const [cafes, setCafes] = useState<KakaoCafe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const state = location.state || { region: 'sogang', door: '정문', tags: [] };
   const { region, door, tags } = state;
   const regionLabel = REGION_LABELS[region as keyof typeof REGION_LABELS] || '지역 정보 없음';
 
-  const handleCafeClick = async (cafe: any) => {
+  const handleCafeClick = async (cafe: KakaoCafe) => {
     try {
       const response = await api.post('/api/cafes/save', {
         kakaoPlaceId: String(cafe.id),
         name: cafe.name,
-        address: cafe.review, // 카카오의 address_name
+        address: cafe.address,
         latitude: Number(cafe.lat),
         longitude: Number(cafe.lng),
       });
 
       const dbCafeId = response.data;
 
-      // 변경 포인트: cafeId 외에 상세 정보들도 함께 넘깁니다.
       navigate(`/cafe/${cafe.name}`, {
         state: {
-          id: dbCafeId, // 우리 DB의 PK
-          kakaoPlaceId: cafe.id, // 카카오 ID
+          id: dbCafeId,
+          kakaoPlaceId: cafe.id,
           name: cafe.name,
-          address: cafe.review, // 주소 (에러 방지 핵심!)
+          address: cafe.address,
           lat: cafe.lat,
           lng: cafe.lng,
           placeUrl: cafe.placeUrl,
@@ -65,7 +65,7 @@ export default function CafeListPage() {
               id: place.id,
               name: place.place_name,
               tags: [place.category_name.split('>').pop().trim(), ...tags],
-              review: place.address_name,
+              address: place.address_name,
               imageUrl: 'https://via.placeholder.com/100',
               placeUrl: place.place_url,
               lat: place.y, // 위도
