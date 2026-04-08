@@ -10,27 +10,54 @@ import {
   Legend,
 } from 'chart.js';
 
-ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
-const LABELS = ['콘센트', '넓은 카페', '화장실', '와이파이', '24시 카페', '조용한 카페'];
+const LABELS = [
+  '콘센트',
+  '넓은 카페',
+  '화장실',
+  '와이파이',
+  '24시 카페',
+  '조용한 카페',
+] as const;
+
+const SCORE_MAP: Record<(typeof LABELS)[number], string | null> = {
+  콘센트: 'outletScoreAvg',
+  '넓은 카페': 'seatScoreAvg',
+  화장실: 'toiletScoreAvg',
+  와이파이: 'wifiScoreAvg',
+  '24시 카페': null,
+  '조용한 카페': 'noiseScoreAvg',
+};
 
 export interface CafeReviewChartProps {
   scores?: Record<string, number>;
-  selectedTags?: string[];
 }
 
-export default function CafeReviewChart({ scores, selectedTags = [] }: CafeReviewChartProps) {
+export default function CafeReviewChart({ scores }: CafeReviewChartProps) {
   const data = useMemo(() => {
     const values = LABELS.map((label) => {
-      if (scores && typeof scores[label] === 'number') return scores[label];
-      return selectedTags.includes(label) ? 80 : 100;
+      const key = SCORE_MAP[label];
+
+      if (scores && key && typeof scores[key] === 'number') {
+        return scores[key];
+      }
+
+      return 0; // 점수가 null이면 0
     });
 
     return {
       labels: LABELS,
       datasets: [
         {
-          label: '카페 점수',
+          label: '카페 점수 (5점 만점)',
           data: values,
           fill: true,
           backgroundColor: 'rgba(160, 116, 90, 0.22)',
@@ -42,7 +69,7 @@ export default function CafeReviewChart({ scores, selectedTags = [] }: CafeRevie
         },
       ],
     };
-  }, [scores, selectedTags]);
+  }, [scores]);
 
   const options = useMemo(
     () => ({
@@ -56,14 +83,13 @@ export default function CafeReviewChart({ scores, selectedTags = [] }: CafeRevie
       },
       scales: {
         r: {
-          beginAtZero: true,
-          suggestedMin: 0,
-          suggestedMax: 100,
+          min: 0,
+          max: 5,
+          ticks: {
+            stepSize: 1,
+          },
           angleLines: {
             display: false,
-          },
-          ticks: {
-            stepSize: 20,
           },
         },
       },

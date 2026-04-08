@@ -27,17 +27,7 @@ export default function CafeListPage() {
 
       const dbCafeId = response.data;
 
-      navigate(`/cafe/${cafe.name}`, {
-        state: {
-          id: dbCafeId,
-          kakaoPlaceId: cafe.id,
-          name: cafe.name,
-          address: cafe.address,
-          lat: cafe.lat,
-          lng: cafe.lng,
-          placeUrl: cafe.placeUrl,
-        },
-      });
+      navigate(`/cafes/${dbCafeId}`);
     } catch (error) {
       console.error('카페 저장 중 에러:', error);
     }
