@@ -25,7 +25,7 @@ export default function App() {
             <Route path="/loginpage" element={<LoginPage />} />
             <Route path="/category" element={<CategoryPage />} />
             <Route path="/cafelist" element={<CafeListPage />} />
-            <Route path="/cafe/:name" element={<CafeInfoPage />} />
+            <Route path="/cafes/:cafeId" element={<CafeInfoPage />} />
             <Route path="/filter" element={<FilterPage />} />
             {/* 반드시 로그인이 필요한 페이지들 */}
             <Route

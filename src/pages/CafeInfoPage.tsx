@@ -1,80 +1,112 @@
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import axios from "@/api/axios"
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import api from '@/api/axios';
 import Button from '@/components/common/Button';
 import CafeImageList from '@/components/cafe/CafeImageList';
 import ImageModal from '@/components/cafe/ImageModal';
 import CafeReviewChart from '@/components/cafe/CafeReviewChart';
 
+type CafeDetail = {
+  id: number;
+  name: string;
+  address: string;
+  placeId?: string;
+  contact?: string;
+  imageName?: string;
+  score: {
+    reviewCount: number;
+    toiletScoreAvg: number;
+    outletScoreAvg: number;
+    seatScoreAvg: number;
+    wifiScoreAvg: number;
+    noiseScoreAvg: number;
+  };
+  isWished?: boolean;
+};
+
 function CafeInfoPage() {
-  const { name } = useParams<{ name: string }>();
-  const location = useLocation();
+  const { cafeId } = useParams<{ cafeId: string }>();
   const navigate = useNavigate();
 
-  // 리스트 페이지에서 navigate 시 넘겨준 { cafeId, cafeName, ... } 정보
-  // 만약 DB의 PK가 cafeId라는 이름으로 넘어온다면 해당 값을 사용하세요.
-  const cafeData = location.state || {};
-
+  const [cafe, setCafe] = useState<CafeDetail | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [isWished, setIsWished] = useState<boolean>(cafeData.isWished || false);
+  const [isWished, setIsWished] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleWishToggle = async () => {
-    // 1. 카페 ID 존재 확인 (DB의 PK가 없으면 진행 불가)
-    const cafeId = cafeData.cafeId || cafeData.id;
+  useEffect(() => {
+    if (!cafeId) return;
 
-    if (!cafeId) {
-      alert('카페 정보를 찾을 수 없습니다. 다시 시도해 주세요.');
-      return;
-    }
+    api.get(`/api/cafes/${cafeId}`)
+      .then(res => {
+        setCafe(res.data);
+        setIsWished(res.data.isWished ?? false);
+      })
+      .catch(() => {
+        alert('카페 정보를 불러올 수 없습니다.');
+        navigate(-1);
+      });
+  }, [cafeId, navigate]);
+
+  const handleWishToggle = async () => {
+    if (!cafeId) return;
 
     setIsLoading(true);
-
-    // 낙관적 업데이트: UI 먼저 변경
-    const previousState = isWished;
-    setIsWished(!previousState);
+    const prev = isWished;
+    setIsWished(!prev);
 
     try {
-      // 2. 이미 DB에 카페가 있으므로 PathVariable로 ID만 전달
-      // 두 번째 인자는 body인데, ID를 URL로 보내므로 빈 객체({})를 보냅니다.
-      const response = await axios.post(
-        `/api/cafes/${cafeId}/wish`, 
-        {}, 
+      const res = await api.post(
+        `/api/cafes/${cafeId}/wish`,
+        {},
         { withCredentials: true }
       );
+      setIsWished(res.data);
+    } catch (err: any) {
+      setIsWished(prev);
 
-      // 서버가 리턴한 최종 찜 상태(boolean) 적용
-      setIsWished(response.data);
-    } catch (error: any) {
-      // 에러 발생 시 원래 상태로 복구
-      setIsWished(previousState);
-
-      if (error.response?.status === 401) {
+      if (err.response?.status === 401) {
         alert('로그인이 필요한 서비스입니다.');
-        navigate('/login');
+        navigate('/loginpage');
       } else {
-        alert('찜하기 처리 중 오류가 발생했습니다.');
+        alert('찜 처리 중 오류가 발생했습니다.');
       }
     } finally {
       setIsLoading(false);
     }
   };
 
+  if (!cafe) {
+    return <div className="p-10 text-center">로딩 중…</div>;
+  }
+
   return (
     <div className="p-6 flex flex-col items-center">
-      <div className="w-full max-w-2xl overflow-hidden bg-white shadow-xl/20 border border-neutral-200 p-8 flex flex-col gap-6">
-        <h1 className="text-3xl font-bold text-center pt-4 text-brown-4">{name}</h1>
+      <div className="w-full max-w-2xl bg-white border p-8 flex flex-col gap-6">
+        <h1 className="text-3xl font-bold text-center text-brown-4">
+          {cafe.name}
+        </h1>
 
-        <a
-          href={cafeData.placeUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="text-blue-800 text-lg text-center font-medium"
-        >
-          {name} 알아보기
-        </a>
-        <div className="w-full bg-white border border-gray-200 shadow-inner rounded-sm p-4">
-          <CafeReviewChart />
+
+          <a
+            href={`https://place.map.kakao.com/${cafe.placeId}`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-blue-800 text-lg text-center font-medium"
+          >
+            {cafe.name} 알아보기
+          </a>
+
+        <p className="text-center text-neutral-600">{cafe.address}</p>
+
+        {/* ✅ 육각형 그래프 */}
+        <div className="border p-4">
+          {!cafe.score || cafe.score.reviewCount === 0 ? (
+            <div className="text-center text-sm text-gray-400 py-6">
+              아직 등록된 리뷰가 없습니다.
+            </div>
+          ) : (
+            <CafeReviewChart scores={cafe.score} />
+          )}
         </div>
 
         <div className="break-keep text-center text-neutral-600 leading-relaxed text-xs mb-2">
@@ -84,9 +116,8 @@ function CafeInfoPage() {
 
         <CafeImageList onImageClick={setSelectedImage} />
 
-        {/* 찜하기 버튼 */}
         <Button
-          className="mt-3 bg-[#8B4513] text-white hover:bg-[#723a10] transition-all duration-300"
+          className="mt-3 bg-[#8B4513] text-white"
           onClick={handleWishToggle}
           disabled={isLoading}
         >
