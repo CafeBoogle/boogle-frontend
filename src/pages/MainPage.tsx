@@ -16,7 +16,7 @@ export default function MainPage() {
     <>
       {open && <GuidelineModal onClose={() => setOpen(false)} />}
       <div className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center px-10 pb-10">
-        <div className="mt-50 mb-8 transform transition-transform hover:rotate-3">
+        <div className="mt-10 mb-8 transform transition-transform hover:rotate-3">
           <img src={Logo} alt="Boogle 로고" className="w-44 drop-shadow-md" />
         </div>
 
@@ -29,13 +29,22 @@ export default function MainPage() {
           </p>
         </div>
 
-        <div className="w-full max-w-[320px] mt-15">
+        <div className="w-full max-w-[320px] mt-15 flex flex-col gap-3">
           <Button
+            variant="brown4"
             size="full"
             onClick={() => navigate(user ? '/category' : '/loginpage')}
             className="text-lg"
           >
             {user ? '오늘의 공간 찾기' : '로그인하기'}
+          </Button>
+          <Button
+            variant="brown4"
+            size="full"
+            onClick={() => navigate('/mypage')}
+            className="text-lg"
+          >
+            마이페이지
           </Button>
         </div>
       </div>
