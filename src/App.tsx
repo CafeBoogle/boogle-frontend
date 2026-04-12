@@ -6,13 +6,30 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import MainPage from '@/pages/MainPage';
 import MyPage from '@/pages/MyPage';
 import LoginPage from '@/pages/LoginPage';
-import SignUpPage from './pages/SignUpPage';
-import CategoryPage from './pages/CategoryPage';
-import FilterPage from './pages/FilterPage';
-import CafeListPage from './pages/CafeListPage';
-import CafeInfoPage from './pages/CafeInfoPage';
-import AddReviewPage from './pages/AddReviewPage';
+import SignUpPage from '@/pages/SignUpPage';
+import CategoryPage from '@/pages/CategoryPage';
+import FilterPage from '@/pages/FilterPage';
+import CafeListPage from '@/pages/CafeListPage';
+import CafeInfoPage from '@/pages/CafeInfoPage';
+import AddReviewPage from '@/pages/AddReviewPage';
 import AuthSuccess from '@/pages/AuthSuccess';
+
+const publicRoutes = [
+  { path: '/', element: <MainPage /> },
+  { path: '/loginpage', element: <LoginPage /> },
+  { path: '/category', element: <CategoryPage /> },
+  { path: '/cafelist', element: <CafeListPage /> },
+  { path: '/cafes/:cafeId', element: <CafeInfoPage /> },
+  { path: '/filter', element: <FilterPage /> },
+  { path: '/signup', element: <SignUpPage /> },
+  { path: '/auth/success', element: <AuthSuccess /> },
+];
+
+const protectedRoutes = [
+  { path: '/mypage', element: <MyPage /> },
+  { path: '/addreview', element: <AddReviewPage /> },
+  { path: '/addreview/:cafeId', element: <AddReviewPage /> },
+];
 
 export default function App() {
   return (
@@ -20,41 +37,12 @@ export default function App() {
       <BrowserRouter>
         <AppLayout>
           <Routes>
-            {/* 누구나 볼 수 있는 페이지 */}
-            <Route path="/" element={<MainPage />} />
-            <Route path="/loginpage" element={<LoginPage />} />
-            <Route path="/category" element={<CategoryPage />} />
-            <Route path="/cafelist" element={<CafeListPage />} />
-            <Route path="/cafes/:cafeId" element={<CafeInfoPage />} />
-            <Route path="/filter" element={<FilterPage />} />
-            {/* 반드시 로그인이 필요한 페이지들 */}
-            <Route
-              path="/mypage"
-              element={
-                <ProtectedRoute>
-                  <MyPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/addreview"
-              element={
-                <ProtectedRoute>
-                  <AddReviewPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/addreview/:cafeId" // 카페 ID를 경로에 포함
-              element={
-                <ProtectedRoute>
-                  <AddReviewPage />
-                </ProtectedRoute>
-              }
-            />
-            {/* 카카오 인증 직후 닉네임 설정하러 오는 곳 */}
-            <Route path="/signup" element={<SignUpPage />} />
-            <Route path="/auth/success" element={<AuthSuccess />} />
+            {publicRoutes.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
+            ))}
+            {protectedRoutes.map(({ path, element }) => (
+              <Route key={path} path={path} element={<ProtectedRoute>{element}</ProtectedRoute>} />
+            ))}
           </Routes>
         </AppLayout>
       </BrowserRouter>
