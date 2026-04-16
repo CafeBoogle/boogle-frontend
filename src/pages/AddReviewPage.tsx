@@ -57,9 +57,8 @@ const AddReviewPage = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white min-h-screen pb-10">
+    <div className="max-w-md p-4 bg-white pb-10 px-8 px-auto mx-4 my-8 mx-auto mt-6 rounded-lg shadow">
       <div className="mb-6">
-        <h2 className="text-xl font-bold mb-4 italic text-[#433633]">Boogle</h2>
         <SearchInput placeholder="카페를 검색하세요" onSearch={(v) => console.log(v)} />
         <p className="mt-4 text-sm font-bold text-stone-800">📍 스타벅스 서강대점</p>
       </div>
@@ -69,7 +68,7 @@ const AddReviewPage = () => {
       </div>
 
       {/* 평가 항목 리스트 */}
-      <div className="space-y-4 mb-8">
+      <div className="space-y-6 mb-8">
         {sliderConfig.map(({ key, label, tip }) => (
           <Slider
             key={key}
