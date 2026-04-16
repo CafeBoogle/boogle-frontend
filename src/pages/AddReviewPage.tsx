@@ -4,6 +4,7 @@ import { SearchInput } from '@/components/common/SearchInput';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { Slider } from '@/components/common/Slider';
 import { TextInput } from '@/components/common/TextInput';
+import Button from '@/components/common/Button';
 
 const AddReviewPage = () => {
   const [cafeId] = useState(1);
@@ -31,7 +32,7 @@ const AddReviewPage = () => {
     const formData = new FormData();
 
     const reviewData = {
-      cafeId: cafeId,
+      cafeId,
       shortReview: comment,
       studyScore: ratings.study,
       outletScore: ratings.outlet,
@@ -86,12 +87,9 @@ const AddReviewPage = () => {
         <TextInput placeholder="한 줄 리뷰를 작성해주세요" value={comment} onChange={setComment} />
       </div>
 
-      <button
-        onClick={handleSubmit}
-        className="w-full py-4 bg-[#433633] text-white rounded-lg font-bold text-lg hover:bg-[#2d2422] transition-colors"
-      >
+      <Button variant="brown4" size="full" onClick={handleSubmit}>
         저장
-      </button>
+      </Button>
     </div>
   );
 };
