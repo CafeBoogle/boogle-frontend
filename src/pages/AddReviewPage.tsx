@@ -10,13 +10,18 @@ const AddReviewPage = () => {
   const [comment, setComment] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const [ratings, setRatings] = useState({
-    outlet: 3,
-    seat: 3,
-    noise: 3,
-    toilet: 3,
-    wifi: 3,
-  });
+  const sliderConfig = [
+    { key: 'study', label: '카공 적합도', tip: '비추천 / 괜찮아요 / 최고예요' },
+    { key: 'outlet', label: '콘센트', tip: '없어요 / 보통이에요 / 자리마다 있어요' },
+    { key: 'seat',   label: '좌석 수', tip: '테이블이 3개 이하 / 보통이에요 / 대형 카페에요' },
+    { key: 'toilet', label: '화장실',  tip: '불편해요 / 평범해요 / 깨끗해요' },
+    { key: 'wifi',   label: '와이파이', tip: '없어요 / 끊겨요 / 빨라요' },
+    { key: 'noise',  label: '소음',    tip: '시끄러워요 / 보통이에요 / 조용해요' },
+  ];
+
+  const [ratings, setRatings] = useState(
+    Object.fromEntries(sliderConfig.map(({ key }) => [key, 3]))
+  );
 
   const handleRatingChange = (key: string, value: number) => {
     setRatings((prev) => ({ ...prev, [key]: value }));
@@ -28,11 +33,12 @@ const AddReviewPage = () => {
     const reviewData = {
       cafeId: cafeId,
       shortReview: comment,
+      studyScore: ratings.study,
       outletScore: ratings.outlet,
       seatScore: ratings.seat,
-      noiseScore: ratings.noise,
       toiletScore: ratings.toilet,
       wifiScore: ratings.wifi,
+      noiseScore: ratings.noise,
     };
 
     formData.append('data', new Blob([JSON.stringify(reviewData)], { type: 'application/json' }));
@@ -63,47 +69,17 @@ const AddReviewPage = () => {
 
       {/* 평가 항목 리스트 */}
       <div className="space-y-4 mb-8">
-        <Slider
-          label="콘센트"
-          tip="거의 없어요 / 보통이에요 / 넉넉해요"
-          min={1}
-          max={5}
-          value={ratings.outlet}
-          onChange={(v) => handleRatingChange('outlet', v)}
-        />
-        <Slider
-          label="좌석 수"
-          tip="거의 없어요 / 보통이에요 / 넉넉해요"
-          min={1}
-          max={5}
-          value={ratings.seat}
-          onChange={(v) => handleRatingChange('seat', v)}
-        />
-        <Slider
-          label="소음"
-          tip="조용해요 / 보통이에요 / 북적거려요"
-          min={1}
-          max={5}
-          value={ratings.noise}
-          onChange={(v) => handleRatingChange('noise', v)}
-        />
-        {/* 추가된 항목 */}
-        <Slider
-          label="화장실"
-          tip="불편해요 / 평범해요 / 깨끗해요"
-          min={1}
-          max={5}
-          value={ratings.toilet}
-          onChange={(v) => handleRatingChange('toilet', v)}
-        />
-        <Slider
-          label="와이파이"
-          tip="끊겨요 / 보통이에요 / 빨라요"
-          min={1}
-          max={5}
-          value={ratings.wifi}
-          onChange={(v) => handleRatingChange('wifi', v)}
-        />
+        {sliderConfig.map(({ key, label, tip }) => (
+          <Slider
+            key={key}
+            label={label}
+            tip={tip}
+            min={1}
+            max={5}
+            value={ratings[key]}
+            onChange={(v) => handleRatingChange(key, v)}
+          />
+        ))}
       </div>
 
       <div className="mb-8">
