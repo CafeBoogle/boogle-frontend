@@ -1,28 +1,20 @@
 import { useState } from 'react';
 import api from '@/api/axios';
-import { SearchInput } from '@/components/common/SearchInput';
-import { ImageUploader } from '@/components/common/ImageUploader';
-import { Slider } from '@/components/common/Slider';
+import { ImageUploader } from '@/components/addreview/ImageUploader';
 import { TextInput } from '@/components/common/TextInput';
 import Button from '@/components/common/Button';
+import CafeSearchSection from '@/components/addreview/CafeSearchSection';
+import RatingSliderList from '@/components/addreview/RatingSliderList';
 
 const AddReviewPage = () => {
   const [cafeId] = useState(1);
+  const [cafeName] = useState('스타벅스 서강대점');
   const [comment, setComment] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const sliderConfig = [
-    { key: 'study', label: '카공 적합도', tip: '비추천 / 괜찮아요 / 최고예요' },
-    { key: 'outlet', label: '콘센트', tip: '없어요 / 보통이에요 / 자리마다 있어요' },
-    { key: 'seat',   label: '좌석 수', tip: '테이블이 3개 이하 / 보통이에요 / 대형 카페에요' },
-    { key: 'toilet', label: '화장실',  tip: '불편해요 / 평범해요 / 깨끗해요' },
-    { key: 'wifi',   label: '와이파이', tip: '없어요 / 끊겨요 / 빨라요' },
-    { key: 'noise',  label: '소음',    tip: '시끄러워요 / 보통이에요 / 조용해요' },
-  ];
-
-  const [ratings, setRatings] = useState(
-    Object.fromEntries(sliderConfig.map(({ key }) => [key, 3]))
-  );
+  const [ratings, setRatings] = useState<Record<string, number>>({
+    study: 3, outlet: 3, seat: 3, toilet: 3, wifi: 3, noise: 3,
+  });
 
   const handleRatingChange = (key: string, value: number) => {
     setRatings((prev) => ({ ...prev, [key]: value }));
@@ -58,29 +50,16 @@ const AddReviewPage = () => {
 
   return (
     <div className="max-w-md p-4 bg-white pb-10 px-8 px-auto mx-4 my-8 mx-auto mt-6 rounded-lg shadow">
-      <div className="mb-6">
-        <SearchInput placeholder="카페를 검색하세요" onSearch={(v) => console.log(v)} />
-        <p className="mt-4 text-sm font-bold text-stone-800">📍 스타벅스 서강대점</p>
-      </div>
+      <CafeSearchSection
+        cafeName={cafeName}
+        onSearch={(v) => console.log(v)}
+      />
 
       <div className="flex justify-center mb-6">
         <ImageUploader onFileSelect={(file) => setSelectedFile(file)} />
       </div>
 
-      {/* 평가 항목 리스트 */}
-      <div className="space-y-6 mb-8">
-        {sliderConfig.map(({ key, label, tip }) => (
-          <Slider
-            key={key}
-            label={label}
-            tip={tip}
-            min={1}
-            max={5}
-            value={ratings[key]}
-            onChange={(v) => handleRatingChange(key, v)}
-          />
-        ))}
-      </div>
+      <RatingSliderList ratings={ratings} onChange={handleRatingChange} />
 
       <div className="mb-8">
         <TextInput placeholder="한 줄 리뷰를 작성해주세요" value={comment} onChange={setComment} />
