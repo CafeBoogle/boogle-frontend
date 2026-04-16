@@ -23,8 +23,8 @@ const handleDismissToday = () => {
   setOpen(false);
 };
 
-
-  const { user } = useAuth();
+  const user =true;
+  //const { user } = useAuth();
 
 
   return (
