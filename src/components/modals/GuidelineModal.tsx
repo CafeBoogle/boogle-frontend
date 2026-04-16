@@ -1,8 +1,9 @@
 interface GuidelineModalProps {
   onClose: () => void;
+  onDismissToday: () => void;
 }
 
-function GuidelineModal({ onClose }: GuidelineModalProps) {
+function GuidelineModal({ onClose, onDismissToday }: GuidelineModalProps) {
   return (
     <div className="fixed inset-0 z-1000 flex items-center justify-center bg-black/30">
       <div className="scrollbar-hide max-w-[60vh] max-h-[80vh] overflow-y-auto rounded-2xl bg-white px-10 pt-16 pb-10 border shadow-xl">
@@ -63,7 +64,9 @@ function GuidelineModal({ onClose }: GuidelineModalProps) {
 
         {/* Footer */}
         <div className="mt-12 flex items-center justify-between text-xs text-gray-400">
-          <button className="hover:underline cursor-pointer">오늘 하루 보지 않음</button>
+          <button onClick={onDismissToday} className="hover:underline cursor-pointer">
+            오늘 하루 보지 않음
+          </button>
           <button onClick={onClose} className="text-lg text-gray-500 hover:text-gray-700">
             ✕
           </button>
