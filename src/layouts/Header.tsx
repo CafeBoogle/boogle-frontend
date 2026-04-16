@@ -11,7 +11,7 @@ export default function Header() {
   const navigate = useNavigate();
 
   return (
-    <header className="h-14 px-4 flex items-center justify-between bg-[#EEE9E5] mt-2">
+    <header className="h-14 px-4 flex items-center justify-between mt-2">
       <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
         <img src={mainLogo} alt="Boogle Logo" className="h-7 ml-3" />
         <span className="text-lg font-bold text-[#30251c]">Boogle</span>
