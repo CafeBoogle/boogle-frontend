@@ -138,7 +138,7 @@ export default function CategoryPage() {
         size="full"
         textColor="white"
         className="w-full max-w-xs mt-auto text-base"
-        onClick={() => navigate('/filter', { state: { region: selected, door: selectedDoor } })}
+        onClick={() => navigate('/cafelist', { state: { region: selected, door: selectedDoor } })}
       >
         적용하기
       </Button>

@@ -11,8 +11,8 @@ export default function CafeListPage() {
   const location = useLocation();
   const [cafes, setCafes] = useState<KakaoCafe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const state = location.state || { region: 'sogang', door: '정문', tags: [] };
-  const { region, door, tags } = state;
+  const state = location.state || { region: 'sogang', door: '정문' };
+  const { region, door } = state;
   const regionLabel = REGION_LABELS[region as keyof typeof REGION_LABELS] || '지역 정보 없음';
 
   const handleCafeClick = async (cafe: KakaoCafe) => {
@@ -78,7 +78,7 @@ export default function CafeListPage() {
     };
 
     searchCafes();
-  }, [region, door, tags]);
+  }, [region, door]);
 
   return (
     <div className="flex flex-col h-[calc(100vh-56px)]">
@@ -87,19 +87,6 @@ export default function CafeListPage() {
         <h2 className="text-lg font-bold text-gray-900">{regionLabel} · {door}</h2>
         <p className="text-xs text-gray-400 mt-0.5">주변 1km 이내 카페</p>
 
-        {/* 필터 태그 */}
-        {tags.length > 0 && (
-          <div className="flex gap-1.5 overflow-x-auto mt-3 scrollbar-hide">
-            {tags.map((tag: string, i: number) => (
-              <span
-                key={i}
-                className="whitespace-nowrap bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full text-xs"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
       </header>
 
       {/* 카페 목록 */}
@@ -130,7 +117,7 @@ export default function CafeListPage() {
 
       {/* 하단 버튼 */}
       <div className="px-4 py-4 border-t border-gray-100 shrink-0">
-        <Button onClick={() => navigate('/filter')} className="w-full">
+        <Button onClick={() => navigate('/category')} className="w-full">
           카테고리 다시 선택하기
         </Button>
       </div>
