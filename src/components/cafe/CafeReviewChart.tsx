@@ -24,7 +24,7 @@ const LABELS = [
   '넓은 카페',
   '화장실',
   '와이파이',
-  '24시 카페',
+  '카공 적합도',
   '조용한 카페',
 ] as const;
 
@@ -33,7 +33,7 @@ const SCORE_MAP: Record<(typeof LABELS)[number], string | null> = {
   '넓은 카페': 'seatScoreAvg',
   화장실: 'toiletScoreAvg',
   와이파이: 'wifiScoreAvg',
-  '24시 카페': null,
+  '카공 적합도': 'studyScoreAvg',
   '조용한 카페': 'noiseScoreAvg',
 };
 
