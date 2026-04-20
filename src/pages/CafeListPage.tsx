@@ -17,7 +17,7 @@ export default function CafeListPage() {
 
   const handleCafeClick = async (cafe: KakaoCafe) => {
     try {
-      const response = await api.post('/api/cafes/save', {
+      const response = await api.post('/api/cafes', {
         kakaoPlaceId: String(cafe.id),
         name: cafe.name,
         address: cafe.address,
