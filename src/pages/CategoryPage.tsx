@@ -19,6 +19,15 @@ interface CategoryCardProps {
   alt: string;
 }
 
+const CATEGORIES: { id: CategoryId; imgSrc: string; alt: string }[] = [
+  { id: 'sogang', imgSrc: sogangImg, alt: '서강대학교' },
+  { id: 'yonsei', imgSrc: yonseiImg, alt: '연세대학교' },
+  { id: 'hongik', imgSrc: hongikImg, alt: '홍익대학교' },
+  { id: 'ewha', imgSrc: ewhaImg, alt: '이화여자대학교' },
+  { id: 'hapjeong', imgSrc: hapjeongImg, alt: '합정역 근처' },
+  { id: 'all', imgSrc: allSpotImg, alt: '전체 모아보기' },
+];
+
 function CategoryCard({ id, selected, onSelect, imgSrc, alt }: CategoryCardProps) {
   const isActive = selected === id;
 
@@ -57,12 +66,8 @@ export default function CategoryPage() {
     setSelectedDoor((prev) => (prev && doorOptions.includes(prev) ? prev : doorOptions[0]));
   }, [selected]);
 
-  const handleSelect = (value: CategoryId) => {
-    setSelected(value);
-  };
-
   return (
-        <div className="flex flex-col items-center justify-center mt-20 px-10">
+    <div className="flex flex-col items-center justify-center mt-20 px-10">
       <div className="mb-12 text-left w-full max-w-xs">
         <h1 className="text-2xl font-bold text-[#4A3A2E] leading-snug mb-2">
           오늘 공부하고 싶은 지역을
@@ -71,52 +76,20 @@ export default function CategoryPage() {
         </h1>
         <p className="text-sm text-[#6D5D50]">지역은 선택한 지역 기반 xm까지~</p>
       </div>
-      <div className="grid grid-cols-2 gap-x-12 gap-y-8 mb-10">
-        <CategoryCard
-          id="sogang"
-          selected={selected}
-          onSelect={handleSelect}
-          imgSrc={sogangImg}
-          alt="서강대학교"
-        />
-        <CategoryCard
-          id="yonsei"
-          selected={selected}
-          onSelect={handleSelect}
-          imgSrc={yonseiImg}
-          alt="연세대학교"
-        />
-        <CategoryCard
-          id="hongik"
-          selected={selected}
-          onSelect={handleSelect}
-          imgSrc={hongikImg}
-          alt="홍익대학교"
-        />
-        <CategoryCard
-          id="ewha"
-          selected={selected}
-          onSelect={handleSelect}
-          imgSrc={ewhaImg}
-          alt="이화여자대학교"
-        />
 
-        <CategoryCard
-          id="hapjeong"
-          selected={selected}
-          onSelect={handleSelect}
-          imgSrc={hapjeongImg}
-          alt="합정역 근처"
-        />
-        <CategoryCard
-          id="all"
-          selected={selected}
-          onSelect={handleSelect}
-          imgSrc={allSpotImg}
-          alt="전체 모아보기"
-        />
+      <div className="grid grid-cols-2 gap-x-12 gap-y-8 mb-10">
+        {CATEGORIES.map(({ id, imgSrc, alt }) => (
+          <CategoryCard
+            key={id}
+            id={id}
+            selected={selected}
+            onSelect={setSelected}
+            imgSrc={imgSrc}
+            alt={alt}
+          />
+        ))}
       </div>
-      
+
       <section className="w-full max-w-xs mb-8 min-h-[72px]">
         <h2 className="text-sm font-semibold mb-3 text-gray-700">출입구 선택</h2>
         <div className="flex flex-wrap gap-2">
@@ -142,10 +115,6 @@ export default function CategoryPage() {
       >
         적용하기
       </Button>
-      <div className="flex flex-col gap-4 w-full max-w-xs">
-
-      </div>
     </div>
-
   );
 }
