@@ -145,3 +145,129 @@ useEffect(() => {
 
 **3. 의존성 배열 `[value, delay]`**
 `value` 또는 `delay`가 바뀔 때만 1~2 과정 반복
+
+---
+
+### 3단계 - 카카오 키워드 장소 검색 훅 구현 (`useKakaoSearch.ts`)
+API 호출 로직을 컴포넌트에서 분리해 커스텀 훅으로 구현.
+
+```ts
+export interface KakaoPlace {
+  id: string;           // 카카오 장소 고유 ID
+  place_name: string;   // 카페 이름
+  address_name: string; // 주소
+  x: string;            // 경도
+  y: string;            // 위도
+}
+
+export const useKakaoSearch = () => {
+  const [results, setResults] = useState<KakaoPlace[]>([]);
+
+  const search = (keyword: string) => {
+    if (!keyword.trim()) { setResults([]); return; }
+
+    const ps = new window.kakao.maps.services.Places();
+    ps.keywordSearch(keyword, (data, status) => {
+      if (status === window.kakao.maps.services.Status.OK) setResults(data);
+      else setResults([]);
+    });
+  };
+
+  return { results, search };
+};
+```
+
+**흐름**
+1. 컴포넌트에서 `search("스타벅스")` 호출
+2. `window.kakao.maps.services.Places()`로 카카오 SDK 장소 검색 객체 생성
+3. `keywordSearch`로 카카오 서버에 비동기 요청
+4. 결과 오면 `setResults(data)` → `results` 업데이트 → 컴포넌트 리렌더링
+
+**`window.kakao` 타입 선언**
+카카오 SDK는 `index.html`의 `<script>`로 로드되어 TypeScript가 타입을 모름.
+`src/types/assets.d.ts`에 `interface Window { kakao: any; }` 추가해서 해결.
+
+---
+
+### 4단계 - CafeSearchSection 드롭다운 UI 추가
+`CafeSearchSection`이 `useKakaoSearch`를 직접 사용하고 결과를 드롭다운으로 표시.
+
+**주요 state**
+```ts
+const { results, search } = useKakaoSearch(); // 검색 결과, 검색 함수
+const [selectedName, setSelectedName] = useState(''); // 선택된 카페 이름
+const [open, setOpen] = useState(false);              // 드롭다운 열림/닫힘
+```
+
+**핸들러**
+```ts
+const handleSearch = (keyword: string) => {
+  search(keyword);  // 카카오 API 호출
+  setOpen(true);    // 드롭다운 열기
+};
+
+const handleSelect = (place: KakaoPlace) => {
+  setSelectedName(place.place_name); // 선택된 카페 이름 저장
+  setOpen(false);                    // 드롭다운 닫기
+  onSelect(place);                   // 상위(AddReviewPage)에 전달
+};
+```
+
+**드롭다운 렌더링**
+```tsx
+{open && results.length > 0 && (
+  <ul className="absolute z-10 w-full ...">
+    {results.map((place) => (
+      <li key={place.id} onClick={() => handleSelect(place)}>
+        <p>{place.place_name}</p>
+        <p>{place.address_name}</p>
+      </li>
+    ))}
+  </ul>
+)}
+```
+- `open && results.length > 0` → 둘 다 true일 때만 드롭다운 렌더링
+- `results.map` → 결과 배열을 `<li>` 목록으로 변환
+- `absolute` → 검색창 바로 아래에 띄움 (부모 div가 `relative` 기준)
+
+**Props 변경**
+| 전 | 후 |
+|---|---|
+| `cafeName`, `onSearch` | `onSelect` 하나만 |
+
+---
+
+### 5단계 - 카페 선택 시 cafeId state 업데이트
+`AddReviewPage`에서 `onSelect` 연결 및 하드코딩 제거.
+
+```ts
+// 전: 하드코딩, setter 없음
+const [cafeId] = useState(1);
+const [cafeName] = useState('스타벅스 서강대점');
+
+// 후: setter 추가, 초기값 0
+const [cafeId, setCafeId] = useState<number>(0);
+```
+
+```ts
+const handleSelect = (place: KakaoPlace) => {
+  setCafeId(Number(place.id)); // 카카오 id는 string이라 Number()로 변환
+};
+```
+
+```tsx
+<CafeSearchSection onSelect={handleSelect} />
+```
+
+**전체 흐름 (완성)**
+```
+검색창 입력
+    ↓
+handleSearch → 카카오 API → results 업데이트 → 드롭다운 표시
+    ↓
+카페 클릭
+    ↓
+handleSelect(CafeSearchSection) → onSelect → handleSelect(AddReviewPage)
+    ↓
+setCafeId → submitReview에 실제 cafeId 전달
+```
