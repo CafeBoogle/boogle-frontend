@@ -53,7 +53,7 @@ function CategoryCard({ id, selected, onSelect, imgSrc, alt }: CategoryCardProps
 
 export default function CategoryPage() {
   const navigate = useNavigate();
-  const [selected, setSelected] = useState<CategoryId | null>(null);
+  const [selected, setSelected] = useState<CategoryId | null>("sogang");
   const [selectedDoor, setSelectedDoor] = useState<string | null>(null);
 
   const doorOptions = selected ? Object.keys(UNIVERSITY_COORDS[selected] ?? {}) : [];
@@ -91,7 +91,7 @@ export default function CategoryPage() {
       </div>
 
       <section className="w-full max-w-xs mb-8 min-h-[72px]">
-        <h2 className="text-sm font-semibold mb-3 text-gray-700">출입구 선택</h2>
+        <h2 className="text-sm font-semibold mb-3 text-gray-700">세부 선택</h2>
         <div className="flex flex-wrap gap-2">
           {doorOptions.map((door) => (
             <Button

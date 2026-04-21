@@ -5,16 +5,16 @@ interface GuidelineModalProps {
 
 function GuidelineModal({ onClose, onDismissToday }: GuidelineModalProps) {
   return (
-    <div className="fixed inset-0 z-1000 flex items-center justify-center bg-black/30">
-      <div className="scrollbar-hide max-w-[60vh] max-h-[80vh] overflow-y-auto rounded-2xl bg-white px-10 pt-16 pb-10 border shadow-xl">
+    <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/30">
+      <div className="scrollbar-hide w-[90%] max-h-[80vh] overflow-y-auto rounded-2xl bg-white px-6 pt-10 pb-8 border shadow-xl">
         {/* Title */}
-        <h2 className="mb-10 text-center text-2xl font-semibold text-brown-4 leading-snug">
+        <h2 className="mb-6 text-center text-xl font-semibold text-brown- leading-snug break-keep">
           행복한 카페 문화를 만들기 위한 <br />
           <span className="font-bold">Boogle 가이드라인</span>
         </h2>
 
         {/* Content */}
-        <ol className="list-decimal pl-5 space-y-6 text-sm">
+        <ol className="list-decimal pl-5 space-y-4 text-sm break-keep">
           <li>
             <p className="font-semibold text-gray-900">
               작업하기 좋은 카페를 발견하는 여정을 돕는 서비스예요.
@@ -63,7 +63,7 @@ function GuidelineModal({ onClose, onDismissToday }: GuidelineModalProps) {
         </ol>
 
         {/* Footer */}
-        <div className="mt-12 flex items-center justify-between text-xs text-gray-400">
+        <div className="mt-8 flex items-center justify-between text-xs text-gray-400">
           <button onClick={onDismissToday} className="hover:underline cursor-pointer">
             오늘 하루 보지 않음
           </button>
