@@ -8,6 +8,8 @@ export interface KakaoCafe {
   placeUrl: string;
   lat: number;
   lng: number;
+  dbCafeId? :number;
+  score? : any;
 }
 
 // 우리 DB에 저장된 카페 (지도 마커용)
