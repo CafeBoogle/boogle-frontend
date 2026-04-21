@@ -10,7 +10,7 @@ interface AppLayoutProps {
 export default function AppLayout({ children }: AppLayoutProps) {
   return (
     <div className="min-h-screen w-full flex justify-center bg-gray-200">
-      <div className="w-full max-w-[430px] min-h-screen bg-white overflow-x-hidden shadow-xl">
+      <div className="relative w-full max-w-[430px] min-h-screen bg-white overflow-x-hidden shadow-xl">
         <Header />
         <main>{children}</main>
       </div>
