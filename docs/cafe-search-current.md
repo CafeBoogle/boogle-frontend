@@ -108,3 +108,40 @@ AddReviewPage (console.log만 찍고 끝)
 ### useKakaoSearch.ts 역할
 검색어를 받아 카카오 API를 호출하고, 결과 목록을 반환하는 커스텀 훅.
 API 호출 로직을 컴포넌트에서 분리해서 관심사를 나눔.
+
+---
+
+## 구현
+
+### 1단계 - 카카오 API 키 환경변수 세팅
+`.env` 파일 생성 후 JavaScript 키 등록.
+Vite 프로젝트는 `VITE_` 접두사를 붙여야 코드에서 접근 가능.
+```
+VITE_KAKAO_JS_KEY=발급받은키
+```
+코드에서는 `import.meta.env.VITE_KAKAO_JS_KEY` 로 접근.
+
+---
+
+### 2단계 - SearchInput 디바운스 적용
+글자 입력마다 API를 호출하면 요청이 폭발하므로 디바운스 적용.
+
+```tsx
+useEffect(() => {
+  const timer = setTimeout(() => {
+    onSearch(value);  // delay 후 실행
+  }, delay);
+
+  return () => clearTimeout(timer);  // 다음 입력 오면 이전 타이머 취소
+}, [value, delay]);
+```
+
+**1. 타이머 설치**
+`value`가 바뀔 때마다 useEffect 실행 → "300ms 후 `onSearch` 실행" 타이머 예약
+
+**2. 기존 예약 취소 (핵심)**
+새 글자 입력 → 이전 타이머 `clearTimeout` → 새 타이머 시작
+타이핑 멈추고 300ms가 지나야 비로소 `onSearch` 호출됨
+
+**3. 의존성 배열 `[value, delay]`**
+`value` 또는 `delay`가 바뀔 때만 1~2 과정 반복
