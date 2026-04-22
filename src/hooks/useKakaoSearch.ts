@@ -26,6 +26,11 @@ export const useKakaoSearch = () => {
       } else {
         setResults([]);
       }
+    },
+    {
+      location,
+      radius:3000,
+      sort: window.kakao.maps.services.SortBy.DISTANCE,
     });
   };
 
