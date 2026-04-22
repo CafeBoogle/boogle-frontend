@@ -12,6 +12,7 @@ export interface KakaoPlace {
 
 export const useKakaoSearch = () => {
   const [results, setResults] = useState<KakaoPlace[]>([]);
+  const location = new window.kakao.maps.LatLng(37.5556, 126.9369); 
 
   const search = (keyword: string) => {
     if (!keyword.trim()) {
