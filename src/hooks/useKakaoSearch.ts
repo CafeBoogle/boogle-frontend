@@ -12,6 +12,7 @@ export interface KakaoPlace {
 
 export const useKakaoSearch = () => {
   const [results, setResults] = useState<KakaoPlace[]>([]);
+  const location = new window.kakao.maps.LatLng(37.5556, 126.9369); 
 
   const search = (keyword: string) => {
     if (!keyword.trim()) {
@@ -22,10 +23,18 @@ export const useKakaoSearch = () => {
     const ps = new window.kakao.maps.services.Places();
     ps.keywordSearch(keyword, (data: KakaoPlace[], status: string) => {
       if (status === window.kakao.maps.services.Status.OK) {
-        setResults(data);
+        const cafesOnly = data.filter((place: any) =>
+        place.category_group_code === 'CE7'
+      );
+      setResults(cafesOnly);
       } else {
         setResults([]);
       }
+    },
+    {
+      location,
+      radius:3000,
+      sort: window.kakao.maps.services.SortBy.DISTANCE,
     });
   };
 
