@@ -23,7 +23,10 @@ export const useKakaoSearch = () => {
     const ps = new window.kakao.maps.services.Places();
     ps.keywordSearch(keyword, (data: KakaoPlace[], status: string) => {
       if (status === window.kakao.maps.services.Status.OK) {
-        setResults(data);
+        const cafesOnly = data.filter((place: any) =>
+        place.category_group_code === 'CE7'
+      );
+      setResults(cafesOnly);
       } else {
         setResults([]);
       }
