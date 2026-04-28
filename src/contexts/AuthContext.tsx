@@ -6,6 +6,7 @@ interface User {
   nickname: string | null; // 닉네임이 없으면 null (추가정보 입력 대상)
   role: string;
   provider: 'kakao' | 'naver';
+  profileImageUrl: string | null;
 }
 
 interface AuthContextValue {
@@ -14,6 +15,7 @@ interface AuthContextValue {
   login: (user: User) => void;
   logout: () => void;
   checkAuth: () => Promise<void>; // 필요 시 수동 업데이트용
+  profileImageUrl: string | null;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);

@@ -12,6 +12,15 @@ export interface KakaoCafe {
   score? : any;
 }
 
+// 마이페이지 내 리뷰 목록 아이템
+export interface MyReview {
+  id: string;
+  name: string;
+  address: string;
+  tags: string[];
+  comment: string;
+}
+
 // 우리 DB에 저장된 카페 (지도 마커용)
 export interface DbCafe {
   id: number;
