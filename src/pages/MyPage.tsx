@@ -4,40 +4,26 @@ import api from '@/api/axios';
 import { useAuth } from '@/contexts/AuthContext';
 import Button from '@/components/common/Button';
 import CafeCard from '@/components/cafe/CafeCard';
-import { KakaoCafe } from '@/types/cafe';
+import { KakaoCafe, MyReview } from '@/types/cafe';
+import { mockReviews, mockUser } from '@/data/mockMyPage';
 
 export default function MyPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<MyReview[]>([]);
+
 
   useEffect(() => {
     const fetchMyReviews = async () => {
-      try {
-        setLoading(true);
+      setLoading(true);
+      try {        
         // [API] 실제 백엔드에 내 리뷰 목록을 요청하는 구간
         const response = await api.get('/api/v1/reviews/my');
         setReviews(response.data);
       } catch (error) {
-        // [MOCK] API 호출 실패 시 강제로 데이터를 넣어 화면을 구성함
-        console.warn('백엔드 연결 실패 // Mock 데이터를 강제로 주입합니다.');
-        setReviews([
-          {
-            id: 'rev-001',
-            name: '커피브레이크 서강대점 (Mock)',
-            tags: ['콘센트 있음', '대형 카페'],
-            address: '서울 마포구 백범로 35',
-            comment: '카공하기 아주 좋습니다! (서버 연결 실패 시 노출되는 Mock)',
-          },
-          {
-            id: 'rev-002',
-            name: '스타벅스 (Mock)',
-            tags: ['와이파이 빠름'],
-            address: '서울 마포구',
-            comment: '항상 사람 많지만 작업하기 좋음.',
-          },
-        ]);
+        // TODO: 백엔드 API 연동 완료 후 mockReviews 주입 제거 및 에러 상태 UI 추가
+        setReviews(mockReviews);
       } finally {
         setLoading(false);
       }
@@ -56,15 +42,9 @@ export default function MyPage() {
     );
   }
 
-  // [MOCK] 서버에서 유저 정보를 가져오지 못했을 때  가상 유저 데이터 세팅
-  const displayUser = user || {
-    nickname: 'boogle_234 ',
-    provider: 'kakao',
-    profileImageUrl: null,
-  };
+  const displayUser = user || mockUser;
 
   return (
-    <div className="min-h-screen bg-[#F2EDE9] font-sans pb-10">
       <main className="px-6">
         <section className="mb-10 pt-8">
           <h1 className="text-xl font-bold mb-6 text-stone-800">마이페이지</h1>
@@ -81,21 +61,18 @@ export default function MyPage() {
               )}
             </div>
             <div className="flex flex-col gap-0.5">
-              {/* [API/MOCK] 유저 닉네임 표시 */}
               <p className="text-lg font-bold text-stone-800">{displayUser.nickname}</p>
               <p className="text-sm text-stone-500 uppercase tracking-wide">
-                {displayUser.provider} 계정 (Mock)
+                {displayUser.provider} 계정
               </p>
-              {/* [MOCK] '찜한 카페' 기능은 현재 API가 없으므로 가상의 숫자와 텍스트 노출 */}
               <p className="text-xs text-[#4A3D39] font-bold mt-2 bg-white/60 px-2 py-1 rounded-full w-fit">
-                찜한 카페 5개 (Mock)
+                찜한 카페 5개
               </p>
             </div>
           </div>
         </section>
 
-        <Button
-          variant="brown6"
+        <Button variant="brown2"
           size="full"
           className="mb-12 shadow-sm py-5 text-lg rounded-2xl active:scale-[0.98] transition-transform"
           onClick={() => navigate('/addreview')}
@@ -140,9 +117,10 @@ export default function MyPage() {
                 작성한 리뷰가 아직 없습니다.
               </div>
             )}
+
           </div>
         </section>
       </main>
-    </div>
+
   );
 }
