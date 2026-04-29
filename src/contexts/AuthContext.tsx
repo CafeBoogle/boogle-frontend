@@ -14,7 +14,7 @@ interface AuthContextValue {
   loading: boolean; // 🚨 로딩 상태 추가 (인증 확인 전까지 화면 렌더링 방지)
   login: (user: User) => void;
   logout: () => void;
-  checkAuth: () => Promise<void>; // 필요 시 수동 업데이트용
+  checkAuth: () => Promise<User | null>; // 필요 시 수동 업데이트용
   profileImageUrl: string | null;
 }
 
@@ -25,14 +25,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true); // 처음엔 로딩 중
 
   // 서버에 내 정보 물어보기
-  const checkAuth = async () => {
+  const checkAuth = async (): Promise<User | null> => {
     try {
       const res = await axiosInstance.get('/api/user/me');
-      setUser(res.data); // 로그인 성공 시 유저 정보 세팅
+      setUser(res.data);
+      return res.data;
     } catch (err) {
-      setUser(null); // 실패(401 등) 시 비로그인 처리
+      setUser(null);
+      return null;
     } finally {
-      setLoading(false); // 확인 끝났으니 로딩 해제
+      setLoading(false);
     }
   };
 
@@ -52,8 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, checkAuth }}>
-      {/* 🚨 로딩 중에는 앱을 보여주지 않거나 스피너를 보여줌 */}
+    <AuthContext.Provider value={{ user, loading, login, logout, checkAuth, profileImageUrl: user?.profileImageUrl ?? null }}>
       {!loading ? children : <div>인증 확인 중...</div>}
     </AuthContext.Provider>
   );
