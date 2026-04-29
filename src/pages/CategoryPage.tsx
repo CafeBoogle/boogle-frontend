@@ -74,7 +74,7 @@ export default function CategoryPage() {
           <br />
           선택해주세요 :)
         </h1>
-        <p className="text-sm text-[#6D5D50]">지역은 선택한 지역 기반 xm까지~</p>
+        <p className="text-sm text-[#6D5D50]">선택한 지역 주변 500m 스터디 스팟을 보여드려요</p>
       </div>
 
       <div className="grid grid-cols-2 gap-x-12 gap-y-8 mb-10">
