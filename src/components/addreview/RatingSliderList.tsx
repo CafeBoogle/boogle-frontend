@@ -1,4 +1,4 @@
-import { Slider } from '@/components/addreview/Slider';
+  import { Slider } from '@/components/addreview/Slider';
 
 const sliderConfig = [
   { key: 'study', label: '카공 적합도', tip: '비추천 / 괜찮아요 / 최고예요' },
