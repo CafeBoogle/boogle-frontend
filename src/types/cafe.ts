@@ -9,7 +9,10 @@ export interface KakaoCafe {
   lat: number;
   lng: number;
   dbCafeId? :number;
-  score? : any;
+   // 해당 카페에 리뷰가 몇개 달려있는지 확인
+  score? : {
+    reviewCount: number;
+  }
 }
 
 // 마이페이지 내 리뷰 목록 아이템

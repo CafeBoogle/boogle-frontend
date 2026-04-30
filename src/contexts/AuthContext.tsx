@@ -48,7 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!user) return;
     const baseUrl = import.meta.env.VITE_API_BASE_URL;
     const provider = user.provider.toLowerCase();
-    const logoutUrl = `${baseUrl}/api/oauth/${provider}/logout`;
+    const logoutUrl = `${baseUrl}/api/oauth/${provider}/logout?redirect=${encodeURIComponent(window.location.origin)}`;
 
     window.location.href = logoutUrl;
   };
