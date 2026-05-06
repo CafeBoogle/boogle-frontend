@@ -1,3 +1,14 @@
+export interface CafeScore {
+  cafeId: number;
+  reviewCount: number;
+  toiletScoreAvg: number;
+  outletScoreAvg: number;
+  seatScoreAvg: number;
+  wifiScoreAvg: number;
+  noiseScoreAvg: number;
+  studyScoreAvg: number;
+}
+
 // 카카오 Places API 검색 결과
 export interface KakaoCafe {
   id: string;
@@ -8,11 +19,8 @@ export interface KakaoCafe {
   placeUrl: string;
   lat: number;
   lng: number;
-  dbCafeId? :number;
-   // 해당 카페에 리뷰가 몇개 달려있는지 확인
-  score? : {
-    reviewCount: number;
-  }
+  dbCafeId?: number;
+  score?: CafeScore;
 }
 
 // 마이페이지 내 리뷰 목록 아이템

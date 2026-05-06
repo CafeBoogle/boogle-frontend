@@ -60,12 +60,12 @@ export default function CafeReviewChart({ scores }: CafeReviewChartProps) {
           label: '카페 점수 (5점 만점)',
           data: values,
           fill: true,
-          backgroundColor: 'rgba(160, 116, 90, 0.22)',
-          borderColor: 'rgba(160, 116, 90, 1)',
-          pointBackgroundColor: 'rgba(160, 116, 90, 1)',
+          backgroundColor: 'rgba(139, 115, 104, 0.45)',
+          borderColor: 'rgba(101, 72, 57, 1)',
+          pointBackgroundColor: 'rgba(101, 72, 57, 1)',
           pointBorderColor: '#fff',
           pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgba(160, 116, 90, 1)',
+          pointHoverBorderColor: 'rgba(101, 72, 57, 1)',
         },
       ],
     };
@@ -87,9 +87,18 @@ export default function CafeReviewChart({ scores }: CafeReviewChartProps) {
           max: 5,
           ticks: {
             stepSize: 1,
+            color: '#888',
+            backdropColor: 'transparent',
           },
           angleLines: {
-            display: false,
+            color: 'rgba(0,0,0,0.15)',
+          },
+          grid: {
+            color: 'rgba(0,0,0,0.1)',
+          },
+          pointLabels: {
+            font: { size: 12, weight: 'bold' as const },
+            color: '#444',
           },
         },
       },
