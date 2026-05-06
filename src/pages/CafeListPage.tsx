@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import CafeCard from '@/components/cafe/CafeCard';
+import { SCORE_FILTERS, type ScoreFilterKey, type SortKey } from '@/constants/filterTags';
 import api from '@/api/axios';
 import { REGION_LABELS, UNIVERSITY_COORDS } from '@/constants/regions';
 import type { KakaoCafe } from '@/types/cafe';
@@ -11,6 +12,20 @@ export default function CafeListPage() {
   const location = useLocation();
   const [cafes, setCafes] = useState<KakaoCafe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedFilters, setSelectedFilters] = useState<ScoreFilterKey[]>([]);
+  const [sortBy, setSortBy] = useState<SortKey | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const toggleFilter = (key: ScoreFilterKey) => {
+    setSelectedFilters((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
+    );
+  };
+
+  const currentSortLabel = sortBy
+    ? (SCORE_FILTERS.find((f) => f.scoreKey === sortBy)?.label ?? '') + ' 순'
+    : '정렬';
 
   const state = location.state || { region: 'sogang', door: '정문' };
   const { region, door } = state;
@@ -24,7 +39,6 @@ export default function CafeListPage() {
         return;
       }
 
-      // 카페가 DB에 없으면 저장 후 이동
       const response = await api.post('/api/cafes/save', {
         kakaoPlaceId: String(cafe.id),
         name: cafe.name,
@@ -62,31 +76,25 @@ export default function CafeListPage() {
             return;
           }
 
-          
-          // 카카오 검색 결과
           const kakaoCafes: KakaoCafe[] = data.map((place) => ({
             id: place.id,
             name: place.place_name,
-            address: place.address_name,
+            address: place.road_address_name || place.address_name,
             lat: Number(place.y),
             lng: Number(place.x),
             imageUrl: 'https://via.placeholder.com/100',
             placeUrl: place.place_url,
-            tags: [], 
+            tags: [],
           }));
 
-          // kakaoPlaceId 목록 추출
           const kakaoIds = kakaoCafes.map((cafe) => cafe.id);
 
           try {
-            // 백엔드에서 우리 DB에 저장되어 있는 카페 검색
             const res = await api.post('/api/cafes/by-kakao-ids', kakaoIds);
             const dbCafeMap = res.data;
 
-            // 우리 DB에 있는 카페는 우리 DB에서만 가져옴(카카오에서 또 주면 중복되니까)
             const merged = kakaoCafes.map((kakaoCafe) => {
               const dbCafe = dbCafeMap[kakaoCafe.id];
-
               if (dbCafe) {
                 return {
                   ...kakaoCafe,
@@ -95,8 +103,7 @@ export default function CafeListPage() {
                   score: dbCafe.score,
                 };
               }
-
-              return kakaoCafe; // DB 없으면 tags=[]
+              return kakaoCafe;
             });
 
             setCafes(merged);
@@ -118,30 +125,89 @@ export default function CafeListPage() {
     searchCafes();
   }, [region, door]);
 
+  const displayedCafes = cafes
+    .filter((cafe) => {
+      if (selectedFilters.length === 0) return true;
+      return selectedFilters.every((filterKey) => {
+        const scoreKey = SCORE_FILTERS.find((f) => f.key === filterKey)?.scoreKey;
+        if (!scoreKey || !cafe.score) return false;
+        return cafe.score[scoreKey] >= 3.5;
+      });
+    })
+    .sort((a, b) => {
+      if (!sortBy) return 0;
+      const aScore = a.score?.[sortBy] ?? 0;
+      const bScore = b.score?.[sortBy] ?? 0;
+      return bScore - aScore;
+    });
+
   return (
     <div className="flex flex-col h-[calc(100vh-56px)]">
       {/* 헤더 */}
-      <header className="px-5 pt-6 pb-4 shrink-0">
-        <h2 className="text-lg font-bold text-gray-900">
-          {regionLabel} · {door}
-        </h2>
-        <p className="text-xs text-gray-400 mt-0.5">
-          주변 1km 이내 카페
-        </p>
+      <header className="px-5 pt-6 pb-3 shrink-0">
+        <h2 className="text-lg font-bold text-gray-900">{regionLabel} · {door}</h2>
+        <p className="text-xs text-gray-400 mt-0.5">주변 1km 이내 카페</p>
       </header>
+
+      {/* 카페 선택 기준 + 정렬 드롭다운 */}
+      <div className="flex items-center justify-between px-4 pb-2 shrink-0">
+        <span className="text-sm font-semibold text-gray-800">카페 선택 기준</span>
+        <div className="relative" ref={dropdownRef}>
+          <button
+            onClick={() => setIsDropdownOpen((prev) => !prev)}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-md border border-gray-200 text-sm text-gray-600 bg-white"
+          >
+            {currentSortLabel}
+            <span className="text-xs">{isDropdownOpen ? '▲' : '▼'}</span>
+          </button>
+          {isDropdownOpen && (
+            <div className="absolute right-0 top-9 bg-white border border-gray-200 rounded-xl shadow-lg z-10 w-40 py-1">
+              {SCORE_FILTERS.map(({ scoreKey, label }) => (
+                <button
+                  key={scoreKey}
+                  onClick={() => { setSortBy(scoreKey); setIsDropdownOpen(false); }}
+                  className={`w-full text-left px-4 py-2 text-sm ${
+                    sortBy === scoreKey ? 'text-[#8B7368] font-semibold' : 'text-gray-700'
+                  }`}
+                >
+                  {label} 순
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 필터 칩 */}
+      <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide shrink-0">
+        {SCORE_FILTERS.map(({ key, label }) => {
+          const selected = selectedFilters.includes(key);
+          return (
+            <button
+              key={key}
+              onClick={() => toggleFilter(key)}
+              className={`shrink-0 px-3 py-1.5 rounded-full text-sm border transition-colors ${
+                selected
+                  ? 'bg-[#8B7368] text-white border-[#8B7368]'
+                  : 'bg-white text-gray-600 border-gray-200'
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
 
       {/* 카페 목록 */}
       <main className="flex-1 overflow-y-auto px-4 py-3">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-32 gap-3">
             <div className="w-7 h-7 border-4 border-brown-4 border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-400 text-sm">
-              주변 카페를 찾는 중...
-            </p>
+            <p className="text-gray-400 text-sm">주변 카페를 찾는 중...</p>
           </div>
-        ) : cafes.length > 0 ? (
+        ) : displayedCafes.length > 0 ? (
           <div className="flex flex-col gap-2">
-            {cafes.map((cafe) => (
+            {displayedCafes.map((cafe) => (
               <div
                 key={cafe.id}
                 onClick={() => handleCafeClick(cafe)}
@@ -153,9 +219,7 @@ export default function CafeListPage() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-32">
-            <p className="text-gray-400 text-sm">
-              주변에 카페 정보가 없습니다.
-            </p>
+            <p className="text-gray-400 text-sm">주변에 카페 정보가 없습니다.</p>
           </div>
         )}
       </main>
@@ -163,10 +227,9 @@ export default function CafeListPage() {
       {/* 하단 버튼 */}
       <div className="px-4 py-4 border-t border-gray-100 shrink-0">
         <Button onClick={() => navigate('/category')} className="w-full">
-          카테고리 다시 선택하기
+          지역 다시 선택하기
         </Button>
       </div>
     </div>
   );
 }
-``

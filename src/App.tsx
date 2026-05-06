@@ -8,7 +8,6 @@ import MyPage from '@/pages/MyPage';
 import LoginPage from '@/pages/LoginPage';
 import SignUpPage from '@/pages/SignUpPage';
 import CategoryPage from '@/pages/CategoryPage';
-import FilterPage from '@/pages/FilterPage';
 import CafeListPage from '@/pages/CafeListPage';
 import CafeInfoPage from '@/pages/CafeInfoPage';
 import AddReviewPage from '@/pages/AddReviewPage';
@@ -20,7 +19,6 @@ const publicRoutes = [
   { path: '/category', element: <CategoryPage /> },
   { path: '/cafelist', element: <CafeListPage /> },
   { path: '/cafes/:cafeId', element: <CafeInfoPage /> },
-  { path: '/filter', element: <FilterPage /> },
   { path: '/signup', element: <SignUpPage /> },
   { path: '/auth/success', element: <AuthSuccess /> },
    { path: '/mypage', element: <MyPage /> },
