@@ -2,11 +2,21 @@ import kakaoLoginImg from '@/assets/images/login/kakao_login_medium_wide.png';
 
 const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_CLIENT_ID;
-const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
 const KakaoLoginButton = () => {
   const onLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
+    const redirect = window.location.origin;
+    const encodedState = btoa(redirect);
+
+    // origin 체크 후 해당 origin으로 redirect
+    const kakaoAuthUrl =
+      `https://kauth.kakao.com/oauth/authorize` +
+      `?client_id=${KAKAO_CLIENT_ID}` +
+      `&redirect_uri=${encodeURIComponent(KAKAO_REDIRECT_URI)}` +
+      `&response_type=code` +
+      `&state=${encodedState}`;
+
+    window.location.href = kakaoAuthUrl;
   };
 
   return (
