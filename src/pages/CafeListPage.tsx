@@ -215,7 +215,10 @@ export default function CafeListPage() {
       </main>
 
       {selectedCafe && (
-        <div className="absolute bottom-0 left-0 right-0 bg-white border-t rounded-t-3xl shadow-[0_-8px_30px_rgb(0,0,0,0.12)] z-40 animate-in fade-in slide-in-from-bottom-10 duration-300">
+        <div
+          className="absolute bottom-0 left-0 right-0 bg-white border-t rounded-t-3xl shadow-[0_-8px_30px_rgb(0,0,0,0.12)] z-40 animate-in fade-in slide-in-from-bottom-10 duration-300"
+          onClick={(e) => e.stopPropagation()}
+        >
           <div className="p-5">
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -229,11 +232,13 @@ export default function CafeListPage() {
                 ✕
               </button>
             </div>
+
             <div
               ref={mapRef}
-              className="w-full h-48 rounded-2xl bg-gray-100 mb-5 overflow-hidden shadow-inner cursor-pointer"
-              onClick={() => goToDetailPage(selectedCafe)}
+              className="w-full h-48 rounded-2xl bg-gray-100 mb-5 overflow-hidden shadow-inner"
+              onClick={(e) => e.stopPropagation()}
             />
+
             <Button
               onClick={() => goToDetailPage(selectedCafe)}
               className="w-full h-12 text-base font-bold"
