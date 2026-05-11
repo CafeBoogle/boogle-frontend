@@ -108,9 +108,9 @@ export default function CategoryPage() {
       </section>
 
       <Button
+        variant="brown4"
         size="full"
-        textColor="white"
-        className="w-full max-w-xs mt-auto text-base"
+        className="w-full max-w-xs mt-auto"
         onClick={() => navigate('/cafelist', { state: { region: selected, door: selectedDoor } })}
       >
         적용하기

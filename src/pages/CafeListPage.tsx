@@ -226,7 +226,7 @@ export default function CafeListPage() {
 
       {/* 하단 버튼 */}
       <div className="px-4 py-4 border-t border-gray-100 shrink-0">
-        <Button onClick={() => navigate('/category')} className="w-full">
+        <Button variant="brown4" size="full" onClick={() => navigate('/category')}>
           지역 다시 선택하기
         </Button>
       </div>

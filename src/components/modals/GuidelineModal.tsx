@@ -21,7 +21,7 @@ function GuidelineModal({ onClose, onDismissToday }: GuidelineModalProps) {
 
         {/* 인트로 */}
         <p className="text-xs leading-relaxed text-gray-500 break-keep text-center mb-6">
-          Boogle은 당신의 몰입이 머무를 최적의 공간을 연결합니다.<br />
+
           좋은 공간은 서로의 배려에서 시작되기에,<br />
           각 카페를 존중하는 마음으로 함께해주세요.
         </p>
