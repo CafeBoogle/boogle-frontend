@@ -21,16 +21,13 @@ const publicRoutes = [
   { path: '/cafes/:cafeId', element: <CafeInfoPage /> },
   { path: '/signup', element: <SignUpPage /> },
   { path: '/auth/success', element: <AuthSuccess /> },
-   { path: '/mypage', element: <MyPage /> },
-   { path: '/addreview', element: <AddReviewPage /> },
-   { path: '/addreview/:cafeId', element: <AddReviewPage /> },
 ];
 
-// const protectedRoutes = [
-//   { path: '/mypage', element: <MyPage /> },
-//   { path: '/addreview', element: <AddReviewPage /> },
-//   { path: '/addreview/:cafeId', element: <AddReviewPage /> },
-// ];
+const protectedRoutes = [
+  { path: '/mypage', element: <MyPage /> },
+  { path: '/addreview', element: <AddReviewPage /> },
+  { path: '/addreview/:cafeId', element: <AddReviewPage /> },
+];
 
 export default function App() {
   return (
@@ -41,9 +38,9 @@ export default function App() {
             {publicRoutes.map(({ path, element }) => (
               <Route key={path} path={path} element={element} />
             ))}
-            {/* {protectedRoutes.map(({ path, element }) => (
+            {protectedRoutes.map(({ path, element }) => (
               <Route key={path} path={path} element={<ProtectedRoute>{element}</ProtectedRoute>} />
-            ))} */}
+            ))}
           </Routes>
         </AppLayout>
       </BrowserRouter>
