@@ -16,7 +16,7 @@ const AddReviewPage = () => {
   const [cafeId, setCafeId] = useState<number>(0);
   const [cafeName, setCafeName] = useState<string>('');
   const [comment, setComment] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [ratings, setRatings] = useState<Record<string, number>>(INITIAL_RATINGS);
 
   const { submitReview } = useSubmitReview();
@@ -53,7 +53,7 @@ const AddReviewPage = () => {
       )}
 
       <div className="flex justify-center mb-6">
-        <ImageUploader onFileSelect={(file) => setSelectedFile(file)} />
+        <ImageUploader onFileSelect={(file) => setSelectedFiles([file])} />
       </div>
 
       <RatingSliderList ratings={ratings} onChange={handleRatingChange} />
@@ -62,7 +62,7 @@ const AddReviewPage = () => {
         <TextInput placeholder="한 줄 리뷰를 작성해주세요" value={comment} onChange={setComment} />
       </div>
 
-      <Button variant="brown4" size="full" onClick={() => submitReview({ cafeId, comment, ratings, selectedFile })}>
+      <Button variant="brown4" size="full" onClick={() => submitReview({ cafeId, comment, ratings, images: selectedFiles })}>
         저장
       </Button>
     </div>

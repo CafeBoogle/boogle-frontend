@@ -8,7 +8,7 @@ type CafeDetail = {
   address: string;
   placeId?: string;
   contact?: string;
-  imageName?: string;
+  imageName?: string[];
   tags?: string[];
   reviewImageUrls?: string[] | null;
   shortReviews?: string[];

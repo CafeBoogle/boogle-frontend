@@ -11,7 +11,7 @@ export interface CafeScore {
 
 // 카카오 Places API 검색 결과
 export interface KakaoCafe {
-  id: string;
+  id: number;
   name: string;
   address: string;
   tags: string[];
