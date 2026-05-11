@@ -16,6 +16,7 @@ type CafeDetail = {
     seatScoreAvg: number;
     wifiScoreAvg: number;
     noiseScoreAvg: number;
+    studyScoreAvg: number;
   };
   isWished?: boolean;
 };
