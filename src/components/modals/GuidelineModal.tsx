@@ -6,71 +6,60 @@ interface GuidelineModalProps {
 function GuidelineModal({ onClose, onDismissToday }: GuidelineModalProps) {
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="scrollbar-hide w-[90%] max-h-[80vh] overflow-y-auto rounded-2xl bg-white px-6 pt-10 pb-8 border shadow-xl">
+      <div className="scrollbar-hide w-[88%] max-h-[80vh] overflow-y-auto rounded-2xl bg-white px-7 pt-8 pb-6 shadow-xl">
+
         {/* Title */}
-        <h2 className="mb-6 text-center text-xl font-semibold text-brown- leading-snug break-keep">
-          행복한 카페 문화를 만들기 위한 <br />
-          <span className="font-bold">Boogle 가이드라인</span>
-        </h2>
+        <div className="text-center mb-5">
+          <p className="text-[10px] tracking-widest text-[#8B7368] uppercase mb-2">Guidelines</p>
+          <h2 className="text-sm font-bold text-gray-900 leading-snug break-keep">
+            더 따뜻한 카페 문화를 위한<br />Boogle 가이드라인
+          </h2>
+        </div>
 
-        {/* Content */}
-        <ol className="list-decimal pl-5 space-y-4 text-sm break-keep">
-          <li>
-            <p className="font-semibold text-gray-900">
-              작업하기 좋은 카페를 발견하는 여정을 돕는 서비스예요.
-            </p>
-            <p className="mt-2 leading-relaxed text-gray-600">
-              당신의 하루에 꼭 맞는 공간을 더 쉽게 찾을 수 있도록 만들었습니다.
-            </p>
-          </li>
+        {/* 구분선 */}
+        <div className="w-8 h-px bg-[#8B7368] mx-auto mb-5" />
 
-          <li>
-            <p className="font-semibold text-gray-900">
-              카페에서의 예의 있는 작업 문화를 소중히 생각합니다.
-            </p>
-            <p className="mt-2 leading-relaxed text-gray-600">
-              카공을 강요하거나 무례한 사용을 조장하지 않으며, 각 공간을 존중하는 마음으로 Boogle을
-              이용해주세요.
-            </p>
-          </li>
+        {/* 인트로 */}
+        <p className="text-xs leading-relaxed text-gray-500 break-keep text-center mb-6">
+          Boogle은 당신의 몰입이 머무를 최적의 공간을 연결합니다.<br />
+          좋은 공간은 서로의 배려에서 시작되기에,<br />
+          각 카페를 존중하는 마음으로 함께해주세요.
+        </p>
 
-          <li>
-            <p className="font-semibold text-gray-900">
-              카페가 자신의 정보를 숨기고 싶다면 언제든 존중합니다.
-            </p>
-            <p className="mt-2 leading-relaxed text-gray-600">
-              노출을 원하지 않는 매장은 편하게 연락 주세요. 빠르게 조치하겠습니다.
-            </p>
-          </li>
-
-          <li>
-            <p className="font-semibold text-gray-900">
-              잘못된 정보나 수정이 필요한 내용이 있다면 알려주세요.
-            </p>
-            <p className="mt-2 leading-relaxed text-gray-600">
-              Boogle은 사용자와 함께 만드는 서비스이기에, 여러분의 제보는 큰 힘이 됩니다.
-            </p>
-          </li>
-
-          <li>
-            <p className="font-semibold text-gray-900">
-              모두가 편안하게 머무를 수 있는 카페 문화를 만들고 싶어요.
-            </p>
-            <p className="mt-2 leading-relaxed text-gray-600">
-              작은 배려와 정확한 정보 공유가 더 따뜻한 카페 찾기 경험을 완성합니다.
-            </p>
-          </li>
-        </ol>
+        {/* 항목 */}
+        <div className="flex flex-col gap-4">
+          {[
+            {
+              num: '01',
+              title: '모든 카페의 운영 방식과 공간의 가치를 존중합니다.',
+              desc: '노출을 원하지 않는 매장은 편하게 연락주세요. 빠르게 조치하겠습니다.',
+            },
+            {
+              num: '02',
+              title: '더 정확한 정보를 위해 여러분의 목소리가 필요합니다.',
+              desc: '잘못된 정보나 수정이 필요한 내용이 있다면 알려주세요.',
+            },
+          ].map(({ num, title, desc }) => (
+            <div key={num} className="flex gap-3 items-start">
+              <span className="text-[10px] font-bold text-[#8B7368] mt-0.5 shrink-0">{num}</span>
+              <div>
+                <p className="text-xs font-semibold text-gray-800 break-keep">{title}</p>
+                <p className="text-[11px] leading-relaxed text-gray-400 mt-1 break-keep">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
 
         {/* Footer */}
-        <div className="mt-8 flex items-center justify-between text-xs text-gray-400">
-          <button onClick={onDismissToday} className="hover:underline cursor-pointer">
+        <div className="mt-7 pt-4 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-400">
+          <button onClick={onDismissToday} className="hover:text-gray-600 transition-colors cursor-pointer">
             오늘 하루 보지 않음
           </button>
-          <button onClick={onClose} className="text-lg text-gray-500 hover:text-gray-700">
-            ✕
+          <button onClick={onClose} className="hover:text-gray-600 transition-colors">
+            닫기
           </button>
         </div>
+
       </div>
     </div>
   );
