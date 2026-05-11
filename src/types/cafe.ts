@@ -25,7 +25,8 @@ export interface KakaoCafe {
 
 // 마이페이지 내 리뷰 목록 아이템
 export interface MyReview {
-  id: string;
+  id: number;
+  cafeId: number;
   name: string;
   address: string;
   tags: string[];
