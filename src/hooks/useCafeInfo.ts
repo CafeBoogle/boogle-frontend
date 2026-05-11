@@ -9,6 +9,9 @@ type CafeDetail = {
   placeId?: string;
   contact?: string;
   imageName?: string;
+  tags?: string[];
+  reviewImageUrls?: string[] | null;
+  shortReviews?: string[];
   score: {
     reviewCount: number;
     toiletScoreAvg: number;

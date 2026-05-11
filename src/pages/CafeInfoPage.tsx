@@ -28,7 +28,7 @@ function CafeInfoPage() {
       <div className="bg-white px-5 pt-5 pb-5 shadow-sm">
         <div className="flex items-start justify-between gap-3">
           <h1 className="text-xl font-bold text-gray-900 leading-snug break-keep">
-            {cafe.name}
+          📍 {cafe.name}
           </h1>
           {cafe.placeId && (
             <a
@@ -42,17 +42,16 @@ function CafeInfoPage() {
           )}
         </div>
 
-        {/* 주소 */}
-        <div className="mt-3 flex items-start gap-2">
-          <span className="text-base mt-0.5">📍</span>
-          <p className="text-sm text-gray-700 font-medium break-keep leading-relaxed">
-            {cafe.address}
-          </p>
-        </div>
-        {cafe.contact && (
-          <div className="mt-1.5 flex items-center gap-2">
-            <span className="text-base">📞</span>
-            <p className="text-sm text-gray-500">{cafe.contact}</p>
+        {/* 태그 */}
+        {cafe.tags && cafe.tags.length > 0 && (
+          <div className="bg-white rounded-2xl px-1 pt-4">
+            <div className="flex flex-wrap gap-2">
+              {cafe.tags.map((tag, i) => (
+                <span key={i} className="text-xs font-semibold text-[#8B7368] bg-[#F5EDE8] px-3 py-1.5 rounded-full">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -88,6 +87,24 @@ function CafeInfoPage() {
             images={cafe.imageName ? [cafe.imageName] : []}
             onImageClick={setSelectedImage}
           />
+        </div>
+
+
+        {/* 한줄리뷰 */}
+        <div className="bg-white rounded-2xl px-5 py-5">
+          <p className="text-sm font-semibold text-gray-800 mb-3">한줄리뷰</p>
+          {cafe.shortReviews && cafe.shortReviews.length > 0 ? (
+            <div className="flex flex-col gap-2">
+              {cafe.shortReviews.map((review, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <span className="text-[#8B7368] mt-0.5">💬</span>
+                  <p className="text-sm text-gray-700 leading-relaxed">{review}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-400 text-center py-4">아직 등록된 한줄리뷰가 없습니다.</p>
+          )}
         </div>
 
         {/* 안내 문구 */}
