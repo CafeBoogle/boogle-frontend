@@ -12,6 +12,15 @@ function CafeInfoPage() {
   const navigate = useNavigate();
   const { cafe, isWished, isLoading, handleWishToggle } = useCafeInfo(cafeId);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  
+  const IMAGE_BASE_URL = 'https://www.api.moonsunpower.com/boogle/images/reviews';
+  
+const cafeImages =
+  cafe?.imageName
+    ? [`${IMAGE_BASE_URL}/${cafe.imageName}`]
+    : [];
+
+
 
   if (!cafe) {
     return (
@@ -82,12 +91,18 @@ function CafeInfoPage() {
         </div>
 
         {/* 이미지 */}
-        <div className="bg-white rounded-2xl px-5 py-5">
-          <CafeImageList
-            images={cafe.imageName ? [cafe.imageName] : []}
-            onImageClick={setSelectedImage}
-          />
-        </div>
+
+
+{cafeImages.length > 0 && (
+  <div className="bg-white rounded-2xl px-5 py-5">
+    <CafeImageList
+      images={cafeImages}
+      onImageClick={setSelectedImage}
+    />
+  </div>
+)}
+
+
 
 
         {/* 한줄리뷰 */}
@@ -106,7 +121,6 @@ function CafeInfoPage() {
             <p className="text-sm text-gray-400 text-center py-4">아직 등록된 한줄리뷰가 없습니다.</p>
           )}
         </div>
-
         {/* 안내 문구 */}
         <p className="text-xs text-gray-400 text-center leading-relaxed px-4 break-keep">
           실제 리뷰를 바탕으로 카페의 분위기와 작업 환경을 분석한 리포트입니다.
