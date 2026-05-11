@@ -46,7 +46,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     if (!user) return;
-    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://www.api.moonsunpower.com/boogle';
+
     const provider = user.provider.toLowerCase();
     const logoutUrl = `${baseUrl}/api/oauth/${provider}/logout?redirect=${encodeURIComponent(window.location.origin)}`;
 
