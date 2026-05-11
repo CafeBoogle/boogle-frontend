@@ -3,7 +3,8 @@ import { useState } from 'react';
 import Button from '@/components/common/Button';
 import CafeImageList from '@/components/cafe/CafeImageList';
 import ImageModal from '@/components/cafe/ImageModal';
-import CafeReviewChart from '@/components/cafe/CafeReviewChart';
+import CafeStudyGauge from '@/components/cafe/CafeStudyGauge';
+import CafeScoreCards from '@/components/cafe/CafeScoreCards';
 import { useCafeInfo } from '@/hooks/useCafeInfo';
 
 function CafeInfoPage() {
@@ -58,12 +59,12 @@ function CafeInfoPage() {
 
       <div className="flex flex-col gap-3 px-4 py-4">
 
-        {/* 리뷰 차트 */}
+        {/* 카공 적합도 + 스코어 카드 */}
         <div className="bg-white rounded-2xl px-5 py-5">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-1">
             <p className="text-sm font-semibold text-gray-800">카페 분석 리포트</p>
             {cafe.score && cafe.score.reviewCount > 0 && (
-              <p className="text-xs text-gray-400">리뷰 {cafe.score.reviewCount}개 기반 분석</p>
+              <p className="text-xs text-gray-400">리뷰 {cafe.score.reviewCount}개 기반</p>
             )}
           </div>
           {!cafe.score || cafe.score.reviewCount === 0 ? (
@@ -72,7 +73,12 @@ function CafeInfoPage() {
               <p className="text-xs text-gray-300 mt-1">첫 번째 리뷰를 남겨보세요!</p>
             </div>
           ) : (
-            <CafeReviewChart scores={cafe.score} />
+            <>
+              <CafeStudyGauge score={cafe.score.studyScoreAvg ?? 0} />
+              <div className="mt-3">
+                <CafeScoreCards scores={cafe.score} />
+              </div>
+            </>
           )}
         </div>
 
