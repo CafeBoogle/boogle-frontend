@@ -11,7 +11,7 @@ export interface CafeScore {
 
 // 카카오 Places API 검색 결과
 export interface KakaoCafe {
-  id: string;
+  id: number;
   name: string;
   address: string;
   tags: string[];
@@ -25,7 +25,8 @@ export interface KakaoCafe {
 
 // 마이페이지 내 리뷰 목록 아이템
 export interface MyReview {
-  id: string;
+  id: number;
+  cafeId: number;
   name: string;
   address: string;
   tags: string[];

@@ -43,7 +43,16 @@ export default function SignUpPage() {
     formData.append('nickname', nickname);
     formData.append('provider', provider);
     formData.append('providerUserId', providerUserId);
-    if (selected) formData.append('catType', selected);
+
+    if (selected) {
+      const cat = cats.find((c) => c.id === selected);
+      if (cat) {
+        const res = await fetch(cat.src);
+        const blob = await res.blob();
+        const file = new File([blob], `${selected}.png`, { type: 'image/png' });
+        formData.append('profileImage', file);
+      }
+    }
 
     try {
       await axiosInstance.post('/api/signup', formData, {

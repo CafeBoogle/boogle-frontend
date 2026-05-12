@@ -14,8 +14,9 @@ const INITIAL_RATINGS: Record<string, number> = {
 
 const AddReviewPage = () => {
   const [cafeId, setCafeId] = useState<number>(0);
+  const [cafeName, setCafeName] = useState<string>('');
   const [comment, setComment] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [ratings, setRatings] = useState<Record<string, number>>(INITIAL_RATINGS);
 
   const { submitReview } = useSubmitReview();
@@ -33,7 +34,8 @@ const AddReviewPage = () => {
         latitude: Number(place.y),
         longitude: Number(place.x),
       });
-      setCafeId(response.data); // DB cafeId
+      setCafeId(response.data);
+      setCafeName(place.place_name);
     } catch (error) {
       alert('카페 정보를 불러오는 데 실패했습니다.');
     }
@@ -42,10 +44,16 @@ const AddReviewPage = () => {
 
   return (
     <div className="max-w-md p-4 bg-white pb-10 px-8 px-auto mx-4 my-8 mx-auto mt-6 rounded-lg shadow">
+      <h1 className="text-2xl font-bold text-[#4A3A2E] leading-snug mb-2">
+        리뷰 등록 페이지
+      </h1>
       <CafeSearchSection onSelect={handleSelect} />
+      {cafeName && (
+        <p className="text-sm text-[#6B4F3A] font-semibold mb-4">선택된 카페: {cafeName}</p>
+      )}
 
       <div className="flex justify-center mb-6">
-        <ImageUploader onFileSelect={(file) => setSelectedFile(file)} />
+        <ImageUploader onFilesSelect={(files) => setSelectedFiles(files)} />
       </div>
 
       <RatingSliderList ratings={ratings} onChange={handleRatingChange} />
@@ -54,7 +62,7 @@ const AddReviewPage = () => {
         <TextInput placeholder="한 줄 리뷰를 작성해주세요" value={comment} onChange={setComment} />
       </div>
 
-      <Button variant="brown4" size="full" onClick={() => submitReview({ cafeId, comment, ratings, selectedFile })}>
+      <Button variant="brown4" size="full" onClick={() => submitReview({ cafeId, comment, ratings, images: selectedFiles })}>
         저장
       </Button>
     </div>

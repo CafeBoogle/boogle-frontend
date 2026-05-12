@@ -3,14 +3,20 @@ import { useState } from 'react';
 import Button from '@/components/common/Button';
 import CafeImageList from '@/components/cafe/CafeImageList';
 import ImageModal from '@/components/cafe/ImageModal';
-import CafeReviewChart from '@/components/cafe/CafeReviewChart';
-import { useCafeInfo } from '@/hooks/useCafeInfo';
+import CafeStudyGauge from '@/components/cafe/CafeStudyGauge';
+import CafeScoreCards from '@/components/cafe/CafeScoreCards';
+import { useCafeInfo, toImageUrl } from '@/hooks/useCafeInfo';
 
 function CafeInfoPage() {
   const { cafeId } = useParams<{ cafeId: string }>();
   const navigate = useNavigate();
   const { cafe, isWished, isLoading, handleWishToggle } = useCafeInfo(cafeId);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  
+  
+  const cafeImages = (cafe?.imageName ?? []).map(toImageUrl);
+
+
 
   if (!cafe) {
     return (
@@ -27,7 +33,7 @@ function CafeInfoPage() {
       <div className="bg-white px-5 pt-5 pb-5 shadow-sm">
         <div className="flex items-start justify-between gap-3">
           <h1 className="text-xl font-bold text-gray-900 leading-snug break-keep">
-            {cafe.name}
+          📍 {cafe.name}
           </h1>
           {cafe.placeId && (
             <a
@@ -41,29 +47,28 @@ function CafeInfoPage() {
           )}
         </div>
 
-        {/* 주소 */}
-        <div className="mt-3 flex items-start gap-2">
-          <span className="text-base mt-0.5">📍</span>
-          <p className="text-sm text-gray-700 font-medium break-keep leading-relaxed">
-            {cafe.address}
-          </p>
-        </div>
-        {cafe.contact && (
-          <div className="mt-1.5 flex items-center gap-2">
-            <span className="text-base">📞</span>
-            <p className="text-sm text-gray-500">{cafe.contact}</p>
+        {/* 태그 */}
+        {cafe.tags && cafe.tags.length > 0 && (
+          <div className="bg-white rounded-2xl px-1 pt-4">
+            <div className="flex flex-wrap gap-2">
+              {cafe.tags.map((tag, i) => (
+                <span key={i} className="text-xs font-semibold text-[#8B7368] bg-[#F5EDE8] px-3 py-1.5 rounded-full">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         )}
       </div>
 
       <div className="flex flex-col gap-3 px-4 py-4">
 
-        {/* 리뷰 차트 */}
+        {/* 카공 적합도 + 스코어 카드 */}
         <div className="bg-white rounded-2xl px-5 py-5">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-1">
             <p className="text-sm font-semibold text-gray-800">카페 분석 리포트</p>
             {cafe.score && cafe.score.reviewCount > 0 && (
-              <p className="text-xs text-gray-400">리뷰 {cafe.score.reviewCount}개 기반 분석</p>
+              <p className="text-xs text-gray-400">리뷰 {cafe.score.reviewCount}개 기반</p>
             )}
           </div>
           {!cafe.score || cafe.score.reviewCount === 0 ? (
@@ -72,18 +77,46 @@ function CafeInfoPage() {
               <p className="text-xs text-gray-300 mt-1">첫 번째 리뷰를 남겨보세요!</p>
             </div>
           ) : (
-            <CafeReviewChart scores={cafe.score} />
+            <>
+              <CafeStudyGauge score={cafe.score.studyScoreAvg ?? 0} />
+              <div className="mt-3">
+                <CafeScoreCards scores={cafe.score} />
+              </div>
+            </>
           )}
         </div>
 
         {/* 이미지 */}
-        <div className="bg-white rounded-2xl px-5 py-5">
-          <CafeImageList
-            images={cafe.imageName ? [cafe.imageName] : []}
-            onImageClick={setSelectedImage}
-          />
-        </div>
 
+
+{cafeImages.length > 0 && (
+  <div className="bg-white rounded-2xl px-5 py-5">
+    <CafeImageList
+      images={cafeImages}
+      onImageClick={setSelectedImage}
+    />
+  </div>
+)}
+
+
+
+
+        {/* 한줄리뷰 */}
+        <div className="bg-white rounded-2xl px-5 py-5">
+          <p className="text-sm font-semibold text-gray-800 mb-3">한줄리뷰</p>
+          {cafe.shortReviews && cafe.shortReviews.length > 0 ? (
+            <div className="flex flex-col gap-2">
+              {cafe.shortReviews.map((review, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <span className="text-[#8B7368] mt-0.5">💬</span>
+                  <p className="text-sm text-gray-700 leading-relaxed">{review}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-400 text-center py-4">아직 등록된 한줄리뷰가 없습니다.</p>
+          )}
+        </div>
         {/* 안내 문구 */}
         <p className="text-xs text-gray-400 text-center leading-relaxed px-4 break-keep">
           실제 리뷰를 바탕으로 카페의 분위기와 작업 환경을 분석한 리포트입니다.
