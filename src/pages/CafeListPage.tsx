@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import CafeCard from '@/components/cafe/CafeCard';
+import { CafeDetailPanel } from '@/components/cafe/CafeDetailPanel';
+import { FilterBar } from '@/components/cafe/FilterBar';
 import { SCORE_FILTERS, type ScoreFilterKey, type SortKey } from '@/constants/filterTags';
 import api from '@/api/axios';
 import { REGION_LABELS, UNIVERSITY_COORDS } from '@/constants/regions';
@@ -14,11 +16,7 @@ export default function CafeListPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState<ScoreFilterKey[]>([]);
   const [sortBy, setSortBy] = useState<SortKey | null>(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const [selectedCafe, setSelectedCafe] = useState<KakaoCafe | null>(null);
-  const mapRef = useRef<HTMLDivElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const state = location.state || { region: 'sogang', door: '정문' };
   const { region, door } = state;
@@ -28,29 +26,6 @@ export default function CafeListPage() {
     setSelectedFilters((prev) =>
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
     );
-  };
-
-  const handleCafeClick = (cafe: KakaoCafe) => {
-    setSelectedCafe(cafe);
-  };
-
-  const goToDetailPage = async (cafe: KakaoCafe) => {
-    try {
-      if (cafe.dbCafeId) {
-        navigate(`/cafes/${cafe.dbCafeId}`);
-        return;
-      }
-      const response = await api.post('/api/cafes/save', {
-        kakaoPlaceId: String(cafe.id),
-        name: cafe.name,
-        address: cafe.address,
-        latitude: Number(cafe.lat),
-        longitude: Number(cafe.lng),
-      });
-      navigate(`/cafes/${response.data}`);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   useEffect(() => {
@@ -116,21 +91,6 @@ export default function CafeListPage() {
     searchCafes();
   }, [region, door]);
 
-  useEffect(() => {
-    if (selectedCafe && mapRef.current) {
-      const container = mapRef.current;
-      const options = {
-        center: new window.kakao.maps.LatLng(selectedCafe.lat, selectedCafe.lng),
-        level: 3,
-      };
-      const map = new window.kakao.maps.Map(container, options);
-      const marker = new window.kakao.maps.Marker({
-        position: new window.kakao.maps.LatLng(selectedCafe.lat, selectedCafe.lng),
-      });
-      marker.setMap(map);
-    }
-  }, [selectedCafe]);
-
   const displayedCafes = cafes
     .filter((cafe) => {
       if (selectedFilters.length === 0) return true;
@@ -153,46 +113,12 @@ export default function CafeListPage() {
         <p className="text-xs text-gray-400 mt-0.5">주변 1km 이내 카페</p>
       </header>
 
-      <div className="flex items-center justify-between px-4 pb-2 shrink-0">
-        <span className="text-sm font-semibold text-gray-800">카페 선택 기준</span>
-        <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-md border border-gray-200 text-sm text-gray-600 bg-white"
-          >
-            {sortBy ? SCORE_FILTERS.find((f) => f.scoreKey === sortBy)?.label + ' 순' : '정렬'}
-            <span className="text-xs">{isDropdownOpen ? '▲' : '▼'}</span>
-          </button>
-          {isDropdownOpen && (
-            <div className="absolute right-0 top-9 bg-white border border-gray-200 rounded-xl shadow-lg z-30 w-40 py-1">
-              {SCORE_FILTERS.map(({ scoreKey, label }) => (
-                <button
-                  key={scoreKey}
-                  onClick={() => {
-                    setSortBy(scoreKey);
-                    setIsDropdownOpen(false);
-                  }}
-                  className={`w-full text-left px-4 py-2 text-sm ${sortBy === scoreKey ? 'text-[#8B7368] font-semibold' : 'text-gray-700'}`}
-                >
-                  {label} 순
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide shrink-0">
-        {SCORE_FILTERS.map(({ key, label }) => (
-          <button
-            key={key}
-            onClick={() => toggleFilter(key)}
-            className={`shrink-0 px-3 py-1.5 rounded-full text-sm border transition-colors ${selectedFilters.includes(key) ? 'bg-[#8B7368] text-white border-[#8B7368]' : 'bg-white text-gray-600 border-gray-200'}`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      <FilterBar
+        selectedFilters={selectedFilters}
+        sortBy={sortBy}
+        onToggleFilter={toggleFilter}
+        onSort={setSortBy}
+      />
 
       <main className="flex-1 overflow-y-auto px-4 py-3">
         {isLoading ? (
@@ -204,7 +130,7 @@ export default function CafeListPage() {
             {displayedCafes.map((cafe) => (
               <div
                 key={cafe.id}
-                onClick={() => handleCafeClick(cafe)}
+                onClick={() => setSelectedCafe(cafe)}
                 className={`bg-white rounded-xl px-4 py-4 cursor-pointer border-2 transition-all ${selectedCafe?.id === cafe.id ? 'border-[#8B7368]' : 'border-transparent'}`}
               >
                 <CafeCard cafe={cafe} />
@@ -215,38 +141,7 @@ export default function CafeListPage() {
       </main>
 
       {selectedCafe && (
-        <div
-          className="absolute bottom-0 left-0 right-0 bg-white border-t rounded-t-3xl shadow-[0_-8px_30px_rgb(0,0,0,0.12)] z-40 animate-in fade-in slide-in-from-bottom-10 duration-300"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="p-5">
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h3 className="text-lg font-bold text-gray-900">{selectedCafe.name}</h3>
-                <p className="text-sm text-gray-500">{selectedCafe.address}</p>
-              </div>
-              <button
-                onClick={() => setSelectedCafe(null)}
-                className="text-gray-400 hover:text-gray-600 p-1"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div
-              ref={mapRef}
-              className="w-full h-48 rounded-2xl bg-gray-100 mb-5 overflow-hidden shadow-inner"
-              onClick={(e) => e.stopPropagation()}
-            />
-
-            <Button
-              onClick={() => goToDetailPage(selectedCafe)}
-              className="w-full h-12 text-base font-bold"
-            >
-              이 카페 상세 정보 보기
-            </Button>
-          </div>
-        </div>
+        <CafeDetailPanel cafe={selectedCafe} onClose={() => setSelectedCafe(null)} />
       )}
 
       {!selectedCafe && (
