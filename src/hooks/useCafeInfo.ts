@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '@/api/axios';
+export { toImageUrl } from '@/constants/api';
 
 type CafeDetail = {
   id: number;
@@ -8,9 +9,8 @@ type CafeDetail = {
   address: string;
   placeId?: string;
   contact?: string;
-  imageName?: string;
+  imageName?: string[];
   tags?: string[];
-  reviewImageUrls?: string[] | null;
   shortReviews?: string[];
   score: {
     reviewCount: number;

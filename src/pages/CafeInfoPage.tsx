@@ -5,7 +5,7 @@ import CafeImageList from '@/components/cafe/CafeImageList';
 import ImageModal from '@/components/cafe/ImageModal';
 import CafeStudyGauge from '@/components/cafe/CafeStudyGauge';
 import CafeScoreCards from '@/components/cafe/CafeScoreCards';
-import { useCafeInfo } from '@/hooks/useCafeInfo';
+import { useCafeInfo, toImageUrl } from '@/hooks/useCafeInfo';
 
 function CafeInfoPage() {
   const { cafeId } = useParams<{ cafeId: string }>();
