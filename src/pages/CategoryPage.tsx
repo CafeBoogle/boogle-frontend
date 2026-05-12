@@ -1,55 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@/components/common/Button';
-import sogangImg from '@/assets/images/Category/sogang.png';
-import yonseiImg from '@/assets/images/Category/yonsei.png';
-import hongikImg from '@/assets/images/Category/hongik.png';
-import ewhaImg from '@/assets/images/Category/ewha.png';
-import hapjeongImg from '@/assets/images/Category/hapjeong.png';
-import allSpotImg from '@/assets/images/Category/allspot.png';
-import { REGION_LABELS, RegionId, UNIVERSITY_COORDS } from '@/constants/regions';
-
-type CategoryId = RegionId;
-
-interface CategoryCardProps {
-  id: CategoryId;
-  selected: CategoryId | null;
-  onSelect: (id: CategoryId) => void;
-  imgSrc: string;
-  alt: string;
-}
-
-const CATEGORIES: { id: CategoryId; imgSrc: string; alt: string }[] = [
-  { id: 'sogang', imgSrc: sogangImg, alt: '서강대학교' },
-  { id: 'yonsei', imgSrc: yonseiImg, alt: '연세대학교' },
-  { id: 'hongik', imgSrc: hongikImg, alt: '홍익대학교' },
-  { id: 'ewha', imgSrc: ewhaImg, alt: '이화여자대학교' },
-  { id: 'hapjeong', imgSrc: hapjeongImg, alt: '합정역 근처' },
-  { id: 'all', imgSrc: allSpotImg, alt: '전체 모아보기' },
-];
-
-function CategoryCard({ id, selected, onSelect, imgSrc, alt }: CategoryCardProps) {
-  const isActive = selected === id;
-
-  return (
-    <button
-      type="button"
-      onClick={() => onSelect(id)}
-      className={`
-        w-28 h-32 rounded-2xl flex flex-col items-center justify-center gap-2
-        border-2 transition-all duration-200
-        ${isActive
-          ? 'border-brown-2 bg-brown-400 bg-opacity-10 shadow-md scale-105'
-          : 'border-gray-200 bg-white shadow-sm hover:border-brown-2 hover:scale-105'}
-      `}
-    >
-      <img src={imgSrc} alt={alt} className="w-16 h-16 object-contain" />
-      <span className={`text-sm font-semibold ${isActive ? 'text-brown-4' : 'text-gray-600'}`}>
-        {REGION_LABELS[id]}
-      </span>
-    </button>
-  );
-}
+import { UNIVERSITY_COORDS } from '@/constants/regions';
+import { CategoryCard, CATEGORIES, type CategoryId } from '@/components/category/CategoryCard';
 
 export default function CategoryPage() {
   const navigate = useNavigate();
@@ -70,7 +23,7 @@ export default function CategoryPage() {
     <div className="flex flex-col items-center justify-center mt-10 px-10">
       <div className="w-full max-w-xs flex flex-col items-center">
       <div className="mb-8 text-left w-full">
-        <h1 className="text-xl font-bold text-[#4A3A2E] leading-snug mb-1">
+        <h1 className="text-lg font-bold text-[#4A3A2E] leading-snug mb-2">
           오늘 공부하고 싶은 지역을
           <br />
           선택해주세요 :)
