@@ -53,7 +53,7 @@ const AddReviewPage = () => {
       )}
 
       <div className="flex justify-center mb-6">
-        <ImageUploader onFileSelect={(file) => setSelectedFiles([file])} />
+        <ImageUploader onFilesSelect={(files) => setSelectedFiles(files)} />
       </div>
 
       <RatingSliderList ratings={ratings} onChange={handleRatingChange} />

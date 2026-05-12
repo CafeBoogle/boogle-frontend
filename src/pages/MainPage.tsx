@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Logo from '@/assets/images/mainLogo.png';
+import Logo from '@/assets/images/boogleLogo.png';
 import GuidelineModal from '@/components/modals/GuidelineModal';
 import Button from '@/components/common/Button';
 
@@ -44,7 +44,7 @@ export default function MainPage() {
           }}
         >
           {/* 상단 레이블 */}
-          <div className="mb-8 flex items-center gap-2">
+          <div className="mb-4 flex items-center gap-2">
             <div className="h-px w-6 bg-[#8B7368]" />
             <span className="text-[11px] tracking-[0.2em] text-[#8B7368] uppercase font-medium">
               Sinchon · Hongdae
@@ -54,19 +54,15 @@ export default function MainPage() {
 
           {/* 로고 */}
           <div
-            className="mb-6"
             style={{ animation: 'float 4s ease-in-out infinite' }}
           >
             <div className="relative">
               <div className="absolute inset-0 rounded-full bg-[#C4A882]/20 blur-xl scale-110" />
-              <img src={Logo} alt="Boogle 로고" className="relative w-28 drop-shadow-lg" />
+              <img src={Logo} alt="Boogle 로고" className="relative w-full drop-shadow-lg" />
             </div>
           </div>
 
-          {/* 브랜드명 */}
-          <h1 className="text-[52px] font-extrabold tracking-[-0.02em] text-[#3B2F2F] leading-none mb-3">
-            Boogle
-          </h1>
+      
 
           {/* 구분선 */}
           <div className="flex items-center gap-3 mb-5">
