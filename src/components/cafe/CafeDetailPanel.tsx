@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import type { KakaoCafe } from '@/types/cafe';
 import Button from '@/components/common/Button';
-import api from '@/api/axios';
+import { useGoToCafe } from '@/hooks/useGoToCafe';
 
 interface CafeDetailPanelProps {
   cafe: KakaoCafe;
@@ -10,7 +9,7 @@ interface CafeDetailPanelProps {
 }
 
 export function CafeDetailPanel({ cafe, onClose }: CafeDetailPanelProps) {
-  const navigate = useNavigate();
+  const { goToDetailPage } = useGoToCafe();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
@@ -35,26 +34,6 @@ export function CafeDetailPanel({ cafe, onClose }: CafeDetailPanelProps) {
   }, [cafe]);
 
 
-  const goToDetailPage = async () => {
-    try {
-      if (cafe.dbCafeId) {
-        navigate(`/cafes/${cafe.dbCafeId}`);
-        return;
-      }
-      const cafePayload = {
-        kakaoPlaceId: String(cafe.id),
-        name: cafe.name,
-        address: cafe.address,
-        latitude: Number(cafe.lat),
-        longitude: Number(cafe.lng),
-      };
-      const response = await api.post('/api/cafes/save', cafePayload);
-      navigate(`/cafes/${response.data}`);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <div
       className="absolute bottom-0 left-0 right-0 bg-white border-t rounded-t-3xl shadow-[0_-8px_30px_rgb(0,0,0,0.12)] z-40 animate-in fade-in slide-in-from-bottom-10 duration-300"
@@ -77,7 +56,7 @@ export function CafeDetailPanel({ cafe, onClose }: CafeDetailPanelProps) {
           onClick={(e) => e.stopPropagation()}
         />
 
-        <Button onClick={goToDetailPage} className="w-full h-12 text-base font-bold">
+        <Button onClick={() => goToDetailPage(cafe)} className="w-full h-12 text-base font-bold">
           이 카페 상세 정보 보기
         </Button>
       </div>
