@@ -33,6 +33,11 @@ export interface MyReview {
   comment: string;
 }
 
+export interface MyWish {
+  id: number;
+  cafeId: number;
+}
+
 // 우리 DB에 저장된 카페 (지도 마커용)
 export interface DbCafe {
   id: number;

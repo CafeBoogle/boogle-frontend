@@ -87,16 +87,14 @@ function CafeInfoPage() {
         </div>
 
         {/* 이미지 */}
-
-
-{cafeImages.length > 0 && (
-  <div className="bg-white rounded-2xl px-5 py-5">
-    <CafeImageList
-      images={cafeImages}
-      onImageClick={setSelectedImage}
-    />
-  </div>
-)}
+        {cafeImages.length > 0 && (
+          <div className="bg-white rounded-2xl px-5 py-5">
+            <CafeImageList
+              images={cafeImages}
+              onImageClick={setSelectedImage}
+            />
+          </div>
+        )}
 
 
 
@@ -125,15 +123,24 @@ function CafeInfoPage() {
 
         {/* 버튼 영역 */}
         <div className="flex flex-col gap-2 mt-4">
-          <Button
-            variant="brown4"
-            size="full"
-            textColor="white"
-            onClick={handleWishToggle}
-            disabled={isLoading}
-          >
-            {isWished ? '찜 취소 ❤️' : '카페 찜하기 ♡'}
-          </Button>
+<Button
+  variant="brown4"
+  size="full"
+  textColor="white"
+  onClick={handleWishToggle}
+  disabled={isLoading}
+>
+  <span className="flex items-center justify-center gap-2">
+    <span
+      className={`text-lg transition ${
+        isWished ? 'text-red-500' : 'text-white'
+      }`}
+    >
+      {isWished ? '❤️' : '🤍'}
+    </span>
+    {isWished ? '찜 완료' : '카페 찜하기'}
+  </span>
+</Button>
           <Button
             variant="brown1"
             size="full"

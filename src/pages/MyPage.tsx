@@ -11,24 +11,53 @@ export default function MyPage() {
   const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState<MyReview[]>([]);
+  const [wishCount, setWishCount] = useState<number>(0);
+
+  const handleDeleteReview = async (reviewId: number) => {
+  const confirmDelete = window.confirm('이 리뷰를 삭제할까요?');
+  if (!confirmDelete) return;
+
+  try {
+    await api.delete(`/api/reviews/delete/${reviewId}`);
+    alert('정상 처리되었습니다.');
+    // 삭제 후 즉시 반영
+    setReviews(prev => prev.filter(review => review.id !== reviewId));
+  } catch (e) {
+    console.error('리뷰 삭제 실패:', e);
+    alert('리뷰 삭제에 실패했습니다.');
+  }
+};
+
+
+const handleEditReview = (reviewId: number) => {
+  // TODO: 리뷰 수정 페이지 or 모달로 이동
+  alert('리뷰 수정 기능은 준비 중입니다.');
+  // navigate(`/reviews/edit/${reviewId}`);
+};
+
 
   useEffect(() => {
-    const fetchMyReviews = async () => {
-      setLoading(true);
-      try {        
-        // [API] 실제 백엔드에 내 리뷰 목록을 요청하는 구간
-        const response = await api.get('/api/mypage/reviews');
-        setReviews(response.data);
-      } catch (e) {
-        console.error('리뷰 fetch 실패:', e);
-        setReviews([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchMyPageData = async () => {
+    setLoading(true);
+    try {
+      const [reviewRes, wishRes] = await Promise.all([
+        api.get('/api/mypage/reviews'),
+        api.get('/api/mypage/wish/count'),
+      ]);
 
-    if (!authLoading) fetchMyReviews();
-  }, [user, authLoading]);
+      setReviews(reviewRes.data);
+      setWishCount(wishRes.data);
+    } catch (e) {
+      console.error('마이페이지 데이터 fetch 실패:', e);
+      setReviews([]);
+      setWishCount(0);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!authLoading) fetchMyPageData();
+}, [user, authLoading]);
 
 if (authLoading || (loading && user)) {
     return (
@@ -68,7 +97,7 @@ if (authLoading || (loading && user)) {
 
             <div className="flex items-center gap-2 mt-1">
               <span className="text-xs font-semibold text-[#8B7368] bg-[#F5EDE8] px-2 py-1 rounded-sm">
-                찜한 카페 5개
+                찜한 카페 {wishCount}개
               </span>
               <span className="text-xs font-semibold text-[#8B7368] bg-[#F5EDE8] px-2.5 py-1 rounded-sm">
                 리뷰 {reviews.length}개
@@ -98,13 +127,36 @@ if (authLoading || (loading && user)) {
             <div className="flex flex-col gap-4">
               {reviews.map((review, index) => (
                 <div key={review.id || index} className="flex flex-col gap-3">
+
                   <CafeCard
                     cafe={{ name: review.name, tags: review.tags || [] } as KakaoCafe}
                   />
+
                   <div className="bg-gray-50 rounded-xl px-4 py-3">
                     <p className="text-xs font-bold text-[#8B7368] mb-1">한줄 리뷰</p>
-                    <p className="text-sm text-gray-700 leading-relaxed">{review.comment}</p>
+                    <p className="text-sm text-gray-700 leading-relaxed">
+                      {review.comment}
+                    </p>
                   </div>
+
+                  {/* ✅ 수정 / 삭제 버튼 */}
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={() => handleEditReview(review.id)}
+                      className="text-xs font-semibold text-gray-500 px-3 py-1 rounded-lg
+                                hover:bg-gray-100 transition"
+                    >
+                      수정
+                    </button>
+                    <button
+                      onClick={() => handleDeleteReview(review.id)}
+                      className="text-xs font-semibold text-red-500 px-3 py-1 rounded-lg
+                                hover:bg-red-50 transition"
+                    >
+                      삭제
+                    </button>
+                  </div>
+
                   {index !== reviews.length - 1 && (
                     <div className="border-b border-gray-100" />
                   )}

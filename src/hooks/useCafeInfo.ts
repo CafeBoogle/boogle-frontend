@@ -42,7 +42,16 @@ export const useCafeInfo = (cafeId: string | undefined) => {
         alert('카페 정보를 불러올 수 없습니다.');
         navigate(-1);
       });
-  }, [cafeId, navigate]);
+
+    api.get(`/api/cafes/${cafeId}/wish`, { withCredentials: true })
+        .then(res => {
+          setIsWished(res.data); // true / false
+        })
+        .catch(() => {
+          setIsWished(false);
+        });
+    }, [cafeId, navigate]);
+
 
   const handleWishToggle = async () => {
     if (!cafeId) return;
