@@ -12,20 +12,28 @@ interface CafeDetailPanelProps {
 export function CafeDetailPanel({ cafe, onClose }: CafeDetailPanelProps) {
   const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<any>(null);
+  const markerRef = useRef<any>(null);
 
   useEffect(() => {
     if (mapRef.current) {
-      const options = {
-        center: new window.kakao.maps.LatLng(cafe.lat, cafe.lng),
-        level: 3,
-      };
-      const map = new window.kakao.maps.Map(mapRef.current, options);
-      const marker = new window.kakao.maps.Marker({
-        position: new window.kakao.maps.LatLng(cafe.lat, cafe.lng),
-      });
-      marker.setMap(map);
+      if (!mapInstanceRef.current) {
+        const options = {
+          center: new window.kakao.maps.LatLng(cafe.lat, cafe.lng),
+          level: 3,
+        };
+        mapInstanceRef.current = new window.kakao.maps.Map(mapRef.current, options);
+        markerRef.current = new window.kakao.maps.Marker({
+          position: new window.kakao.maps.LatLng(cafe.lat, cafe.lng),
+        });              
+        markerRef.current.setMap(mapInstanceRef.current);
+      } else {
+        markerRef.current.setPosition(new window.kakao.maps.LatLng(cafe.lat, cafe.lng));
+        mapInstanceRef.current.setCenter(new window.kakao.maps.LatLng(cafe.lat, cafe.lng));
+      }
     }
   }, [cafe]);
+
 
   const goToDetailPage = async () => {
     try {

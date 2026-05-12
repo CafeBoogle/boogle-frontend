@@ -126,12 +126,12 @@ export default function CafeListPage() {
             <div className="w-7 h-7 border-4 border-[#8B7368] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
-          <div className="flex flex-col gap-2 pb-20">
+          <div className="flex flex-col pb-20 divide-y divide-gray-100">
             {displayedCafes.map((cafe) => (
               <div
                 key={cafe.id}
                 onClick={() => setSelectedCafe(cafe)}
-                className={`bg-white rounded-xl px-4 py-4 cursor-pointer border-2 transition-all ${selectedCafe?.id === cafe.id ? 'border-[#8B7368]' : 'border-transparent'}`}
+                className={`px-4 py-4 cursor-pointer border-l-4 transition-all ${selectedCafe?.id === cafe.id ? 'border-l-[#8B7368] bg-[#F7F2ED]' : 'border-l-transparent bg-white'}`}
               >
                 <CafeCard cafe={cafe} />
               </div>
