@@ -35,7 +35,7 @@ export const useSubmitReview = () => {
     };
 
     formData.append('data', new Blob([JSON.stringify(reviewData)], { type: 'application/json' }));
-    if (selectedFile) formData.append('image', selectedFile);
+    if (selectedFile) formData.append('images', selectedFile);
 
     try {
       await api.post('/api/reviews', formData, {

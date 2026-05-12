@@ -15,9 +15,9 @@ export default function MyPage() {
   useEffect(() => {
     const fetchMyReviews = async () => {
       setLoading(true);
-      try {
+      try {        
+        // [API] 실제 백엔드에 내 리뷰 목록을 요청하는 구간
         const response = await api.get('/api/mypage/reviews');
-        console.log('리뷰 응답:', response.data);
         setReviews(response.data);
       } catch (e) {
         console.error('리뷰 fetch 실패:', e);
