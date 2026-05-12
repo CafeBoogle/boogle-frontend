@@ -5,13 +5,13 @@ interface ReviewData {
   cafeId: number;
   comment: string;
   ratings: Record<string, number>;
-  selectedFile: File | null;
+  images: File[];
 }
 
 export const useSubmitReview = () => {
   const navigate = useNavigate();
 
-  const submitReview = async ({ cafeId, comment, ratings, selectedFile }: ReviewData) => {
+  const submitReview = async ({ cafeId, comment, ratings, images }: ReviewData) => {
     if (cafeId === 0) {
       alert('카페를 선택해주세요.');
       return;
@@ -35,7 +35,7 @@ export const useSubmitReview = () => {
     };
 
     formData.append('data', new Blob([JSON.stringify(reviewData)], { type: 'application/json' }));
-    if (selectedFile) formData.append('images', selectedFile);
+    images.forEach((file) => formData.append('images', file));
 
     try {
       await api.post('/api/reviews', formData, {

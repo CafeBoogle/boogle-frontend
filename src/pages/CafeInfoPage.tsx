@@ -13,12 +13,8 @@ function CafeInfoPage() {
   const { cafe, isWished, isLoading, handleWishToggle } = useCafeInfo(cafeId);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   
-  const IMAGE_BASE_URL = 'https://www.api.moonsunpower.com/boogle/images/reviews';
   
-const cafeImages =
-  cafe?.imageName
-    ? [`${IMAGE_BASE_URL}/${cafe.imageName}`]
-    : [];
+  const cafeImages = (cafe?.imageName ?? []).map(toImageUrl);
 
 
 
