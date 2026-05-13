@@ -47,3 +47,11 @@ export interface DbCafe {
   longitude: number;
   thumbnail: string;
 }
+
+// 마이페이지 찜한 카페 목록 아이템 
+export interface MyWishCafe {
+  id: number;
+  name: string;
+  address: string;
+  tags: string[];
+}
