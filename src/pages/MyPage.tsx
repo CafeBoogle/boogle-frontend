@@ -145,17 +145,17 @@ export default function MyPage() {
           {activeTab === 'reviews' && (
             <>
               {reviews.length > 0 ? (
-                <div className="flex flex-col gap-2">
-                  {reviews.map((review, index) => (
+                <div className="flex flex-col divide-y divide-gray-100">
+                  {reviews.map((review) => (
                     <div
                       key={review.id}
                       onClick={() => navigate(`/cafes/${review.cafeId}`)}
-                      className="flex flex-col gap-3 cursor-pointer"
+                      className="flex flex-col gap-3 py-4 cursor-pointer "
                     >
                       <CafeCard
                         cafe={{ name: review.name, tags: review.tags || [] } as KakaoCafe}
                       />
-                      <div className="bg-gray-50 rounded-xl px-4 py-3">
+                      <div className="bg-white border border-[#E8DDD8] rounded-xl px-4 py-3">
                         <p className="text-xs font-bold text-[#8B7368] mb-1">한줄 리뷰</p>
                         <p className="text-sm text-gray-700 leading-relaxed">{review.comment}</p>
                       </div>
@@ -165,7 +165,7 @@ export default function MyPage() {
                             e.stopPropagation();
                             handleEditReview(review.id);
                           }}
-                          className="text-xs font-semibold text-gray-500 px-3 py-1 rounded-lg hover:bg-gray-100 transition"
+                          className="text-xs font-semibold text-gray-400 px-3 py-1 rounded-lg hover:bg-gray-100 transition"
                         >
                           수정
                         </button>
@@ -174,12 +174,11 @@ export default function MyPage() {
                             e.stopPropagation();
                             handleDeleteReview(review.id);
                           }}
-                          className="text-xs font-semibold text-red-500 px-3 py-1 rounded-lg hover:bg-red-50 transition"
+                          className="text-xs font-semibold text-red-400 px-3 py-1 rounded-lg hover:bg-red-50 transition"
                         >
                           삭제
                         </button>
                       </div>
-                      {index !== reviews.length - 1 && <div className="border-b border-gray-100" />}
                     </div>
                   ))}
                 </div>
@@ -195,15 +194,18 @@ export default function MyPage() {
           {activeTab === 'wishes' && (
             <>
               {wishes.length > 0 ? (
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col divide-y divide-gray-100">
                   {wishes.map((cafe) => (
                     <div
                       key={cafe.id}
                       onClick={() => navigate(`/cafes/${cafe.id}`)}
-                      className="cursor-pointer"
+                      className="flex items-center justify-between py-4 ml-1 cursor-pointer hover:bg-[#F5EDE8] -mx-5 px-5 transition-colors"
                     >
-                      <p className="text-sm font-semibold text-gray-800 pb-2">{cafe.name}</p>
-                      <p className="text-xs text-gray-400">{cafe.address}</p>
+                      <div>
+                        <p className="text-sm font-semibold text-[#6B4F3A]">{cafe.name}</p>
+                        <p className="text-xs text-gray-400 mt-0.5">{cafe.address}</p>
+                      </div>
+                      <span className="text-[#8B7368] text-sm">›</span>
                     </div>
                   ))}
                 </div>
