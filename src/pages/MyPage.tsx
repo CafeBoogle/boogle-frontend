@@ -145,9 +145,13 @@ export default function MyPage() {
           {activeTab === 'reviews' && (
             <>
               {reviews.length > 0 ? (
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
                   {reviews.map((review, index) => (
-                    <div key={review.id || index} className="flex flex-col gap-3">
+                    <div
+                      key={review.id}
+                      onClick={() => navigate(`/cafes/${review.cafeId}`)}
+                      className="flex flex-col gap-3 cursor-pointer"
+                    >
                       <CafeCard
                         cafe={{ name: review.name, tags: review.tags || [] } as KakaoCafe}
                       />
@@ -157,13 +161,19 @@ export default function MyPage() {
                       </div>
                       <div className="flex justify-end gap-2">
                         <button
-                          onClick={() => handleEditReview(review.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditReview(review.id);
+                          }}
                           className="text-xs font-semibold text-gray-500 px-3 py-1 rounded-lg hover:bg-gray-100 transition"
                         >
                           수정
                         </button>
                         <button
-                          onClick={() => handleDeleteReview(review.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteReview(review.id);
+                          }}
                           className="text-xs font-semibold text-red-500 px-3 py-1 rounded-lg hover:bg-red-50 transition"
                         >
                           삭제
@@ -187,7 +197,11 @@ export default function MyPage() {
               {wishes.length > 0 ? (
                 <div className="flex flex-col gap-8">
                   {wishes.map((cafe) => (
-                    <div key={cafe.id} onClick={() => navigate(`/cafes/${cafe.id}`)} className="cursor-pointer">
+                    <div
+                      key={cafe.id}
+                      onClick={() => navigate(`/cafes/${cafe.id}`)}
+                      className="cursor-pointer"
+                    >
                       <p className="text-sm font-semibold text-gray-800 pb-2">{cafe.name}</p>
                       <p className="text-xs text-gray-400">{cafe.address}</p>
                     </div>
