@@ -185,10 +185,10 @@ export default function MyPage() {
           {activeTab === 'wishes' && (
             <>
               {wishes.length > 0 ? (
-                <div className="flex flex-col gap-3">
-                  {wishes.map((cafe, index) => (
-                    <div key={cafe.id || index}>
-                      <p className="text-sm font-semibold text-gray-800">{cafe.name}</p>
+                <div className="flex flex-col gap-8">
+                  {wishes.map((cafe) => (
+                    <div key={cafe.id} onClick={() => navigate(`/cafes/${cafe.id}`)} className="cursor-pointer">
+                      <p className="text-sm font-semibold text-gray-800 pb-2">{cafe.name}</p>
                       <p className="text-xs text-gray-400">{cafe.address}</p>
                     </div>
                   ))}
