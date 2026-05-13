@@ -5,7 +5,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import CafeCard from '@/components/cafe/CafeCard';
 import { KakaoCafe, MyReview } from '@/types/cafe';
 
-
 export default function MyPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
@@ -14,52 +13,49 @@ export default function MyPage() {
   const [wishCount, setWishCount] = useState<number>(0);
 
   const handleDeleteReview = async (reviewId: number) => {
-  const confirmDelete = window.confirm('이 리뷰를 삭제할까요?');
-  if (!confirmDelete) return;
+    const confirmDelete = window.confirm('이 리뷰를 삭제할까요?');
+    if (!confirmDelete) return;
 
-  try {
-    await api.delete(`/api/reviews/delete/${reviewId}`);
-    alert('정상 처리되었습니다.');
-    // 삭제 후 즉시 반영
-    setReviews(prev => prev.filter(review => review.id !== reviewId));
-  } catch (e) {
-    console.error('리뷰 삭제 실패:', e);
-    alert('리뷰 삭제에 실패했습니다.');
-  }
-};
-
-
-const handleEditReview = (reviewId: number) => {
-  // TODO: 리뷰 수정 페이지 or 모달로 이동
-  alert('리뷰 수정 기능은 준비 중입니다.');
-  // navigate(`/reviews/edit/${reviewId}`);
-};
-
-
-  useEffect(() => {
-  const fetchMyPageData = async () => {
-    setLoading(true);
     try {
-      const [reviewRes, wishRes] = await Promise.all([
-        api.get('/api/mypage/reviews'),
-        api.get('/api/mypage/wish/count'),
-      ]);
-
-      setReviews(reviewRes.data);
-      setWishCount(wishRes.data);
+      await api.delete(`/api/reviews/delete/${reviewId}`);
+      alert('정상 처리되었습니다.');
+      setReviews(prev => prev.filter(review => review.id !== reviewId));
     } catch (e) {
-      console.error('마이페이지 데이터 fetch 실패:', e);
-      setReviews([]);
-      setWishCount(0);
-    } finally {
-      setLoading(false);
+      console.error('리뷰 삭제 실패:', e);
+      alert('리뷰 삭제에 실패했습니다.');
     }
   };
 
-  if (!authLoading) fetchMyPageData();
-}, [user, authLoading]);
+  const handleEditReview = (reviewId: number) => {
+    // TODO: 리뷰 수정 페이지 or 모달로 이동
+    alert('리뷰 수정 기능은 준비 중입니다.');
+    // navigate(`/reviews/edit/${reviewId}`);
+  };
 
-if (authLoading || (loading && user)) {
+  useEffect(() => {
+    const fetchMyPageData = async () => {
+      setLoading(true);
+      try {
+        const [reviewRes, wishRes] = await Promise.all([
+          api.get('/api/mypage/reviews'),
+          api.get('/api/mypage/wish/count'),
+        ]);
+
+        setReviews(reviewRes.data);
+        setWishCount(wishRes.data);
+      } catch (e) {
+        console.error('마이페이지 데이터 fetch 실패:', e);
+        setReviews([]);
+        setWishCount(0);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (!authLoading) fetchMyPageData();
+  }, [user, authLoading]);
+
+  if (authLoading || (loading && user)) {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-56px)]">
         <div className="w-7 h-7 border-4 border-[#8B7368] border-t-transparent rounded-full animate-spin" />
@@ -75,7 +71,6 @@ if (authLoading || (loading && user)) {
       {/* 프로필 카드 */}
       <div className="bg-white px-5 pt-8 pb-6 shadow-sm">
         <div className="flex items-center gap-4">
-          {/* 프로필 이미지 */}
           <div className="w-[72px] h-[72px] rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 flex items-center justify-center shrink-0">
             {user.profileImageUrl ? (
               <img src={user.profileImageUrl} alt="profile" className="w-full h-full object-cover" />
@@ -93,7 +88,6 @@ if (authLoading || (loading && user)) {
             }`}>
               {user.provider.toUpperCase()} 계정
             </span>
-
 
             <div className="flex items-center gap-2 mt-1">
               <span className="text-xs font-semibold text-[#8B7368] bg-[#F5EDE8] px-2 py-1 rounded-sm">
@@ -139,19 +133,16 @@ if (authLoading || (loading && user)) {
                     </p>
                   </div>
 
-                  {/* ✅ 수정 / 삭제 버튼 */}
                   <div className="flex justify-end gap-2">
                     <button
                       onClick={() => handleEditReview(review.id)}
-                      className="text-xs font-semibold text-gray-500 px-3 py-1 rounded-lg
-                                hover:bg-gray-100 transition"
+                      className="text-xs font-semibold text-gray-500 px-3 py-1 rounded-lg hover:bg-gray-100 transition"
                     >
                       수정
                     </button>
                     <button
                       onClick={() => handleDeleteReview(review.id)}
-                      className="text-xs font-semibold text-red-500 px-3 py-1 rounded-lg
-                                hover:bg-red-50 transition"
+                      className="text-xs font-semibold text-red-500 px-3 py-1 rounded-lg hover:bg-red-50 transition"
                     >
                       삭제
                     </button>
