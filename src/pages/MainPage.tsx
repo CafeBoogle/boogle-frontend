@@ -33,7 +33,6 @@ export default function MainPage() {
 
       {/* 배경 */}
       <div className="relative min-h-[calc(100vh-64px)] overflow-hidden">
-
         {/* 메인 콘텐츠 */}
         <div
           className="relative flex flex-col items-center justify-center min-h-[calc(100vh-64px)] px-8 pb-12 pt-6"
@@ -53,25 +52,19 @@ export default function MainPage() {
           </div>
 
           {/* 로고 */}
-          <div
-            style={{ animation: 'float 4s ease-in-out infinite' }}
-          >
+          <div style={{ animation: 'float 4s ease-in-out infinite' }}>
             <div className="relative">
               <div className="absolute inset-0 rounded-full bg-[#C4A882]/20 blur-xl scale-110" />
               <img src={Logo} alt="Boogle 로고" className="relative w-full drop-shadow-lg" />
             </div>
           </div>
 
-      
-
-          {/* 구분선 */}
           <div className="flex items-center gap-3 mb-5">
             <div className="h-px w-10 bg-gradient-to-r from-transparent to-[#8B7368]" />
             <div className="w-1.5 h-1.5 rounded-full bg-[#8B7368]" />
             <div className="h-px w-10 bg-gradient-to-l from-transparent to-[#8B7368]" />
           </div>
 
-          {/* 서브 텍스트 */}
           <p className="text-center text-[15px] text-[#6B5A4E] leading-relaxed mb-2">
             신촌·홍대 대학생을 위한
           </p>
@@ -79,7 +72,6 @@ export default function MainPage() {
             맞춤형 카페 큐레이션 서비스
           </p>
 
-          {/* 기능 태그 */}
           <div className="flex flex-wrap justify-center gap-2 mb-10 max-w-[300px]">
             {FEATURES.map((tag) => (
               <span
@@ -91,7 +83,6 @@ export default function MainPage() {
             ))}
           </div>
 
-          {/* CTA 버튼 */}
           <div className="w-full max-w-[300px] flex flex-col gap-3">
             <Button
               variant="brown4"
@@ -112,8 +103,6 @@ export default function MainPage() {
               마이페이지
             </Button>
           </div>
-
-          
         </div>
       </div>
 

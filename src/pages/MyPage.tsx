@@ -21,7 +21,7 @@ export default function MyPage() {
 
     try {
       await api.delete(`/api/reviews/delete/${reviewId}`);
-      alert('정상 처리되었습니다.');
+      alert('리뷰가 삭제되었습니다.');
       setReviews((prev) => prev.filter((review) => review.id !== reviewId));
     } catch (e) {
       console.error('리뷰 삭제 실패:', e);
@@ -39,13 +39,15 @@ export default function MyPage() {
     const fetchMyPageData = async () => {
       setLoading(true);
       try {
-        const [reviewRes, wishRes] = await Promise.all([
+        const [reviewRes, wishRes, wishListRes] = await Promise.all([
           api.get('/api/mypage/reviews'),
           api.get('/api/mypage/wish/count'),
+          api.get('/api/mypage/wish'),
         ]);
 
         setReviews(reviewRes.data);
         setWishCount(wishRes.data);
+        setWishes(wishListRes.data);
       } catch (e) {
         console.error('마이페이지 데이터 fetch 실패:', e);
         setReviews([]);
@@ -70,7 +72,6 @@ export default function MyPage() {
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)] bg-gray-50">
-      {/* 프로필 카드 */}
       <div className="bg-white px-5 pt-8 pb-6 shadow-sm">
         <div className="flex items-center gap-4">
           <div className="w-[72px] h-[72px] rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 flex items-center justify-center shrink-0">
@@ -108,7 +109,6 @@ export default function MyPage() {
       </div>
 
       <div className="flex flex-col gap-4 px-4 py-4">
-        {/* 리뷰 등록 버튼 */}
         <Button
           variant="brown4"
           size="full"
@@ -142,7 +142,6 @@ export default function MyPage() {
             </button>
           </div>
 
-          {/* 리뷰 탭 */}
           {activeTab === 'reviews' && (
             <>
               {reviews.length > 0 ? (
