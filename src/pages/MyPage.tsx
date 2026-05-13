@@ -182,11 +182,23 @@ export default function MyPage() {
             </>
           )}
 
-          {/* 찜 탭 */}
           {activeTab === 'wishes' && (
-            <div className="text-center py-10">
-              <p className="text-sm text-gray-400">찜한 카페 목록이 여기에 표시돼요.</p>
-            </div>
+            <>
+              {wishes.length > 0 ? (
+                <div className="flex flex-col gap-3">
+                  {wishes.map((cafe, index) => (
+                    <div key={cafe.id || index}>
+                      <p className="text-sm font-semibold text-gray-800">{cafe.name}</p>
+                      <p className="text-xs text-gray-400">{cafe.address}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-10">
+                  <p className="text-sm text-gray-400">찜한 카페가 없어요.</p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
