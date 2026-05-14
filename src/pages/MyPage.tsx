@@ -30,9 +30,7 @@ export default function MyPage() {
   };
 
   const handleEditReview = (reviewId: number) => {
-    // TODO: 리뷰 수정 페이지 or 모달로 이동
-    alert('리뷰 수정 기능은 준비 중입니다.');
-    // navigate(`/reviews/edit/${reviewId}`);
+    navigate(`/reviews/edit/${reviewId}`);
   };
 
   useEffect(() => {
