@@ -11,6 +11,7 @@ import CategoryPage from '@/pages/CategoryPage';
 import CafeListPage from '@/pages/CafeListPage';
 import CafeInfoPage from '@/pages/CafeInfoPage';
 import AddReviewPage from '@/pages/AddReviewPage';
+import EditReviewPage from '@/pages/EditReviewPage';
 import AuthSuccess from '@/pages/AuthSuccess';
 
 const publicRoutes = [
@@ -19,8 +20,10 @@ const publicRoutes = [
   { path: '/category', element: <CategoryPage /> },
   { path: '/cafelist', element: <CafeListPage /> },
   { path: '/cafes/:cafeId', element: <CafeInfoPage /> },
+  { path: '/reviews/edit/:reviewId', element: <EditReviewPage /> },
   { path: '/signup', element: <SignUpPage /> },
   { path: '/auth/success', element: <AuthSuccess /> },
+  
 ];
 
 const protectedRoutes = [
