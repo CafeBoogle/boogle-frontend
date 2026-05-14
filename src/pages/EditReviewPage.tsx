@@ -16,7 +16,6 @@ const DEFAULT_RATINGS = {
   noise: 3,
 };
 
-
 const EditReviewPage = () => {
   const { reviewId } = useParams();
   const navigate = useNavigate();
@@ -37,8 +36,6 @@ const EditReviewPage = () => {
       try {
         const res = await api.get(`/api/reviews/detail/${parsedReviewId}`);
         const data = res.data;
-
-        console.log("GET response =", data); // ✅ 디버깅
 
         setCafeName(data.cafeName ?? '');
         setComment(data.shortReview ?? '');
@@ -66,7 +63,7 @@ const EditReviewPage = () => {
     setRatings((prev) => ({ ...prev, [key]: value }));
   };
 
-  // ✅ ✅ 수정 제출 (완성)
+  // ✅ 수정 제출
   const handleSubmit = async () => {
     if (!parsedReviewId) return;
 
@@ -83,26 +80,18 @@ const EditReviewPage = () => {
       imageUrls: existingImages,
     };
 
-    // ✅ ✅ 핵심 수정 (Blob 제거!!)
-    formData.append("data", JSON.stringify(data));
+    formData.append(
+      "data",
+      new Blob([JSON.stringify(data)], { type: "application/json" }),
+      "data.json"
+    );
 
-    // ✅ 새 이미지 추가
     newFiles.forEach((file) => {
       formData.append("images", file);
     });
 
-    // ✅ 디버깅
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
     try {
-      await api.patch(`/api/reviews/${parsedReviewId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
+      await api.patch(`/api/reviews/${parsedReviewId}`, formData);
       alert("수정 완료!");
       navigate("/mypage");
     } catch (e) {
@@ -118,12 +107,21 @@ const EditReviewPage = () => {
         리뷰 수정
       </h1>
 
+      {/* ✅ 카페 고정 */}
+      <div className="mb-4 p-3 bg-[#F7F3EF] rounded-lg">
+        <p className="text-sm text-gray-500">카페</p>
+        <p className="font-semibold text-[#4A3A2E]">{cafeName}</p>
+      </div>
+
       {/* ✅ 기존 이미지 */}
       {existingImages.length > 0 && (
         <div className="flex gap-2 mb-4">
           {existingImages.map((url, idx) => (
             <div key={idx} className="relative">
-              <img src={toImageUrl(url)} className="w-20 h-20 object-cover rounded" />
+              <img
+                src={toImageUrl(url)} // ✅ 여기 핵심
+                className="w-20 h-20 object-cover rounded"
+              />
 
               <button
                 onClick={() =>
