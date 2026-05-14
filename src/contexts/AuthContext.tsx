@@ -3,7 +3,7 @@ import axiosInstance from '@/api/axios';
 
 interface User {
   id: number;
-  nickname: string | null; // 닉네임이 없으면 null (추가정보 입력 대상)
+  nickname: string | null;
   role: string;
   provider: 'kakao' | 'naver';
   profileImageUrl: string | null;
@@ -11,10 +11,10 @@ interface User {
 
 interface AuthContextValue {
   user: User | null;
-  loading: boolean; // 🚨 로딩 상태 추가 (인증 확인 전까지 화면 렌더링 방지)
-  login: (user: User) => void;
+  loading: boolean;
+  login: () => Promise<void>; // ✅ 변경
   logout: () => void;
-  checkAuth: () => Promise<User | null>; // 필요 시 수동 업데이트용
+  checkAuth: () => Promise<User | null>;
   profileImageUrl: string | null;
 }
 
@@ -22,9 +22,9 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true); // 처음엔 로딩 중
+  const [loading, setLoading] = useState(true);
 
-  // 서버에 내 정보 물어보기
+  // ✅ 서버에 내 정보 확인
   const checkAuth = async (): Promise<User | null> => {
     try {
       const res = await axiosInstance.get('/api/user/me');
@@ -42,20 +42,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, []);
 
-  const login = (user: User) => setUser(user);
+  // ✅ login → 토큰 저장 후 user 새로 불러오기
+  const login = async () => {
+    await checkAuth();
+  };
 
+  // ✅ 로그아웃
   const logout = async () => {
-    if (!user) return;
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://www.api.moonsunpower.com/boogle';
+    try {
+      await axiosInstance.post('/api/user/logout'); // ✅ refresh 쿠키 삭제
+    } catch (e) {
+      console.error('로그아웃 API 실패', e);
+    } finally {
+      localStorage.removeItem('accessToken'); // ✅ 핵심
 
-    const provider = user.provider.toLowerCase();
-    const logoutUrl = `${baseUrl}/api/oauth/${provider}/logout?redirect=${encodeURIComponent(window.location.origin)}`;
-
-    window.location.href = logoutUrl;
+      setUser(null);
+      window.location.href = '/';
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, checkAuth, profileImageUrl: user?.profileImageUrl ?? null }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        logout,
+        checkAuth,
+        profileImageUrl: user?.profileImageUrl ?? null
+      }}
+    >
       {!loading ? children : <div>인증 확인 중...</div>}
     </AuthContext.Provider>
   );

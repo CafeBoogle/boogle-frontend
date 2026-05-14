@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'https://www.api.moonsunpower.com/boogle',
   withCredentials: true,
@@ -14,7 +13,6 @@ axiosInstance.interceptors.response.use(
     if (originalRequest.url?.includes('/auth/refresh')) {
       return Promise.reject(error);
     }
-
     // 토큰 만료일 때만 refresh
     const errorMessage = error.response?.data;
 
