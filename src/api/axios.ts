@@ -1,5 +1,10 @@
 import axios, { AxiosInstance } from 'axios';
-// 'http://localhost:8080'
+
+const axiosInstance: AxiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://www.api.moonsunpower.com/boogle',
+  withCredentials: true,
+});
+
 axiosInstance.interceptors.response.use(
   (res) => res,
   async (error) => {
@@ -15,7 +20,7 @@ axiosInstance.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
-      errorMessage === "TOKEN_EXPIRED" &&
+      errorMessage === 'TOKEN_EXPIRED' &&
       !originalRequest._retry
     ) {
       originalRequest._retry = true;
@@ -30,6 +35,6 @@ axiosInstance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
-export default axiosInstance; // 이제 이름이 일치합니다.
+export default axiosInstance;
