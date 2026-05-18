@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '@/api/axios';
 import { useAuth } from '@/contexts/AuthContext';
+import { resolveProfileImage } from '@/constants/catImages';
 import CafeCard from '@/components/cafe/CafeCard';
 import { KakaoCafe, MyReview, MyWishCafe } from '@/types/cafe';
 import Button from '@/components/common/Button';
 
 export default function MyPage() {
   const navigate = useNavigate();
-  const { user, loading: authLoading, profileImageUrl } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const profileImageUrl = resolveProfileImage(user?.profileImageName ?? null);
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState<MyReview[]>([]);
   const [wishes, setWishes] = useState<MyWishCafe[]>([]);
