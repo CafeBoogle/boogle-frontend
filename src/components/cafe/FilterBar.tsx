@@ -14,18 +14,20 @@ export function FilterBar({ selectedFilters, sortBy, onToggleFilter, onSort }: F
 
   return (
     <>
-      <div className="flex items-center justify-between px-4 pb-2 shrink-0">
-        <span className="text-sm font-semibold text-gray-800">카페 선택 기준</span>
+      <div className="flex items-center justify-between px-6 pt-4 pb-2 shrink-0 border-t border-stone-100">
+        <span className="text-sm font-medium text-stone-500">
+          여러분에게 중요한 요소를 선택해주세요 !
+        </span>
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-md border border-gray-200 text-sm text-gray-600 bg-white"
+            className="flex items-center gap-1 px-3 py-1 rounded-full border border-stone-200 text-xs text-stone-400 bg-white"
           >
             {sortBy ? SCORE_FILTERS.find((f) => f.scoreKey === sortBy)?.label + ' 순' : '정렬'}
-            <span className="text-xs">{isDropdownOpen ? '▲' : '▼'}</span>
+            <span>{isDropdownOpen ? '▲' : '▼'}</span>
           </button>
           {isDropdownOpen && (
-            <div className="absolute right-0 top-9 bg-white border border-gray-200 rounded-xl shadow-lg z-30 w-40 py-1">
+            <div className="absolute right-0 top-8 bg-white border border-stone-200 rounded-xl shadow-lg z-30 w-40 py-1">
               {SCORE_FILTERS.map(({ scoreKey, label }) => (
                 <button
                   key={scoreKey}
@@ -33,7 +35,7 @@ export function FilterBar({ selectedFilters, sortBy, onToggleFilter, onSort }: F
                     onSort(scoreKey);
                     setIsDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-4 py-2 text-sm ${sortBy === scoreKey ? 'text-[#8B7368] font-semibold' : 'text-gray-700'}`}
+                  className={`w-full text-left px-4 py-2 text-sm ${sortBy === scoreKey ? 'text-[#4A3A2E] font-semibold' : 'text-stone-500'}`}
                 >
                   {label} 순
                 </button>
@@ -43,16 +45,30 @@ export function FilterBar({ selectedFilters, sortBy, onToggleFilter, onSort }: F
         </div>
       </div>
 
-      <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide shrink-0">
-        {SCORE_FILTERS.map(({ key, label }) => (
-          <button
-            key={key}
-            onClick={() => onToggleFilter(key)}
-            className={`shrink-0 px-3 py-1.5 rounded-full text-sm border transition-colors ${selectedFilters.includes(key) ? 'bg-[#8B7368] text-white border-[#8B7368]' : 'bg-white text-gray-600 border-gray-200'}`}
-          >
-            {label}
-          </button>
-        ))}
+      <div className="flex flex-wrap gap-2 px-6 pb-4 shrink-0">
+        {SCORE_FILTERS.map(({ key, label }) => {
+          const active = selectedFilters.includes(key);
+          return (
+            <button
+              key={key}
+              onClick={() => onToggleFilter(key)}
+              className={`shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium border transition-all ${
+                active
+                  ? 'bg-[#4A3A2E] text-white border-[#4A3A2E] shadow-sm'
+                  : 'bg-white text-stone-500 border-stone-200'
+              }`}
+            >
+              <span
+                className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center text-[10px] ${
+                  active ? 'bg-white border-white text-[#4A3A2E]' : 'border-stone-300'
+                }`}
+              >
+                {active && '✓'}
+              </span>
+              {label}
+            </button>
+          );
+        })}
       </div>
     </>
   );

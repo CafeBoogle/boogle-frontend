@@ -24,7 +24,7 @@ export function CafeDetailPanel({ cafe, onClose }: CafeDetailPanelProps) {
         mapInstanceRef.current = new window.kakao.maps.Map(mapRef.current, options);
         markerRef.current = new window.kakao.maps.Marker({
           position: new window.kakao.maps.LatLng(cafe.lat, cafe.lng),
-        });              
+        });
         markerRef.current.setMap(mapInstanceRef.current);
       } else {
         markerRef.current.setPosition(new window.kakao.maps.LatLng(cafe.lat, cafe.lng));
@@ -32,7 +32,6 @@ export function CafeDetailPanel({ cafe, onClose }: CafeDetailPanelProps) {
       }
     }
   }, [cafe]);
-
 
   return (
     <div
@@ -56,7 +55,7 @@ export function CafeDetailPanel({ cafe, onClose }: CafeDetailPanelProps) {
           onClick={(e) => e.stopPropagation()}
         />
 
-        <Button onClick={() => goToDetailPage(cafe)} className="w-full h-12 text-base font-bold">
+        <Button onClick={() => goToDetailPage(cafe)} className="w-full h-12">
           이 카페 상세 정보 보기
         </Button>
       </div>

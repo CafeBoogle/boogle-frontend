@@ -106,11 +106,11 @@ export default function CafeListPage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-56px)] relative overflow-hidden">
-      <header className="px-5 pt-6 pb-3 shrink-0">
-        <h2 className="text-lg font-bold text-gray-900">
+      <header className="px-6 pt-10 pb-4 shrink-0">
+        <h2 className="text-2xl font-bold text-[#4A3A2E] leading-snug mb-1">
           {regionLabel} · {door}
         </h2>
-        <p className="text-xs text-gray-400 mt-0.5">주변 1km 이내 카페</p>
+        <p className="text-xs text-stone-400">주변 500m 이내 카페</p>
       </header>
 
       <FilterBar
@@ -126,7 +126,7 @@ export default function CafeListPage() {
             <div className="w-7 h-7 border-4 border-[#8B7368] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
-          <div className="flex flex-col pb-20 divide-y divide-gray-100">
+          <div className="flex flex-col divide-y divide-gray-100">
             {displayedCafes.map((cafe) => (
               <div
                 key={cafe.id}
@@ -146,7 +146,7 @@ export default function CafeListPage() {
 
       {!selectedCafe && (
         <div className="px-4 py-4 border-t border-gray-100 bg-white shrink-0">
-          <Button onClick={() => navigate('/category')} className="w-full outline">
+          <Button onClick={() => navigate('/category')} variant="brown4" size="full">
             지역 다시 선택하기
           </Button>
         </div>
