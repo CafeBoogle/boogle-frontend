@@ -11,7 +11,7 @@ export const TextInput = ({
     type="text"
     value={value}
     placeholder={placeholder}
-    className="w-full p-4 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-600 text-sm"
+    className="w-full px-1 py-3 bg-white border-b-2 border-stone-300 focus:outline-none focus:border-[#4A3A2E] text-sm text-stone-800 placeholder:text-stone-400 transition-colors"
     onChange={(e) => onChange(e.target.value)}
   />
 );
