@@ -26,10 +26,10 @@ function CafeInfoPage() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)] bg-gray-50">
       {/* 헤더 카드 */}
-      <div className="bg-white px-5 pt-5 pb-5 shadow-sm">
-        <div className="flex items-start justify-between gap-3">
+      <div className="bg-white px-6 pt-5 pb-5 shadow-sm">
+        <div className="flex items-start justify-between ">
           <h1 className="text-xl font-bold text-gray-900 leading-snug break-keep">
-            📍 {cafe.name}
+            ☕ {cafe.name}
           </h1>
           {cafe.placeId && (
             <a
@@ -38,14 +38,14 @@ function CafeInfoPage() {
               rel="noreferrer"
               className="shrink-0 flex items-center gap-1 px-3 py-1.5 bg-[#F9E000] text-gray-900 text-xs font-semibold rounded-lg"
             >
-              카카오맵 ↗
+              Kakao Map ↗
             </a>
           )}
         </div>
 
         {/* 태그 */}
         {cafe.tags && cafe.tags.length > 0 && (
-          <div className="bg-white rounded-2xl px-1 pt-4">
+          <div className="bg-white rounded-2xl px-1 pt-5">
             <div className="flex flex-wrap gap-2">
               {cafe.tags.map((tag, i) => (
                 <span
@@ -85,11 +85,16 @@ function CafeInfoPage() {
         </div>
 
         {/* 이미지 */}
-        {cafeImages.length > 0 && (
-          <div className="bg-white rounded-2xl px-5 py-5">
-            <CafeImageList images={cafeImages} onImageClick={setSelectedImage} />
-          </div>
-        )}
+        <div className="bg-white rounded-2xl px-5 py-5">
+          <p className="text-sm font-semibold text-gray-800 mb-3">카페 이미지</p>
+          {cafeImages.length > 0 ? (
+            <div className="bg-white rounded-2xl px-5 py-5">
+              <CafeImageList images={cafeImages} onImageClick={setSelectedImage} />
+            </div>
+          ) : (
+            <p className="text-sm text-gray-400 text-center py-4">아직 등록된 이미지가 없습니다.</p>
+          )}
+        </div>
 
         {/* 한줄리뷰 */}
         <div className="bg-white rounded-2xl px-5 py-5">

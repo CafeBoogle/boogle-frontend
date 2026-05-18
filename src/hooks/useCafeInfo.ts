@@ -33,8 +33,9 @@ export const useCafeInfo = (cafeId: string | undefined) => {
   useEffect(() => {
     if (!cafeId) return;
 
-    api.get(`/api/cafes/${cafeId}`)
-      .then(res => {
+    api
+      .get(`/api/cafes/${cafeId}`)
+      .then((res) => {
         setCafe(res.data);
         setIsWished(res.data.isWished ?? false);
       })
@@ -43,15 +44,15 @@ export const useCafeInfo = (cafeId: string | undefined) => {
         navigate(-1);
       });
 
-    api.get(`/api/cafes/${cafeId}/wish`, { withCredentials: true })
-        .then(res => {
-          setIsWished(res.data); // true / false
-        })
-        .catch(() => {
-          setIsWished(false);
-        });
-    }, [cafeId, navigate]);
-
+    api
+      .get(`/api/cafes/${cafeId}/wish`, { withCredentials: true })
+      .then((res) => {
+        setIsWished(res.data); // true / false
+      })
+      .catch(() => {
+        setIsWished(false);
+      });
+  }, [cafeId, navigate]);
 
   const handleWishToggle = async () => {
     if (!cafeId) return;
