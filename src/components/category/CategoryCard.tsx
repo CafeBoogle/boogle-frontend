@@ -3,7 +3,7 @@ import sogangImg from '@/assets/images/Category/sogang.png';
 import yonseiImg from '@/assets/images/Category/yonsei.png';
 import hongikImg from '@/assets/images/Category/hongik.png';
 import ewhaImg from '@/assets/images/Category/ewha.png';
-import hapjeongImg from '@/assets/images/Category/hapjeong.png';
+import hapjeongImg from '@/assets/images/Category/hapjeong.svg';
 import allSpotImg from '@/assets/images/Category/allspot.png';
 
 export type CategoryId = RegionId;
@@ -33,15 +33,17 @@ export function CategoryCard({ id, selected, onSelect, imgSrc, alt }: CategoryCa
       type="button"
       onClick={() => onSelect(id)}
       className={`
-        w-28 h-32 rounded-2xl flex flex-col items-center justify-center gap-2
-        border-2 transition-all duration-200
+        w-full h-32 rounded-2xl flex flex-col items-center justify-center gap-2
+        border-0 outline-none transition-all duration-200
         ${isActive
-          ? 'border-brown-2 bg-brown-400 bg-opacity-10 shadow-md scale-105'
-          : 'border-gray-200 bg-white shadow-sm hover:border-brown-2 hover:scale-105'}
+          ? 'bg-[#F2EBE3] shadow-md ring-1 ring-[#C4A882]'
+          : 'bg-white shadow-sm hover:bg-[#FAF7F4] hover:shadow-md'}
       `}
     >
-      <img src={imgSrc} alt={alt} className="w-16 h-16 object-contain" />
-      <span className={`text-xs mt-2 font-semibold ${isActive ? 'text-brown-4' : 'text-gray-600'}`}>
+      <img src={imgSrc} alt={alt} className="w-14 h-14 object-contain" />
+      <span
+        className={`text-xs ${isActive ? 'text-[#4A3A2E] font-bold' : 'text-stone-500 font-medium'}`}
+      >
         {REGION_LABELS[id]}
       </span>
     </button>
