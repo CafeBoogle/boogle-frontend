@@ -9,7 +9,12 @@ import { KakaoPlace } from '@/hooks/useKakaoSearch';
 import api from '@/api/axios';
 
 const INITIAL_RATINGS: Record<string, number> = {
-  study: 3, outlet: 3, seat: 3, toilet: 3, wifi: 3, noise: 3,
+  study: 3,
+  outlet: 3,
+  seat: 3,
+  toilet: 3,
+  wifi: 3,
+  noise: 3,
 };
 
 const AddReviewPage = () => {
@@ -41,12 +46,9 @@ const AddReviewPage = () => {
     }
   };
 
-
   return (
-    <div className="max-w-md p-4 bg-white pb-10 px-8 px-auto mx-4 my-8 mx-auto mt-6 rounded-lg shadow">
-      <h1 className="text-2xl font-bold text-[#4A3A2E] leading-snug mb-2">
-        리뷰 등록 페이지
-      </h1>
+    <div className="max-w-md mx-auto my-8 px-8 py-6 bg-white rounded-lg shadow">
+      <h1 className="text-2xl font-bold text-[#4A3A2E] leading-snug mb-2">리뷰 등록 페이지</h1>
       <CafeSearchSection onSelect={handleSelect} />
       {cafeName && (
         <p className="text-sm text-[#6B4F3A] font-semibold mb-4">선택된 카페: {cafeName}</p>
@@ -62,7 +64,11 @@ const AddReviewPage = () => {
         <TextInput placeholder="한 줄 리뷰를 작성해주세요" value={comment} onChange={setComment} />
       </div>
 
-      <Button variant="brown4" size="full" onClick={() => submitReview({ cafeId, comment, ratings, images: selectedFiles })}>
+      <Button
+        variant="brown4"
+        size="full"
+        onClick={() => submitReview({ cafeId, comment, ratings, images: selectedFiles })}
+      >
         저장
       </Button>
     </div>

@@ -25,7 +25,9 @@ const CafeSearchSection = ({ onSelect }: CafeSearchSectionProps) => {
 
   return (
     <div className="mb-6 relative" ref={dropdownRef}>
-      <p className = "ml-2 mb-3 text-sm text-stone-400">방문한 카페를 검색하고, 솔직한 리뷰를 남겨보세요 :) </p>
+      <p className="mb-3 text-sm text-stone-400">
+        방문한 카페를 검색하고, 솔직한 리뷰를 남겨보세요 :){' '}
+      </p>
       <SearchInput placeholder="카페를 검색하세요" onSearch={handleSearch} />
       {open && results.length > 0 && (
         <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-md mt-1 max-h-48 overflow-y-auto">
@@ -40,10 +42,6 @@ const CafeSearchSection = ({ onSelect }: CafeSearchSectionProps) => {
             </li>
           ))}
         </ul>
-      )}
-
-      {selectedName && (
-        <p className="mt-4 text-lg font-semibold text-brown-4">📍 선택된 카페 : {selectedName}</p>
       )}
     </div>
   );
