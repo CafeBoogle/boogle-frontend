@@ -12,11 +12,8 @@ function CafeInfoPage() {
   const navigate = useNavigate();
   const { cafe, isWished, isLoading, handleWishToggle } = useCafeInfo(cafeId);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  
-  
+
   const cafeImages = (cafe?.imageName ?? []).map(toImageUrl);
-
-
 
   if (!cafe) {
     return (
@@ -28,12 +25,11 @@ function CafeInfoPage() {
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)] bg-gray-50">
-
       {/* 헤더 카드 */}
       <div className="bg-white px-5 pt-5 pb-5 shadow-sm">
         <div className="flex items-start justify-between gap-3">
           <h1 className="text-xl font-bold text-gray-900 leading-snug break-keep">
-          📍 {cafe.name}
+            📍 {cafe.name}
           </h1>
           {cafe.placeId && (
             <a
@@ -52,7 +48,10 @@ function CafeInfoPage() {
           <div className="bg-white rounded-2xl px-1 pt-4">
             <div className="flex flex-wrap gap-2">
               {cafe.tags.map((tag, i) => (
-                <span key={i} className="text-xs font-semibold text-[#8B7368] bg-[#F5EDE8] px-3 py-1.5 rounded-full">
+                <span
+                  key={i}
+                  className="text-xs font-semibold text-[#8B7368] bg-[#F5EDE8] px-3 py-1.5 rounded-full"
+                >
                   {tag}
                 </span>
               ))}
@@ -62,7 +61,6 @@ function CafeInfoPage() {
       </div>
 
       <div className="flex flex-col gap-3 px-4 py-4">
-
         {/* 카공 적합도 + 스코어 카드 */}
         <div className="bg-white rounded-2xl px-5 py-5">
           <div className="flex items-center justify-between mb-1">
@@ -89,68 +87,56 @@ function CafeInfoPage() {
         {/* 이미지 */}
         {cafeImages.length > 0 && (
           <div className="bg-white rounded-2xl px-5 py-5">
-            <CafeImageList
-              images={cafeImages}
-              onImageClick={setSelectedImage}
-            />
+            <CafeImageList images={cafeImages} onImageClick={setSelectedImage} />
           </div>
         )}
-
-
-
 
         {/* 한줄리뷰 */}
         <div className="bg-white rounded-2xl px-5 py-5">
           <p className="text-sm font-semibold text-gray-800 mb-3">한줄리뷰</p>
-          {cafe.shortReviews && cafe.shortReviews.length > 0 ? (
+          {cafe.shortReviews && cafe.shortReviews.filter((r) => r.trim().length > 0).length > 0 ? (
             <div className="flex flex-col gap-2">
-              {cafe.shortReviews.map((review, i) => (
-                <div key={i} className="flex items-start gap-2">
-                  <span className="text-[#8B7368] mt-0.5">💬</span>
-                  <p className="text-sm text-gray-700 leading-relaxed">{review}</p>
-                </div>
-              ))}
+              {cafe.shortReviews
+                .filter((review) => review.trim().length > 0)
+                .map((review, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <span className="text-[#8B7368] mt-0.5">💬</span>
+                    <p className="text-sm text-gray-700 leading-relaxed">{review}</p>
+                  </div>
+                ))}
             </div>
           ) : (
-            <p className="text-sm text-gray-400 text-center py-4">아직 등록된 한줄리뷰가 없습니다.</p>
+            <p className="text-sm text-gray-400 text-center py-4">
+              아직 등록된 한줄리뷰가 없습니다.
+            </p>
           )}
         </div>
         {/* 안내 문구 */}
         <p className="text-xs text-gray-400 text-center leading-relaxed px-4 break-keep">
-          실제 리뷰를 바탕으로 카페의 분위기와 작업 환경을 분석한 리포트입니다.
-          이용자 경험을 데이터로 정리해 더 정확한 카페 선택을 돕습니다.
+          실제 리뷰를 바탕으로 카페의 분위기와 작업 환경을 분석한 리포트입니다. 이용자 경험을
+          데이터로 정리해 더 정확한 카페 선택을 돕습니다.
         </p>
 
         {/* 버튼 영역 */}
         <div className="flex flex-col gap-2 mt-4">
-<Button
-  variant="brown4"
-  size="full"
-  textColor="white"
-  onClick={handleWishToggle}
-  disabled={isLoading}
->
-  <span className="flex items-center justify-center gap-2">
-    <span
-      className={`text-lg transition ${
-        isWished ? 'text-red-500' : 'text-white'
-      }`}
-    >
-      {isWished ? '❤️' : '🤍'}
-    </span>
-    {isWished ? '찜 완료' : '카페 찜하기'}
-  </span>
-</Button>
           <Button
-            variant="brown1"
+            variant="brown4"
             size="full"
-            textColor="brown"
-            onClick={() => navigate(-1)}
+            textColor="white"
+            onClick={handleWishToggle}
+            disabled={isLoading}
           >
+            <span className="flex items-center justify-center gap-2">
+              <span className={`text-lg transition ${isWished ? 'text-red-500' : 'text-white'}`}>
+                {isWished ? '❤️' : '🤍'}
+              </span>
+              {isWished ? '찜 완료' : '카페 찜하기'}
+            </span>
+          </Button>
+          <Button variant="brown1" size="full" textColor="brown" onClick={() => navigate(-1)}>
             카페 목록으로 돌아가기
           </Button>
         </div>
-
       </div>
 
       <ImageModal image={selectedImage} onClose={() => setSelectedImage(null)} />
