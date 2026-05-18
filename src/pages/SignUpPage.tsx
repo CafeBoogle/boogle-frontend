@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axiosInstance from '@/api/axios';
+import api from '@/api/axios';
 import { useAuth } from '@/contexts/AuthContext';
 import Button from '@/components/common/Button';
 import sogangCat from '@/assets/images/SignUp/sogangCat.png';
@@ -39,24 +39,12 @@ export default function SignUpPage() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('nickname', nickname);
-    formData.append('provider', provider);
-    formData.append('providerUserId', providerUserId);
-
-    if (selected) {
-      const cat = cats.find((c) => c.id === selected);
-      if (cat) {
-        const res = await fetch(cat.src);
-        const blob = await res.blob();
-        const file = new File([blob], `${selected}.png`, { type: 'image/png' });
-        formData.append('profileImage', file);
-      }
-    }
-
     try {
-      await axiosInstance.post('/api/signup', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      await api.post('/api/signup', {
+        provider,
+        providerUserId,
+        nickname,
+        ...(selected && { catId: selected }),
       });
       await checkAuth();
       navigate('/');
