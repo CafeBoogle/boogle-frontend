@@ -72,12 +72,8 @@ export default function MyPage() {
     <div className="flex flex-col min-h-[calc(100vh-56px)] bg-gray-50">
       <div className="bg-white px-5 pt-8 pb-6 shadow-sm">
         <div className="flex items-center gap-4">
-          <div className="w-[72px] h-[72px] rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 flex items-center justify-center shrink-0">
-            <img
-              src={profileImageUrl}
-              alt="profile"
-              className="w-full h-full object-cover"
-            />
+          <div className="w-22 h-22 flex items-center justify-center shrink-0">
+            <img src={profileImageUrl} alt="profile" className="w-full h-full object-cover" />
           </div>
 
           <div className="flex flex-col gap-1">
