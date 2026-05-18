@@ -16,10 +16,6 @@ export const useSubmitReview = () => {
       alert('카페를 선택해주세요.');
       return;
     }
-    if (!comment.trim()) {
-      alert('한 줄 리뷰를 입력해주세요.');
-      return;
-    }
 
     const formData = new FormData();
 

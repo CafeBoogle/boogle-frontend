@@ -20,7 +20,7 @@ const INITIAL_RATINGS: Record<string, number> = {
 const AddReviewPage = () => {
   const [cafeId, setCafeId] = useState<number>(0);
   const [cafeName, setCafeName] = useState<string>('');
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState<string>('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [ratings, setRatings] = useState<Record<string, number>>(INITIAL_RATINGS);
 

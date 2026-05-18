@@ -12,11 +12,11 @@ const EditReviewPage = () => {
   const navigate = useNavigate();
   const parsedReviewId = reviewId ? Number(reviewId) : null;
 
-  const [cafeName, setCafeName] = useState('');
   const [comment, setComment] = useState('');
   const [ratings, setRatings] = useState<Record<string, number> | null>(null);
   const [existingImages, setExistingImages] = useState<string[]>([]);
   const [newFiles, setNewFiles] = useState<File[]>([]);
+  const [cafeName, setCafeName] = useState('');
 
   useEffect(() => {
     if (!parsedReviewId) return;
@@ -35,10 +35,8 @@ const EditReviewPage = () => {
           wifi: data.wifiScore ?? 3,
           noise: data.noiseScore ?? 3,
         });
+        setCafeName(data.cafeName);
         setExistingImages(data.imageUrls ?? []);
-
-        const cafeRes = await api.get(`/api/cafes/${data.cafeId}`);
-        setCafeName(cafeRes.data.name ?? '');
       } catch (e) {
         console.error(e);
         alert('리뷰 불러오기 실패');
@@ -90,33 +88,17 @@ const EditReviewPage = () => {
   if (!ratings) return <div className="text-center mt-10 text-gray-400">로딩 중...</div>;
 
   return (
-    <div className="max-w-md mx-auto mt-6 p-4 px-8 pb-10 bg-white rounded-lg shadow">
-      <h1 className="text-xl font-bold text-[#4A3A2E] mb-4 text-center">리뷰 수정하기</h1>
-
-      <div className="mb-4 p-3 bg-[#F7F3EF] rounded-lg">
-        <p className="text-sm text-gray-500">카페</p>
-        <p className="font-semibold text-[#4A3A2E]">{cafeName}</p>
-      </div>
-
-      {existingImages.length > 0 && (
-        <div className="flex gap-2 mb-4">
-          {existingImages.map((url, idx) => (
-            <div key={idx} className="relative">
-              <img src={toImageUrl(url)} className="w-20 h-20 object-cover rounded" />
-              <button
-                type="button"
-                onClick={() => setExistingImages((prev) => prev.filter((_, i) => i !== idx))}
-                className="absolute top-0 right-0 bg-black text-white text-xs px-1 rounded"
-              >
-                X
-              </button>
-            </div>
-          ))}
-        </div>
+    <div className="max-w-md mx-auto ml-1 my-8 px-8 py-6 bg-white rounded-lg shadow">
+      {cafeName && (
+        <h1 className="text-2xl font-bold text-[#4A3A2E] leading-snug mb-3">☕ {cafeName}</h1>
       )}
 
-      <div className="flex justify-center mb-6">
-        <ImageUploader onFilesSelect={(files) => setNewFiles(files)} />
+      <p className="mb-4 text-xs text-stone-400">기억을 조금 더 정확하게 남겨봐요 ✏️</p>
+
+      <div className="flex items-center gap-2 mt-6 mb-5">
+        <span className="text-sm font-semibold text-[#4A3A2E]">점수 평가</span>
+        <span className="text-red-500 text-s">*</span>
+        <div className="flex-1 h-px bg-stone-200" />
       </div>
 
       <RatingSliderList ratings={ratings} onChange={handleRatingChange} />
@@ -128,9 +110,14 @@ const EditReviewPage = () => {
           onChange={setComment}
         />
       </div>
+      <ImageUploader
+        onFilesSelect={(files) => setNewFiles((prev) => [...prev, ...files])}
+        existingImages={existingImages.map((url) => toImageUrl(url))}
+        onRemoveExisting={(idx) => setExistingImages((prev) => prev.filter((_, i) => i !== idx))}
+      />
 
-      <Button onClick={handleSubmit} variant="brown4" size="full">
-        수정하기
+      <Button variant="brown4" size="full" onClick={handleSubmit}>
+        저장
       </Button>
     </div>
   );
