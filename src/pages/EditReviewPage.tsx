@@ -7,15 +7,6 @@ import RatingSliderList from '@/components/addreview/RatingSliderList';
 import { toImageUrl } from '@/constants/api';
 import api from '@/api/axios';
 
-const DEFAULT_RATINGS = {
-  study: 3,
-  outlet: 3,
-  seat: 3,
-  toilet: 3,
-  wifi: 3,
-  noise: 3,
-};
-
 const EditReviewPage = () => {
   const { reviewId } = useParams();
   const navigate = useNavigate();
@@ -23,12 +14,11 @@ const EditReviewPage = () => {
 
   const [cafeName, setCafeName] = useState('');
   const [comment, setComment] = useState('');
-  const [ratings, setRatings] = useState(DEFAULT_RATINGS);
+  const [ratings, setRatings] = useState<Record<string, number> | null>(null);
 
   const [existingImages, setExistingImages] = useState<string[]>([]);
   const [newFiles, setNewFiles] = useState<File[]>([]);
 
-  // ✅ 기존 데이터 로딩
   useEffect(() => {
     if (!parsedReviewId) return;
 
@@ -63,9 +53,8 @@ const EditReviewPage = () => {
     setRatings((prev) => ({ ...prev, [key]: value }));
   };
 
-  // ✅ 수정 제출
   const handleSubmit = async () => {
-    if (!parsedReviewId) return;
+    if (!parsedReviewId || !ratings) return;
 
     const formData = new FormData();
 
@@ -81,31 +70,30 @@ const EditReviewPage = () => {
     };
 
     formData.append(
-      "data",
-      new Blob([JSON.stringify(data)], { type: "application/json" }),
-      "data.json"
+      'data',
+      new Blob([JSON.stringify(data)], { type: 'application/json' }),
+      'data.json',
     );
 
     newFiles.forEach((file) => {
-      formData.append("images", file);
+      formData.append('images', file);
     });
 
     try {
       await api.patch(`/api/reviews/${parsedReviewId}`, formData);
-      alert("수정 완료!");
-      navigate("/mypage");
+      alert('수정 완료!');
+      navigate('/mypage');
     } catch (e) {
       console.error(e);
-      alert("수정 실패");
+      alert('수정 실패');
     }
   };
 
+  if (!ratings) return <div className="text-center mt-10 text-gray-400">로딩 중...</div>;
+
   return (
     <div className="max-w-md p-4 bg-white pb-10 px-8 mx-auto mt-6 rounded-lg shadow">
-      
-      <h1 className="text-2xl font-bold text-[#4A3A2E] mb-4">
-        리뷰 수정
-      </h1>
+      <h1 className="text-2xl font-bold text-[#4A3A2E] mb-4">리뷰 수정</h1>
 
       {/* ✅ 카페 고정 */}
       <div className="mb-4 p-3 bg-[#F7F3EF] rounded-lg">
@@ -124,9 +112,7 @@ const EditReviewPage = () => {
               />
 
               <button
-                onClick={() =>
-                  setExistingImages((prev) => prev.filter((_, i) => i !== idx))
-                }
+                onClick={() => setExistingImages((prev) => prev.filter((_, i) => i !== idx))}
                 className="absolute top-0 right-0 bg-black text-white text-xs px-1 rounded"
               >
                 X
