@@ -14,7 +14,8 @@ const EditReviewPage = () => {
 
   const [comment, setComment] = useState('');
   const [ratings, setRatings] = useState<Record<string, number> | null>(null);
-  const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [existingImages, setExistingImages] = useState<{ id: number; url: string }[]>([]);
+  const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
   const [newFiles, setNewFiles] = useState<File[]>([]);
   const [cafeName, setCafeName] = useState('');
 
@@ -36,7 +37,7 @@ const EditReviewPage = () => {
           noise: data.noiseScore ?? 3,
         });
         setCafeName(data.cafeName);
-        setExistingImages(data.imageUrls ?? []);
+        setExistingImages(data.images ?? []);
       } catch (e) {
         console.error(e);
         alert('리뷰 불러오기 실패');
@@ -66,7 +67,7 @@ const EditReviewPage = () => {
             wifiScore: ratings.wifi,
             noiseScore: ratings.noise,
             studyScore: ratings.study,
-            imageUrls: existingImages,
+            deleteImageIds: deletedImageIds,
           }),
         ],
         { type: 'application/json' },
@@ -112,8 +113,11 @@ const EditReviewPage = () => {
       </div>
       <ImageUploader
         onFilesSelect={(files) => setNewFiles((prev) => [...prev, ...files])}
-        existingImages={existingImages.map((url) => toImageUrl(url))}
-        onRemoveExisting={(idx) => setExistingImages((prev) => prev.filter((_, i) => i !== idx))}
+        existingImages={existingImages.map((img) => toImageUrl(img.url))}
+        onRemoveExisting={(idx) => {
+          setDeletedImageIds((prev) => [...prev, existingImages[idx].id]);
+          setExistingImages((prev) => prev.filter((_, i) => i !== idx));
+        }}
       />
 
       <Button variant="brown4" size="full" onClick={handleSubmit}>
