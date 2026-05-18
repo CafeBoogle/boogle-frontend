@@ -1,22 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axiosInstance from '@/api/axios';
-import sogangCat from '@/assets/images/SignUp/sogangCat.png';
-import yonseiCat from '@/assets/images/SignUp/yonseiCat.png';
-import hongikCat from '@/assets/images/SignUp/hongikCat.png';
-import ewhaCat from '@/assets/images/SignUp/ewhaCat.png';
-import boogleCat from '@/assets/images/SignUp/boogleCat.png';
-
-const catImageMap: Record<string, string> = {
-  SG: sogangCat,
-  Y: yonseiCat,
-  H: hongikCat,
-  E: ewhaCat,
-};
-
-export const resolveProfileImage = (profileImageName: string | null): string => {
-  if (!profileImageName) return boogleCat;
-  return catImageMap[profileImageName] ?? boogleCat;
-};
+import { resolveProfileImage } from '@/constants/catImages';
 
 interface User {
   id: number;
@@ -41,7 +25,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ 서버에 내 정보 확인
   const checkAuth = async (): Promise<User | null> => {
     try {
       const res = await axiosInstance.get('/api/user/me');
@@ -59,12 +42,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, []);
 
-  // ✅ login → 토큰 저장 후 user 새로 불러오기
   const login = async () => {
     await checkAuth();
   };
 
-  // ✅ 로그아웃
   const logout = async () => {
     try {
       await axiosInstance.post('/api/user/logout'); // ✅ refresh 쿠키 삭제
@@ -86,7 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         checkAuth,
-        profileImageUrl: resolveProfileImage(user?.profileImageName ?? null)
+        profileImageUrl: resolveProfileImage(user?.profileImageName ?? null),
       }}
     >
       {!loading ? children : <div>인증 확인 중...</div>}
