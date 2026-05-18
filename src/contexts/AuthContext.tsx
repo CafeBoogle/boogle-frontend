@@ -1,21 +1,38 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axiosInstance from '@/api/axios';
+import sogangCat from '@/assets/images/SignUp/sogangCat.png';
+import yonseiCat from '@/assets/images/SignUp/yonseiCat.png';
+import hongikCat from '@/assets/images/SignUp/hongikCat.png';
+import ewhaCat from '@/assets/images/SignUp/ewhaCat.png';
+import boogleCat from '@/assets/images/SignUp/boogleCat.png';
+
+const catImageMap: Record<string, string> = {
+  SG: sogangCat,
+  Y: yonseiCat,
+  H: hongikCat,
+  E: ewhaCat,
+};
+
+export const resolveProfileImage = (profileImageName: string | null): string => {
+  if (!profileImageName) return boogleCat;
+  return catImageMap[profileImageName] ?? boogleCat;
+};
 
 interface User {
   id: number;
   nickname: string | null;
   role: string;
   provider: 'kakao' | 'naver';
-  profileImageUrl: string | null;
+  profileImageName: string | null;
 }
 
 interface AuthContextValue {
   user: User | null;
   loading: boolean;
-  login: () => Promise<void>; // ✅ 변경
+  login: () => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<User | null>;
-  profileImageUrl: string | null;
+  profileImageUrl: string;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -69,7 +86,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         checkAuth,
-        profileImageUrl: user?.profileImageUrl ?? null
+        profileImageUrl: resolveProfileImage(user?.profileImageName ?? null)
       }}
     >
       {!loading ? children : <div>인증 확인 중...</div>}

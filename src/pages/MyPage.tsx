@@ -8,7 +8,7 @@ import Button from '@/components/common/Button';
 
 export default function MyPage() {
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, profileImageUrl } = useAuth();
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState<MyReview[]>([]);
   const [wishes, setWishes] = useState<MyWishCafe[]>([]);
@@ -73,15 +73,11 @@ export default function MyPage() {
       <div className="bg-white px-5 pt-8 pb-6 shadow-sm">
         <div className="flex items-center gap-4">
           <div className="w-[72px] h-[72px] rounded-2xl overflow-hidden bg-stone-100 border border-stone-200 flex items-center justify-center shrink-0">
-            {user.profileImageUrl ? (
-              <img
-                src={user.profileImageUrl}
-                alt="profile"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-4xl">👤</span>
-            )}
+            <img
+              src={profileImageUrl}
+              alt="profile"
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <div className="flex flex-col gap-1">
