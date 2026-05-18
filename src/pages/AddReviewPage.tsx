@@ -67,7 +67,7 @@ const AddReviewPage = () => {
         <TextInput placeholder="한 줄 리뷰를 작성해주세요" value={comment} onChange={setComment} />
       </div>
       <div className="mb-8">
-        <ImageUploader onFilesSelect={(files) => setSelectedFiles(files)} />
+        <ImageUploader onFilesSelect={(files) => setSelectedFiles((prev) => [...prev, ...files])} />
       </div>
       <Button
         variant="brown4"
