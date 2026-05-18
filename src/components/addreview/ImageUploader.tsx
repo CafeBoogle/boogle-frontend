@@ -15,22 +15,32 @@ export const ImageUploader = ({ onFilesSelect }: ImageUploaderProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-start">
+      <div className="flex items-center gap-2 mt-2 mb-5 w-full">
+        <span className="text-sm font-semibold text-[#4A3A2E]">이미지 등록하기</span>
+        <div className="flex-1 h-px bg-stone-200" />
+      </div>
+
       <label className="cursor-pointer">
         {previews.length > 0 ? (
           <div className="flex gap-2 overflow-x-auto">
             {previews.map((src, i) => (
-              <img key={i} src={src} alt="preview" className="w-24 h-24 object-cover rounded-xl flex-shrink-0" />
+              <img
+                key={i}
+                src={src}
+                alt="preview"
+                className="w-30 h-30 object-cover rounded-xl flex-shrink-0"
+              />
             ))}
           </div>
         ) : (
-          <div className="w-40 h-48 bg-gray-200 rounded-xl flex flex-col items-center justify-center border-2 border-transparent hover:border-stone-400">
-            <span className="text-4xl text-gray-400">+</span>
+          <div className="w-30 h-30 bg-[#FAF7F4] rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-stone-300 hover:border-[#4A3A2E] hover:bg-[#F0EBE5] transition-colors">
+            <span className="text-3xl text-stone-400">+</span>
+            <span className="text-xs text-stone-400 mt-1">사진 추가</span>
           </div>
         )}
         <input type="file" className="hidden" onChange={handleFile} accept="image/*" multiple />
       </label>
-      <span className="mt-2 text-sm text-gray-600 font-medium">사진 등록하기</span>
     </div>
   );
 };

@@ -47,23 +47,28 @@ const AddReviewPage = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto my-8 px-8 py-6 bg-white rounded-lg shadow">
-      <h1 className="text-2xl font-bold text-[#4A3A2E] leading-snug mb-2">리뷰 등록 페이지</h1>
+    <div className="max-w-md mx-auto ml-1 my-8 px-8 py-6 bg-white rounded-lg shadow">
+      <h1 className="text-2xl font-bold text-[#4A3A2E] leading-snug mb-1">
+        오늘의 카페, 어땠나요?
+      </h1>
+      <p className="mb-4 text-xs text-stone-400">
+        방문한 카페를 검색하고, 솔직한 리뷰를 남겨보세요 :)
+      </p>
       <CafeSearchSection onSelect={handleSelect} />
-      {cafeName && (
-        <p className="text-sm text-[#6B4F3A] font-semibold mb-4">선택된 카페: {cafeName}</p>
-      )}
 
-      <div className="flex justify-center mb-6">
-        <ImageUploader onFilesSelect={(files) => setSelectedFiles(files)} />
+      <div className="flex items-center gap-2 mt-6 mb-5">
+        <span className="text-sm font-semibold text-[#4A3A2E]">점수 평가</span>
+        <span className="text-red-500 text-s">*</span>
+        <div className="flex-1 h-px bg-stone-200" />
       </div>
-
       <RatingSliderList ratings={ratings} onChange={handleRatingChange} />
 
       <div className="mb-8">
         <TextInput placeholder="한 줄 리뷰를 작성해주세요" value={comment} onChange={setComment} />
       </div>
-
+      <div className="mb-8">
+        <ImageUploader onFilesSelect={(files) => setSelectedFiles(files)} />
+      </div>
       <Button
         variant="brown4"
         size="full"

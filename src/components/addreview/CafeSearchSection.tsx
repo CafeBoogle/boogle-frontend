@@ -25,20 +25,23 @@ const CafeSearchSection = ({ onSelect }: CafeSearchSectionProps) => {
 
   return (
     <div className="mb-6 relative" ref={dropdownRef}>
-      <p className="mb-3 text-sm text-stone-400">
-        방문한 카페를 검색하고, 솔직한 리뷰를 남겨보세요 :){' '}
-      </p>
-      <SearchInput placeholder="카페를 검색하세요" onSearch={handleSearch} />
+      <SearchInput
+        placeholder="카페를 검색하세요"
+        onSearch={handleSearch}
+        value={selectedName}
+        onChange={() => setSelectedName('')}
+      />
+
       {open && results.length > 0 && (
-        <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-md mt-1 max-h-48 overflow-y-auto">
+        <ul className="absolute z-50 w-full bg-white border border-stone-200 rounded-xl shadow-lg mt-1 max-h-48 overflow-y-auto">
           {results.map((place) => (
             <li
               key={place.id}
               onClick={() => handleSelect(place)}
-              className="px-4 py-3 cursor-pointer hover:bg-gray-100"
+              className="px-4 py-3 cursor-pointer hover:bg-[#FAF7F4] transition-colors"
             >
               <p className="text-sm font-semibold text-stone-800">{place.place_name}</p>
-              <p className="text-xs text-gray-400">{place.address_name}</p>
+              <p className="text-xs text-stone-400">{place.address_name}</p>
             </li>
           ))}
         </ul>
