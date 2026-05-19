@@ -40,53 +40,61 @@ export default function CafeListPage() {
       const center = univCoords[door] || univCoords['정문'];
       const searchLocation = new window.kakao.maps.LatLng(center.lat, center.lng);
 
-      ps.categorySearch(
-        'CE7',
-        async (data: any[], status: any) => {
-          if (status !== window.kakao.maps.services.Status.OK) {
-            setCafes([]);
-            setIsLoading(false);
-            return;
-          }
-          const kakaoCafes: KakaoCafe[] = data.map((place) => ({
-            id: place.id,
-            name: place.place_name,
-            address: place.road_address_name || place.address_name,
-            lat: Number(place.y),
-            lng: Number(place.x),
-            imageUrl: 'https://via.placeholder.com/100',
-            placeUrl: place.place_url,
-            tags: [],
-          }));
-          try {
-            const res = await api.post(
-              '/api/cafes/by-kakao-ids',
-              kakaoCafes.map((c) => c.id),
-            );
-            const dbCafeMap = res.data;
-            const merged = kakaoCafes.map((kc) =>
-              dbCafeMap[kc.id]
-                ? {
-                    ...kc,
-                    dbCafeId: dbCafeMap[kc.id].id,
-                    tags: dbCafeMap[kc.id].tags ?? [],
-                    score: dbCafeMap[kc.id].score,
-                  }
-                : kc,
-            );
-            setCafes(merged);
-          } catch {
-            setCafes(kakaoCafes);
-          } finally {
-            setIsLoading(false);
-          }
-        },
-        {
-          location: searchLocation,
-          radius: 500,
-          sort: window.kakao.maps.services.SortBy.DISTANCE,
-        },
-      );
+      const allCafes: KakaoCafe[] = [];
+
+      const handleSearch = async (data: any[], status: any, pagination: any) => {
+        if (status !== window.kakao.maps.services.Status.OK) {
+          setCafes([]);
+          setIsLoading(false);
+          return;
+        }
+
+        const batch: KakaoCafe[] = data.map((place) => ({
+          id: place.id,
+          name: place.place_name,
+          address: place.road_address_name || place.address_name,
+          lat: Number(place.y),
+          lng: Number(place.x),
+          imageUrl: 'https://via.placeholder.com/100',
+          placeUrl: place.place_url,
+          tags: [],
+        }));
+        allCafes.push(...batch);
+
+        if (pagination.hasNextPage) {
+          pagination.nextPage();
+          return;
+        }
+
+        try {
+          const res = await api.post(
+            '/api/cafes/by-kakao-ids',
+            allCafes.map((c) => c.id),
+          );
+          const dbCafeMap = res.data;
+          const merged = allCafes.map((kc) =>
+            dbCafeMap[kc.id]
+              ? {
+                  ...kc,
+                  dbCafeId: dbCafeMap[kc.id].id,
+                  tags: dbCafeMap[kc.id].tags ?? [],
+                  score: dbCafeMap[kc.id].score,
+                }
+              : kc,
+          );
+          setCafes(merged);
+        } catch {
+          setCafes(allCafes);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      ps.categorySearch('CE7', handleSearch, {
+        location: searchLocation,
+        radius: 500,
+        sort: window.kakao.maps.services.SortBy.DISTANCE,
+      });
     };
     searchCafes();
   }, [region, door]);

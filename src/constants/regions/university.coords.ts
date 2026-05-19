@@ -30,6 +30,6 @@ export const UNIVERSITY_COORDS: Record<string, Record<string, Coordinates>> = {
   },
 
   all: {
-    전체: { lat: 37.56049685856855, lng: 126.9368404801723 },
+    전체: { lat: 37.55519803940573, lng: 126.93698092718137 },
   },
 };
