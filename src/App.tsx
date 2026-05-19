@@ -14,7 +14,6 @@ import AddReviewPage from '@/pages/AddReviewPage';
 import EditReviewPage from '@/pages/EditReviewPage';
 import AuthSuccess from '@/pages/AuthSuccess';
 import DebugPage from '@/pages/DebugPage';
-import { elements } from 'chart.js';
 
 const publicRoutes = [
   { path: '/', element: <MainPage /> },
@@ -25,8 +24,7 @@ const publicRoutes = [
   { path: '/reviews/edit/:reviewId', element: <EditReviewPage /> },
   { path: '/signup', element: <SignUpPage /> },
   { path: '/auth/success', element: <AuthSuccess /> },
-  { path: '/debug', element: <DebugPage />}
-  
+  { path: '/debug', element: <DebugPage /> },
 ];
 
 const protectedRoutes = [
