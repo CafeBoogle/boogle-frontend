@@ -4,6 +4,19 @@ const axiosInstance: AxiosInstance = axios.create({
   withCredentials: true,
 });
 
+// Access Token 헤더 자동 첨부
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('accessToken');
+
+    console.log('저장된 토큰:', token);
+  console.log('Authorization 헤더:', config.headers.Authorization);
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// 토큰 만료 시 Refresh Token으로 재발급
 axiosInstance.interceptors.response.use(
   (res) => res,
   async (error) => {
@@ -13,7 +26,7 @@ axiosInstance.interceptors.response.use(
     if (originalRequest.url?.includes('/auth/refresh')) {
       return Promise.reject(error);
     }
-    // 토큰 만료일 때만 refresh
+
     const errorMessage = error.response?.data;
 
     if (
@@ -24,9 +37,15 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        await axiosInstance.post('/auth/refresh');
+        const res = await axiosInstance.post('/auth/refresh');
+        const newToken = res.data.accessToken;
+
+        localStorage.setItem('accessToken', newToken);
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+
         return axiosInstance(originalRequest);
       } catch (e) {
+        localStorage.removeItem('accessToken');
         window.location.href = '/login';
         return Promise.reject(e);
       }
@@ -35,4 +54,9 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+<<<<<<< Updated upstream
 export default axiosInstance;
+=======
+
+export default axiosInstance;
+>>>>>>> Stashed changes
