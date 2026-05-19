@@ -83,7 +83,7 @@ export default function CafeListPage() {
         },
         {
           location: searchLocation,
-          radius: 1000,
+          radius: 3000,
           sort: window.kakao.maps.services.SortBy.DISTANCE,
         },
       );
