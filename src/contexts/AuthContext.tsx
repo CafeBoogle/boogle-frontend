@@ -6,15 +6,16 @@ interface User {
   nickname: string | null;
   role: string;
   provider: 'kakao' | 'naver';
-  profileImageName: string | null;
+  profileImageUrl: string | null;
 }
 
 interface AuthContextValue {
   user: User | null;
   loading: boolean;
-  login: () => Promise<void>;
+  login: () => Promise<void>; 
   logout: () => void;
   checkAuth: () => Promise<User | null>;
+  profileImageUrl: string | null;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -22,6 +23,19 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('access_token');
+
+    if (token) {
+      localStorage.setItem('accessToken', token);
+      // 브라우저 히스토리에서 토큰 제거
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    checkAuth();
+  }, []);
 
   const checkAuth = async (): Promise<User | null> => {
     try {
@@ -36,18 +50,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // URL에서 access_token 꺼내서 저장 후 URL 정리
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('access_token');
-
-    if (token) {
-      localStorage.setItem('accessToken', token);
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-
-    checkAuth();
-  }, []);
   const login = async () => {
     await checkAuth();
   };
@@ -58,7 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (e) {
       console.error('로그아웃 API 실패', e);
     } finally {
-      localStorage.removeItem('access_token');
+      localStorage.removeItem('accessToken');
       setUser(null);
       window.location.href = '/';
     }
@@ -72,6 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         checkAuth,
+        profileImageUrl: user?.profileImageUrl ?? null
       }}
     >
       {!loading ? children : <div>인증 확인 중...</div>}
