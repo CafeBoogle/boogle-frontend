@@ -23,6 +23,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+<<<<<<< Updated upstream
+=======
+  // URL에서 access_token 꺼내서 저장 후 URL 정리
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('access_token');
+
+    if (token) {
+      localStorage.setItem('accessToken', token);
+      // 브라우저 히스토리에서 토큰 제거
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    checkAuth();
+  }, []);
+
+>>>>>>> Stashed changes
   const checkAuth = async (): Promise<User | null> => {
     try {
       const res = await axiosInstance.get('/api/user/me');
@@ -36,22 +53,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+<<<<<<< Updated upstream
   useEffect(() => {
     checkAuth();
   }, []);
 
+=======
+>>>>>>> Stashed changes
   const login = async () => {
     await checkAuth();
   };
 
   const logout = async () => {
     try {
-      await axiosInstance.post('/api/user/logout'); // ✅ refresh 쿠키 삭제
+      await axiosInstance.post('/api/user/logout');
     } catch (e) {
       console.error('로그아웃 API 실패', e);
     } finally {
-      localStorage.removeItem('accessToken'); // ✅ 핵심
-
+      localStorage.removeItem('access_token');
       setUser(null);
       window.location.href = '/';
     }
