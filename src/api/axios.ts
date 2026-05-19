@@ -55,4 +55,8 @@ axiosInstance.interceptors.response.use(
   },
 );
 
+<<<<<<< HEAD
 export default axiosInstance;
+=======
+export default axiosInstance;
+>>>>>>> 04b9f92077f2ea1425258ae633c918ef65c8bfec
