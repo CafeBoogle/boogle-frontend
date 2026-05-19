@@ -8,7 +8,7 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('accessToken');
 
-    console.log('저장된 토큰:', token);
+  console.log('저장된 토큰:', token);
   console.log('Authorization 헤더:', config.headers.Authorization);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -55,8 +55,4 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-<<<<<<< HEAD
 export default axiosInstance;
-=======
-export default axiosInstance;
->>>>>>> 04b9f92077f2ea1425258ae633c918ef65c8bfec
