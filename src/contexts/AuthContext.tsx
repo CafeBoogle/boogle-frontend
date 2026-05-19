@@ -23,23 +23,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-<<<<<<< Updated upstream
-=======
-  // URL에서 access_token 꺼내서 저장 후 URL 정리
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('access_token');
-
-    if (token) {
-      localStorage.setItem('accessToken', token);
-      // 브라우저 히스토리에서 토큰 제거
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-
-    checkAuth();
-  }, []);
-
->>>>>>> Stashed changes
   const checkAuth = async (): Promise<User | null> => {
     try {
       const res = await axiosInstance.get('/api/user/me');
@@ -53,13 +36,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-<<<<<<< Updated upstream
+  // URL에서 access_token 꺼내서 저장 후 URL 정리
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('access_token');
+
+    if (token) {
+      localStorage.setItem('accessToken', token);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
     checkAuth();
   }, []);
-
-=======
->>>>>>> Stashed changes
   const login = async () => {
     await checkAuth();
   };
