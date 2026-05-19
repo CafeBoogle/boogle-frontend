@@ -13,6 +13,11 @@ axiosInstance.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
+  // ✅ 설정 후에 출력
+  console.log('저장된 토큰:', token);
+  console.log('Authorization 헤더:', config.headers.Authorization);
+
   return config;
 });
 

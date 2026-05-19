@@ -25,12 +25,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // ✅ URL에서 access_token 꺼내서 저장
     const params = new URLSearchParams(window.location.search);
     const token = params.get('access_token');
 
     if (token) {
       localStorage.setItem('accessToken', token);
-      // 브라우저 히스토리에서 토큰 제거
       window.history.replaceState({}, '', window.location.pathname);
     }
 

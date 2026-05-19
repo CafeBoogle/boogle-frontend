@@ -40,12 +40,18 @@ export default function SignUpPage() {
     }
 
     try {
-      await api.post('/api/signup', {
+      const res = await api.post('/api/signup', {
         provider,
         providerUserId,
         nickname,
         ...(selected && { catId: selected }),
       });
+
+      // 토큰 저장
+      if (res.data.accessToken) {
+        localStorage.setItem('accessToken', res.data.accessToken);
+      }
+
       await checkAuth();
       navigate('/');
     } catch (err) {
@@ -55,8 +61,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col  px-12 pt-10 ">
-    
+    <div className="min-h-screen flex flex-col px-12 pt-10">
       {/* 캐릭터 선택 */}
       <div className="w-full max-w-sm mb-12">
         <h1 className="text-2xl font-bold text-brown-4 mb-2">추가 정보를<br/>입력해주세요</h1>
