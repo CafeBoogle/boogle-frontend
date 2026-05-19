@@ -12,19 +12,20 @@ export default function Header() {
 
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleOutside = (e: MouseEvent | TouchEvent) => {
+    function handleClickOutside(e: PointerEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
-    };
-    document.addEventListener('mousedown', handleOutside);
-    document.addEventListener('touchstart', handleOutside);
+    }
+
+    document.addEventListener('pointerdown', handleClickOutside);
+
     return () => {
-      document.removeEventListener('mousedown', handleOutside);
-      document.removeEventListener('touchstart', handleOutside);
+      document.removeEventListener('pointerdown', handleClickOutside);
     };
   }, []);
 
@@ -36,23 +37,26 @@ export default function Header() {
           Boogle
         </span>
       </div>
+
       <div className="relative">
         {user ? (
-          <div className="relative group">
+          <div ref={dropdownRef} className="relative">
             <span
               onClick={() => setOpen((p) => !p)}
               className="cursor-pointer text-sm font-semibold text-[#5C4A3A] px-3 py-1.5 rounded-full border border-transparent hover:border-[#D9C4B0] hover:bg-[#F7F2ED] transition-all duration-200"
             >
               {user.nickname} 님
             </span>
+
             {open && (
-              <div className="absolute right-0 top-full mt-2 w-32 bg-[#FDFCFB] border border-[#E5DED8] rounded-xl shadow-lg">
+              <div className="absolute right-0 top-full mt-2 w-32 bg-[#FDFCFB] border border-[#E5DED8] rounded-xl shadow-lg z-50">
                 <button
                   className={cn(dropdownBtnBase, 'rounded-t-xl text-[#4A3A2E]')}
                   onClick={() => navigate('/mypage')}
                 >
                   마이페이지
                 </button>
+
                 <button
                   className={cn(dropdownBtnBase, 'rounded-b-xl text-[#A68966] font-medium')}
                   onClick={logout}
