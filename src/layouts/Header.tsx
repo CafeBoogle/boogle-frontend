@@ -46,7 +46,7 @@ export default function Header() {
               {user.nickname} 님
             </span>
             {open && (
-              <div className="absolute right-0 top-full mt-2 w-32 bg-[#FDFCFB] border border-[#E5DED8] rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+              <div className="absolute right-0 top-full mt-2 w-32 bg-[#FDFCFB] border border-[#E5DED8] rounded-xl shadow-lg">
                 <button
                   className={cn(dropdownBtnBase, 'rounded-t-xl text-[#4A3A2E]')}
                   onClick={() => navigate('/mypage')}
