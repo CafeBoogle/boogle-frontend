@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import mainLogo from '@/assets/images/boogleLogosm.png';
 import { useAuth } from '@/contexts/AuthContext';
@@ -8,34 +9,58 @@ const dropdownBtnBase =
 
 export default function Header() {
   const { user, logout } = useAuth();
+
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleOutside = (e: MouseEvent | TouchEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutside);
+    document.addEventListener('touchstart', handleOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('touchstart', handleOutside);
+    };
+  }, []);
 
   return (
     <header className="h-14 px-6 flex items-center justify-between sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#EDE5DC]">
       <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
         <img src={mainLogo} alt="Boogle Logo" className="h-8 block" />
-        <span className="text-base font-bold mt-2 tracking-widest text-[#30251c] uppercase leading-none">Boogle</span>
+        <span className="text-base font-bold mt-2 tracking-widest text-[#30251c] uppercase leading-none">
+          Boogle
+        </span>
       </div>
       <div className="relative">
         {user ? (
           <div className="relative group">
-            <span className="cursor-pointer text-sm font-semibold text-[#5C4A3A] px-3 py-1.5 rounded-full border border-transparent hover:border-[#D9C4B0] hover:bg-[#F7F2ED] transition-all duration-200">
+            <span
+              onClick={() => setOpen((p) => !p)}
+              className="cursor-pointer text-sm font-semibold text-[#5C4A3A] px-3 py-1.5 rounded-full border border-transparent hover:border-[#D9C4B0] hover:bg-[#F7F2ED] transition-all duration-200"
+            >
               {user.nickname} 님
             </span>
-            <div className="absolute right-0 top-full mt-2 w-32 bg-[#FDFCFB] border border-[#E5DED8] rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-              <button
-                className={cn(dropdownBtnBase, 'rounded-t-xl text-[#4A3A2E]')}
-                onClick={() => navigate('/mypage')}
-              >
-                마이페이지
-              </button>
-              <button
-                className={cn(dropdownBtnBase, 'rounded-b-xl text-[#A68966] font-medium')}
-                onClick={logout}
-              >
-                로그아웃
-              </button>
-            </div>
+            {open && (
+              <div className="absolute right-0 top-full mt-2 w-32 bg-[#FDFCFB] border border-[#E5DED8] rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <button
+                  className={cn(dropdownBtnBase, 'rounded-t-xl text-[#4A3A2E]')}
+                  onClick={() => navigate('/mypage')}
+                >
+                  마이페이지
+                </button>
+                <button
+                  className={cn(dropdownBtnBase, 'rounded-b-xl text-[#A68966] font-medium')}
+                  onClick={logout}
+                >
+                  로그아웃
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <button
