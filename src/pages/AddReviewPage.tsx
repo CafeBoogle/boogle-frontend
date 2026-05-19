@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { ImageUploader } from '@/components/addreview/ImageUploader';
 import { TextInput } from '@/components/common/TextInput';
 import Button from '@/components/common/Button';
@@ -18,13 +19,21 @@ const INITIAL_RATINGS: Record<string, number> = {
 };
 
 const AddReviewPage = () => {
-  const [cafeId, setCafeId] = useState<number>(0);
+  const { cafeId: cafeIdParam } = useParams<{ cafeId: string }>();
+  const [cafeId, setCafeId] = useState<number>(cafeIdParam ? Number(cafeIdParam) : 0);
   const [cafeName, setCafeName] = useState<string>('');
   const [comment, setComment] = useState<string>('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [ratings, setRatings] = useState<Record<string, number>>(INITIAL_RATINGS);
 
   const { submitReview } = useSubmitReview();
+
+  useEffect(() => {
+    if (!cafeIdParam) return;
+    api.get(`/api/cafes/${cafeIdParam}`).then((res) => {
+      setCafeName(res.data.name);
+    });
+  }, [cafeIdParam]);
 
   const handleRatingChange = (key: string, value: number) => {
     setRatings((prev) => ({ ...prev, [key]: value }));
@@ -54,7 +63,14 @@ const AddReviewPage = () => {
       <p className="mb-4 text-xs text-stone-400">
         방문한 카페를 검색하고, 솔직한 리뷰를 남겨보세요 :)
       </p>
-      <CafeSearchSection onSelect={handleSelect} />
+      {cafeIdParam && cafeName ? (
+        <div className="flex items-center gap-2 px-4 py-3 bg-[#F7F2ED] rounded-xl mb-4">
+          <span className="text-sm">☕</span>
+          <span className="text-sm font-semibold text-[#4A3A2E]">{cafeName}</span>
+        </div>
+      ) : (
+        <CafeSearchSection onSelect={handleSelect} />
+      )}
 
       <div className="flex items-center gap-2 mt-6 mb-5">
         <span className="text-sm font-semibold text-[#4A3A2E]">점수 평가</span>

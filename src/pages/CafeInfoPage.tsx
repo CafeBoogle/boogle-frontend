@@ -128,19 +128,29 @@ function CafeInfoPage() {
             variant="brown4"
             size="full"
             textColor="white"
-            onClick={handleWishToggle}
-            disabled={isLoading}
+            onClick={() => navigate(`/addreview/${cafeId}`)}
           >
-            <span className="flex items-center justify-center gap-2">
-              <span className={`text-lg transition ${isWished ? 'text-red-500' : 'text-white'}`}>
-                {isWished ? '❤️' : '🤍'}
+            ✏️ 리뷰 등록하기
+          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="brown4"
+              size="full"
+              textColor="white"
+              onClick={handleWishToggle}
+              disabled={isLoading}
+            >
+              <span className="flex items-center justify-center gap-1">
+                <span className={`text-lg transition ${isWished ? 'text-red-500' : 'text-white'}`}>
+                  {isWished ? '❤️' : '🤍'}
+                </span>
+                {isWished ? '찜 완료' : '찜하기'}
               </span>
-              {isWished ? '찜 완료' : '카페 찜하기'}
-            </span>
-          </Button>
-          <Button variant="brown1" size="full" textColor="brown" onClick={() => navigate(-1)}>
-            카페 목록으로 돌아가기
-          </Button>
+            </Button>
+            <Button variant="brown1" size="full" textColor="brown" onClick={() => navigate(-1)}>
+              목록으로
+            </Button>
+          </div>
         </div>
       </div>
 
