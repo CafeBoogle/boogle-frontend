@@ -54,9 +54,5 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-<<<<<<< Updated upstream
-export default axiosInstance;
-=======
 
 export default axiosInstance;
->>>>>>> Stashed changes
