@@ -1,5 +1,5 @@
 export const SCORE_FILTERS = [
-  { key: 'study', label: '카공 적합도 (별점)', scoreKey: 'studyScoreAvg' },
+  { key: 'study', label: '카공 추천', scoreKey: 'studyScoreAvg' },
   { key: 'outlet', label: '콘센트', scoreKey: 'outletScoreAvg' },
   { key: 'wifi', label: '와이파이', scoreKey: 'wifiScoreAvg' },
   { key: 'seat', label: '넓은 카페', scoreKey: 'seatScoreAvg' },

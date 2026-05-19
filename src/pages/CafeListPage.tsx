@@ -8,6 +8,7 @@ import api from '@/api/axios';
 import { REGION_LABELS, UNIVERSITY_COORDS } from '@/constants/regions';
 import type { KakaoCafe } from '@/types/cafe';
 import Button from '@/components/common/Button';
+import TagInfoModal from '@/components/modals/TagInfoModal';
 
 export default function CafeListPage() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function CafeListPage() {
   const [selectedFilters, setSelectedFilters] = useState<ScoreFilterKey[]>([]);
   const [sortBy, setSortBy] = useState<SortKey | null>(null);
   const [selectedCafe, setSelectedCafe] = useState<KakaoCafe | null>(null);
+  const [showTagInfo, setShowTagInfo] = useState(false);
 
   const state = location.state || { region: 'sogang', door: '정문' };
   const { region, door } = state;
@@ -115,11 +117,23 @@ export default function CafeListPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-56px)] relative overflow-hidden">
       <header className="px-6 pt-10 pb-4 shrink-0">
-        <h2 className="text-2xl font-bold text-[#4A3A2E] leading-snug mb-1">
-          {regionLabel} · {door}
-        </h2>
-        <p className="text-xs text-stone-400">주변 500m 이내 카페</p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-[#4A3A2E] leading-snug mb-1">
+              {regionLabel} · {door}
+            </h2>
+            <p className="text-xs text-stone-400">주변 500m 이내 카페</p>
+          </div>
+          <button
+            onClick={() => setShowTagInfo(true)}
+            className="mt-1 w-6 h-6 rounded-full border border-stone-300 text-stone-400 text-xs flex items-center justify-center hover:border-[#8B7368] hover:text-[#8B7368] transition-colors"
+          >
+            ?
+          </button>
+        </div>
       </header>
+
+      {showTagInfo && <TagInfoModal onClose={() => setShowTagInfo(false)} />}
 
       <FilterBar
         selectedFilters={selectedFilters}

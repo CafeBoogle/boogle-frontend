@@ -97,10 +97,10 @@ export default function MainPage() {
               variant="brown1"
               size="full"
               textColor="brown"
-              onClick={() => navigate('/mypage')}
+              onClick={() => navigate('/addreview')}
               className="text-[15px]"
             >
-              마이페이지
+              리뷰 등록하기
             </Button>
           </div>
         </div>
