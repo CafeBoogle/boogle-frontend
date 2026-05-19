@@ -5,7 +5,7 @@ interface FilterBarProps {
   selectedFilters: ScoreFilterKey[];
   sortBy: SortKey | null;
   onToggleFilter: (key: ScoreFilterKey) => void;
-  onSort: (key: SortKey) => void;
+  onSort: (key: SortKey | null) => void;
 }
 
 export function FilterBar({ selectedFilters, sortBy, onToggleFilter, onSort }: FilterBarProps) {
@@ -21,13 +21,23 @@ export function FilterBar({ selectedFilters, sortBy, onToggleFilter, onSort }: F
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-1 px-3 py-1 rounded-full border border-stone-200 text-xs text-stone-400 bg-white"
+            className="flex items-center gap-1 px-3 py-1 rounded-full border border-stone-200 text-xs text-stone-800 bg-white"
           >
-            {sortBy ? SCORE_FILTERS.find((f) => f.scoreKey === sortBy)?.label + ' 순' : '정렬'}
+            {sortBy ? SCORE_FILTERS.find((f) => f.scoreKey === sortBy)?.label + ' 순' : '거리순'}
             <span>{isDropdownOpen ? '▲' : '▼'}</span>
           </button>
           {isDropdownOpen && (
             <div className="absolute right-0 top-8 bg-white border border-stone-200 rounded-xl shadow-lg z-30 w-40 py-1">
+              <button
+                onClick={() => {
+                  onSort(null);
+                  setIsDropdownOpen(false);
+                }}
+                className={`w-full text-left px-4 py-2 text-sm ${!sortBy ? 'text-[#4A3A2E] font-semibold' : 'text-stone-500'}`}
+              >
+                거리순
+              </button>
+
               {SCORE_FILTERS.map(({ scoreKey, label }) => (
                 <button
                   key={scoreKey}
