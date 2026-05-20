@@ -59,7 +59,8 @@ export const useSubmitReview = () => {
       return true;
     }
     return false;
-  } catch {
+  } catch (e){
+    console.log('에러', e);
     return false;
   }
 };
