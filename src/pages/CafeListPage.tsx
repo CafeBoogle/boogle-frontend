@@ -11,7 +11,17 @@ import Button from '@/components/common/Button';
 import TagInfoModal from '@/components/modals/TagInfoModal';
 
 // 카카오 category_name에 포함되면 제외할 카페 유형 (일반 카페가 아닌 테마형 업종)
-const EXCLUDE_CATEGORIES = ['보드카페', '북카페', '만화카페', '애견카페', '키즈카페', '룸카페'];
+const EXCLUDE_CATEGORIES = [
+  '보드카페',
+  '북카페',
+  '만화카페',
+  '애견카페',
+  '키즈카페',
+  '룸카페',
+  '모임카페',
+  '모임공간',
+  '테마카페',
+];
 
 export default function CafeListPage() {
   const navigate = useNavigate();
@@ -36,94 +46,127 @@ export default function CafeListPage() {
 
   // region 또는 door가 바뀔 때마다 카페 목록을 새로 불러옴
   useEffect(() => {
-    const searchCafes = () => {
-      // 카카오 SDK는 <script>로 비동기 로드되므로, 준비될 때까지 100ms마다 재시도
-      if (!window.kakao?.maps?.services) {
-        setTimeout(searchCafes, 100);
-        return;
-      }
+    // [변경] SDK 미준비 시 폴링 방식 → cleanup 가능한 setTimeout으로 교체
+    if (!window.kakao?.maps?.services) {
+      const timer = setTimeout(() => setCafes([]), 100);
+      return () => clearTimeout(timer);
+    }
 
-      setIsLoading(true);
-      const ps = new window.kakao.maps.services.Places();
+    setIsLoading(true);
 
-      // region + door 조합으로 검색 중심 좌표 결정 (없으면 서강대 정문으로 폴백)
-      const univCoords = UNIVERSITY_COORDS[region] || UNIVERSITY_COORDS.sogang;
-      const center = univCoords[door] || univCoords['정문'];
-      const searchLocation = new window.kakao.maps.LatLng(center.lat, center.lng);
+    const univCoords = UNIVERSITY_COORDS[region] || UNIVERSITY_COORDS.sogang;
+    const center = univCoords[door] || univCoords['정문'];
 
-      // 카카오 API는 15개씩 페이지네이션으로 내려주므로, 전체 결과를 누적할 배열
-      const allCafes: KakaoCafe[] = [];
+    // [추가] 카카오 API 한계(45개)를 극복하기 위해 중심 좌표를 5방향으로 분산 검색 후 중복 제거
+    // 0.008도 ≈ 약 880m 이동 → 각 500m 반경 원이 서로 겹쳐 빈 구간 없이 커버
+    const SEARCH_OFFSETS = [
+      { dlat: 0, dlng: 0 }, // 원점
+      { dlat: 0.008, dlng: 0 }, // 북 (~100m)
+      { dlat: -0.008, dlng: 0 }, // 남 (~100m)
+      { dlat: 0, dlng: 0.008 }, // 동 (~100m)
+      { dlat: 0, dlng: -0.008 }, // 서 (~100m)
+    ];
 
-      // categorySearch의 콜백 - 페이지마다 호출됨
-      const handleSearch = async (data: any[], status: any, pagination: any) => {
-        // 검색 실패(반경 내 카페 없음 등)이면 빈 배열로 세팅하고 종료
-        console.log(data[0]); // ← 여기 추가
-        if (status !== window.kakao.maps.services.Status.OK) {
-          setCafes([]);
-          setIsLoading(false);
-          return;
-        }
+    // [추가] 단일 중심 좌표로 카카오 검색 → 페이지네이션 포함 전체 결과를 Promise로 반환
+    const searchFromCenter = (lat: number, lng: number): Promise<any[]> =>
+      new Promise((resolve) => {
+        const ps = new window.kakao.maps.services.Places();
+        const collected: any[] = [];
 
-        // 카카오 응답 필드명 → KakaoCafe 타입으로 변환 (제외 업종 필터링 포함)
-        const batch: KakaoCafe[] = data
-          .filter((place) => !EXCLUDE_CATEGORIES.some((cat) => place.category_name.includes(cat)))
+        const callback = (data: any[], status: any, pagination: any) => {
+          console.log(data[0]);
+          console.log(
+            JSON.stringify(
+              data.find((p) => p.place_name.includes('디거즈')),
+              null,
+              2,
+            ),
+          );
+          if (status !== window.kakao.maps.services.Status.OK) {
+            resolve(collected);
+            return;
+          }
+          collected.push(...data);
+          if (pagination.hasNextPage) {
+            pagination.nextPage();
+          } else {
+            resolve(collected);
+          }
+        };
+
+        ps.categorySearch('CE7', callback, {
+          location: new window.kakao.maps.LatLng(lat, lng),
+          radius: 500,
+          sort: window.kakao.maps.services.SortBy.DISTANCE,
+        });
+      });
+
+    const run = async () => {
+      try {
+        // [추가] 5개 지점 병렬 검색 후 결과 합산
+        const results = await Promise.all(
+          SEARCH_OFFSETS.map(({ dlat, dlng }) =>
+            searchFromCenter(center.lat + dlat, center.lng + dlng),
+          ),
+        );
+
+        // [추가] 카카오 ID 기준 중복 제거
+        const uniquePlaces = [...new Map(results.flat().map((p) => [p.id, p])).values()];
+
+        // [추가] 원점 기준 500m 이내만 통과 — 오프셋 검색으로 범위 밖 카페가 섞일 수 있어 거리 필터링
+        // 단순 평면 근사: 위도 1도 ≈ 111km, 경도 1도 ≈ 111km * cos(위도)
+        const withinRadius = (placeLat: number, placeLng: number) => {
+          const dLat = (placeLat - center.lat) * 111000;
+          const dLng = (placeLng - center.lng) * 111000 * Math.cos((center.lat * Math.PI) / 180);
+          return Math.sqrt(dLat * dLat + dLng * dLng) <= 500;
+        };
+
+        const allCafes: KakaoCafe[] = uniquePlaces
+          .filter(
+            (place) =>
+              withinRadius(Number(place.y), Number(place.x)) &&
+              !EXCLUDE_CATEGORIES.some((cat) => place.category_name.includes(cat)),
+          )
           .map((place) => ({
-            id: place.id, // 카카오 장소 ID
+            id: place.id,
             name: place.place_name,
-            address: place.road_address_name || place.address_name, // 도로명 우선, 없으면 지번
+            address: place.road_address_name || place.address_name,
             lat: Number(place.y),
             lng: Number(place.x),
             imageUrl: 'https://via.placeholder.com/100',
             placeUrl: place.place_url,
-            tags: [], // DB 병합 전이라 빈 배열
+            tags: [],
           }));
-        allCafes.push(...batch); // 이번 페이지 결과 누적
 
-        // 다음 페이지가 있으면 nextPage() 호출 → handleSearch 재호출됨, DB 병합은 아직
-        if (pagination.hasNextPage) {
-          pagination.nextPage();
-          return;
-        }
-
-        // 모든 페이지 수집 완료 → 우리 DB에서 태그/점수 조회
+        // 수집된 카카오 ID로 우리 DB 태그/점수 조회 후 병합
         try {
-          // 카카오 ID 목록을 백엔드에 보내면, 우리 DB에 등록된 카페 정보를 맵으로 반환
-          // 응답 형태: { "카카오ID": { id, tags, score }, ... }
           const res = await api.post(
             '/api/cafes/by-kakao-ids',
             allCafes.map((c) => c.id),
           );
           const dbCafeMap = res.data;
-
-          // 카카오 카페마다 DB 데이터가 있으면 병합, 없으면 카카오 데이터만 유지
-          const merged = allCafes.map(
-            (kc) =>
+          setCafes(
+            allCafes.map((kc) =>
               dbCafeMap[kc.id]
                 ? {
                     ...kc,
-                    dbCafeId: dbCafeMap[kc.id].id, // 우리 DB의 PK
-                    tags: dbCafeMap[kc.id].tags ?? [], // 태그 목록
-                    score: dbCafeMap[kc.id].score, // 항목별 평균 점수
+                    dbCafeId: dbCafeMap[kc.id].id,
+                    tags: dbCafeMap[kc.id].tags ?? [],
+                    score: dbCafeMap[kc.id].score,
                   }
-                : kc, // DB에 없는 카페는 태그/점수 없이 카카오 데이터만
+                : kc,
+            ),
           );
-          setCafes(merged);
         } catch {
-          // 백엔드 API 실패 시 카카오 데이터만으로라도 화면에 표시
+          // 백엔드 API 실패 시 카카오 데이터만으로 표시
           setCafes(allCafes);
-        } finally {
-          setIsLoading(false);
         }
-      };
-
-      // 카테고리 CE7 = 카페, 중심 좌표 기준 500m 이내, 거리순 정렬
-      ps.categorySearch('CE7', handleSearch, {
-        location: searchLocation,
-        radius: 500,
-        sort: window.kakao.maps.services.SortBy.DISTANCE,
-      });
+      } finally {
+        setIsLoading(false);
+      }
     };
-    searchCafes();
+
+    run();
   }, [region, door]);
 
   const displayedCafes = cafes

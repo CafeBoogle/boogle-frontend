@@ -6,7 +6,7 @@ const TAG_DESCRIPTIONS = [
   {
     label: '카공 적합도',
     emoji: '⭐',
-    desc: '카페에서 공부하기 얼마나 적합한지 종합적으로 평가한 점수예요. 콘센트, 와이파이, 소음, 좌석 등을 모두 고려해요.',
+    desc: '카페에서 공부하기 얼마나 좋은지 사용자들이 직접 남긴 추천 점수예요.',
   },
   {
     label: '콘센트',
@@ -51,8 +51,12 @@ export default function TagInfoModal({ onClose }: TagInfoModalProps) {
             📍 기본 정렬은 <span className="font-semibold">거리순</span>이에요.
           </p>
           <p className="text-[11px] text-[#8B7368] leading-relaxed break-keep">
+            🗺️ 선택한 지점을 중심으로 <span className="font-semibold">반경 500m 이내</span>의 카페를
+            보여줘요.
+          </p>
+          <p className="text-[11px] text-[#8B7368] leading-relaxed break-keep">
             ✅ 태그를 선택하면 해당 항목 <span className="font-semibold">3.5점 이상</span>인 카페만
-            보여요.
+            볼 수 있어요.
           </p>
         </div>
 
@@ -68,10 +72,12 @@ export default function TagInfoModal({ onClose }: TagInfoModalProps) {
           ))}
         </div>
 
-        <div className="mt-7 pt-4 border-t border-gray-100 flex items-center justify-between">
-          <p className="text-[11px] text-gray-400 break-keep">
-            잘못된 정보가 있다면 인스타그램{' '}
-            <span className="font-semibold text-[#8B7368]">@cafe_boogle</span>로 알려주세요
+        <div className="mt-7 pt-4 border-t border-gray-100 flex flex-col gap-2">
+          <p className="text-[11px] text-gray-400 break-keep leading-relaxed">
+            Boogle은 여러분의 소중한 리뷰로 운영되는 서비스에요 :) ☕ <br />
+            불편한 점이나 틀린 정보는 인스타그램{' '}
+            <span className="font-semibold text-[#8B7368]">@cafe_boogle</span>로 편하게 알려주시면
+            감사하겠습니다 🙌
           </p>
           <button
             onClick={onClose}
