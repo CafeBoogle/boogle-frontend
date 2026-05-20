@@ -17,7 +17,8 @@ function CafeInfoPage() {
 
   const handleReviewClick = async () => {
   const isDuplicate = await checkDuplicate(Number(cafeId));
-    if (!isDuplicate) {
+  console.log('checkDuplicate 호출됨', cafeId);
+  if (!isDuplicate) {
       navigate(`/addreview/${cafeId}`);
     }
   };
@@ -137,7 +138,7 @@ function CafeInfoPage() {
             variant="brown4"
             size="full"
             textColor="white"
-            onClick={() => navigate(`/addreview/${cafeId}`)}
+            onClick={handleReviewClick}
           >
             ✏️ 리뷰 등록하기
           </Button>
@@ -146,7 +147,7 @@ function CafeInfoPage() {
               variant="brown4"
               size="full"
               textColor="white"
-              onClick={handleReviewClick}
+              onClick={handleWishToggle}
               disabled={isLoading}
             >
               <span className="flex items-center justify-center gap-1">

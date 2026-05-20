@@ -53,6 +53,7 @@ export const useSubmitReview = () => {
 
   try {
     const res = await api.get('/api/reviews/check', { params: { cafeId } });
+    console.log('checkDuplicate 호출됨', cafeId);
     if (res.data.exists) {
       alert('이미 리뷰를 작성하신 카페입니다.');
       return true;
