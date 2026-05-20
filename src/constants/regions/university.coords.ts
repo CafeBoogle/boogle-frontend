@@ -17,7 +17,7 @@ export const UNIVERSITY_COORDS: Record<string, Record<string, Coordinates>> = {
   },
 
   yonsei: {
-    정문: { lat: 37.56049685856855, lng: 126.9368404801723 },
+    정문: { lat: 37.5600283622505, lng: 126.93688162053782 },
     서문: { lat: 37.563774906163886, lng: 126.93395373517579 },
   },
 
