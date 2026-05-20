@@ -17,6 +17,7 @@ export const useSubmitReview = () => {
       return;
     }
 
+
     const formData = new FormData();
 
     const reviewData = {
@@ -46,6 +47,21 @@ export const useSubmitReview = () => {
       }
     }
   };
+  
+  const checkDuplicate = async (cafeId: number) => {
+  if (cafeId === 0) return;
 
-  return { submitReview };
+  try {
+    const res = await api.get('/api/reviews/check', { params: { cafeId } });
+    if (res.data.exists) {
+      alert('이미 리뷰를 작성하신 카페입니다.');
+      return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+};
+
+return { submitReview, checkDuplicate };
 };

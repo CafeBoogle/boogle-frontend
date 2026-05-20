@@ -6,12 +6,21 @@ import ImageModal from '@/components/cafe/ImageModal';
 import CafeStudyGauge from '@/components/cafe/CafeStudyGauge';
 import CafeScoreCards from '@/components/cafe/CafeScoreCards';
 import { useCafeInfo, toImageUrl } from '@/hooks/useCafeInfo';
+import { useSubmitReview } from '@/hooks/useSubmitReview';
 
 function CafeInfoPage() {
   const { cafeId } = useParams<{ cafeId: string }>();
   const navigate = useNavigate();
   const { cafe, isWished, isLoading, handleWishToggle } = useCafeInfo(cafeId);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const { checkDuplicate } = useSubmitReview();
+
+  const handleReviewClick = async () => {
+  const isDuplicate = await checkDuplicate(Number(cafeId));
+    if (!isDuplicate) {
+      navigate(`/addreview/${cafeId}`);
+    }
+  };
 
   const cafeImages = (cafe?.imageName ?? []).map(toImageUrl);
 
@@ -137,7 +146,7 @@ function CafeInfoPage() {
               variant="brown4"
               size="full"
               textColor="white"
-              onClick={handleWishToggle}
+              onClick={handleReviewClick}
               disabled={isLoading}
             >
               <span className="flex items-center justify-center gap-1">
