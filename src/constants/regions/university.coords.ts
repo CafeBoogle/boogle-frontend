@@ -25,11 +25,11 @@ export const UNIVERSITY_COORDS: Record<string, Record<string, Coordinates>> = {
     정문: { lat: 37.55942365921526, lng: 126.94566937595 },
   },
 
-  hapjeong: {
-    합정역: { lat: 37.5499134480298, lng: 126.91445460253196 },
+  sinchon: {
+    신촌역: { lat: 37.55519803940573, lng: 126.93698092718137 },
   },
 
-  all: {
-    전체: { lat: 37.55519803940573, lng: 126.93698092718137 },
+  hapjeong: {
+    합정역: { lat: 37.5499134480298, lng: 126.91445460253196 },
   },
 };
