@@ -82,7 +82,7 @@ export default function MyPage() {
             <p className="text-lg font-bold text-gray-900">{user.nickname} 님</p>
             <span
               className={`text-xs font-semibold px-2 py-0.5 rounded-full w-fit ${
-                user.provider === 'kakao' ? 'bg-[#FEE500] text-gray-800' : 'bg-[#03C75A] text-white'
+                user.provider === 'KAKAO' ? 'bg-[#FEE500] text-gray-800' : 'bg-[#03C75A] text-white'
               }`}
             >
               {user.provider.toUpperCase()} 계정

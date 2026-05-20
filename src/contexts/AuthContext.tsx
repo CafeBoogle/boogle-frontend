@@ -5,7 +5,7 @@ interface User {
   id: number;
   nickname: string | null;
   role: string;
-  provider: 'kakao' | 'naver';
+  provider: 'KAKAO' | 'NAVER';
   profileImageName: string | null;
 }
 
