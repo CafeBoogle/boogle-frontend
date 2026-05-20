@@ -61,10 +61,10 @@ export default function CafeListPage() {
     // 0.008도 ≈ 약 880m 이동 → 각 500m 반경 원이 서로 겹쳐 빈 구간 없이 커버
     const SEARCH_OFFSETS = [
       { dlat: 0, dlng: 0 }, // 원점
-      { dlat: 0.008, dlng: 0 }, // 북 (~100m)
-      { dlat: -0.008, dlng: 0 }, // 남 (~100m)
-      { dlat: 0, dlng: 0.008 }, // 동 (~100m)
-      { dlat: 0, dlng: -0.008 }, // 서 (~100m)
+      { dlat: 0.008, dlng: 0 },
+      { dlat: -0.008, dlng: 0 },
+      { dlat: 0, dlng: 0.008 },
+      { dlat: 0, dlng: -0.008 },
     ];
 
     // [추가] 단일 중심 좌표로 카카오 검색 → 페이지네이션 포함 전체 결과를 Promise로 반환

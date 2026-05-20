@@ -6,16 +6,15 @@ interface User {
   nickname: string | null;
   role: string;
   provider: 'kakao' | 'naver';
-  profileImageUrl: string | null;
+  profileImageName: string | null;
 }
 
 interface AuthContextValue {
   user: User | null;
   loading: boolean;
-  login: () => Promise<void>; 
+  login: () => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<User | null>;
-  profileImageUrl: string | null;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -74,7 +73,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         checkAuth,
-        profileImageUrl: user?.profileImageUrl ?? null
       }}
     >
       {!loading ? children : <div>인증 확인 중...</div>}
