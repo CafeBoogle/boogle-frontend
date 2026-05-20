@@ -47,23 +47,20 @@ export const useSubmitReview = () => {
       }
     }
   };
-  
-  const checkDuplicate = async (cafeId: number) => {
-  if (cafeId === 0) return;
 
+const checkDuplicate = async (kakaoPlaceId: string) => {
   try {
-    const res = await api.get('/api/reviews/check', { params: { cafeId } });
-    console.log('checkDuplicate 호출됨', cafeId);
+    const res = await api.get('/api/reviews/check', { params: { kakaoPlaceId } });
     if (res.data.exists) {
       alert('이미 리뷰를 작성하신 카페입니다.');
       return true;
     }
     return false;
-  } catch (e){
+  } catch (e) {
     console.log('에러', e);
     return false;
   }
 };
 
-return { submitReview, checkDuplicate };
+  return { submitReview, checkDuplicate };
 };

@@ -16,9 +16,9 @@ function CafeInfoPage() {
   const { checkDuplicate } = useSubmitReview();
 
   const handleReviewClick = async () => {
-  const isDuplicate = await checkDuplicate(Number(cafeId));
-  console.log('checkDuplicate 호출됨', cafeId);
-  if (!isDuplicate) {
+  if (!cafe?.placeId) return;
+    const isDuplicate = await checkDuplicate(cafe.placeId);
+    if (!isDuplicate) {
       navigate(`/addreview/${cafeId}`);
     }
   };

@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { SearchInput } from '@/components/common/SearchInput';
 import { useKakaoSearch, KakaoPlace } from '@/hooks/useKakaoSearch';
+import { useSubmitReview } from '@/hooks/useSubmitReview';
 
 interface CafeSearchSectionProps {
   onSelect: (place: KakaoPlace) => void;
@@ -8,6 +9,7 @@ interface CafeSearchSectionProps {
 
 const CafeSearchSection = ({ onSelect }: CafeSearchSectionProps) => {
   const { results, search } = useKakaoSearch();
+  const { checkDuplicate } = useSubmitReview();
   const [selectedName, setSelectedName] = useState('');
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -17,7 +19,10 @@ const CafeSearchSection = ({ onSelect }: CafeSearchSectionProps) => {
     setOpen(true);
   };
 
-  const handleSelect = (place: KakaoPlace) => {
+  const handleSelect = async (place: KakaoPlace) => {
+    const isDuplicate = await checkDuplicate(place.id);
+    if (isDuplicate) return;
+
     setSelectedName(place.place_name);
     setOpen(false);
     onSelect(place);
