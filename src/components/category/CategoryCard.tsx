@@ -4,6 +4,7 @@ import yonseiImg from '@/assets/images/Category/yonsei.png';
 import hongikImg from '@/assets/images/Category/hongik.png';
 import ewhaImg from '@/assets/images/Category/ewha.png';
 import hapjeongImg from '@/assets/images/Category/hapjeong.svg';
+import sinchonImg from '@/assets/images/Category/sinchon.png';
 import allSpotImg from '@/assets/images/Category/allspot.png';
 
 export type CategoryId = RegionId;
@@ -13,8 +14,8 @@ export const CATEGORIES: { id: CategoryId; imgSrc: string; alt: string }[] = [
   { id: 'yonsei', imgSrc: yonseiImg, alt: '연세대학교' },
   { id: 'hongik', imgSrc: hongikImg, alt: '홍익대학교' },
   { id: 'ewha', imgSrc: ewhaImg, alt: '이화여자대학교' },
+  { id: 'sinchon', imgSrc: sinchonImg, alt: '신촌역 근처' },
   { id: 'hapjeong', imgSrc: hapjeongImg, alt: '합정역 근처' },
-  { id: 'all', imgSrc: allSpotImg, alt: '전체 모아보기' },
 ];
 
 interface CategoryCardProps {
@@ -35,9 +36,11 @@ export function CategoryCard({ id, selected, onSelect, imgSrc, alt }: CategoryCa
       className={`
         w-full h-32 rounded-2xl flex flex-col items-center justify-center gap-2
         border-0 outline-none transition-all duration-200
-        ${isActive
-          ? 'bg-[#F2EBE3] shadow-md ring-1 ring-[#C4A882]'
-          : 'bg-white shadow-sm hover:bg-[#FAF7F4] hover:shadow-md'}
+        ${
+          isActive
+            ? 'bg-[#F2EBE3] shadow-md ring-1 ring-[#C4A882]'
+            : 'bg-white shadow-sm hover:bg-[#FAF7F4] hover:shadow-md'
+        }
       `}
     >
       <img src={imgSrc} alt={alt} className="w-14 h-14 object-contain" />

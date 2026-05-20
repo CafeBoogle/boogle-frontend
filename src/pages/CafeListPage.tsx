@@ -19,6 +19,8 @@ export default function CafeListPage() {
   const [sortBy, setSortBy] = useState<SortKey | null>(null);
   const [selectedCafe, setSelectedCafe] = useState<KakaoCafe | null>(null);
   const [showTagInfo, setShowTagInfo] = useState(false);
+  // [추가] 리뷰 있는 카페만 보기 토글
+  const [showOnlyWithReviews, setShowOnlyWithReviews] = useState(false);
 
   const state = location.state || { region: 'sogang', door: '정문' };
   const { region, door } = state;
@@ -103,6 +105,9 @@ export default function CafeListPage() {
 
   const displayedCafes = cafes
     .filter((cafe) => {
+      // [추가] 리뷰 있는 카페만 보기 ON이면 reviewCount > 0인 카페만 통과
+      if (showOnlyWithReviews && !(cafe.score?.reviewCount && cafe.score.reviewCount > 0))
+        return false;
       if (selectedFilters.length === 0) return true;
       return selectedFilters.every((fKey) => {
         const sKey = SCORE_FILTERS.find((f) => f.key === fKey)?.scoreKey;
@@ -130,11 +135,15 @@ export default function CafeListPage() {
           >
             ?
           </button>
+          {/* <button
+            onClick={() => setShowOnlyWithReviews((prev) => !prev)}
+            className="mt-1 w-6 h-6 rounded-full border border-stone-300 text-stone-400 text-xs flex items-center justify-center hover:border-[#8B7368] hover:text-[#8B7368] transition-colors"
+          >
+            리뷰 있는 카페만 보기
+          </button> */}
         </div>
       </header>
-
       {showTagInfo && <TagInfoModal onClose={() => setShowTagInfo(false)} />}
-
       <FilterBar
         selectedFilters={selectedFilters}
         sortBy={sortBy}
@@ -142,6 +151,18 @@ export default function CafeListPage() {
         onSort={setSortBy}
       />
 
+      <div className="px-6 pb-3 shrink-0">
+        <button
+          onClick={() => setShowOnlyWithReviews((prev) => !prev)}
+          className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
+            showOnlyWithReviews
+              ? 'bg-[#4A3A2E] text-white border-[#4A3A2E]'
+              : 'bg-white text-stone-500 border-stone-200'
+          }`}
+        >
+          리뷰 있는 카페만 보기
+        </button>
+      </div>
       <main className="flex-1 overflow-y-auto px-4 py-3">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-32 gap-3">
@@ -161,11 +182,9 @@ export default function CafeListPage() {
           </div>
         )}
       </main>
-
       {selectedCafe && (
         <CafeDetailPanel cafe={selectedCafe} onClose={() => setSelectedCafe(null)} />
       )}
-
       {!selectedCafe && (
         <div className="px-4 py-4 border-t border-gray-100 bg-white shrink-0">
           <Button onClick={() => navigate('/category')} variant="brown4" size="full">
