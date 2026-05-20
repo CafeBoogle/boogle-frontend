@@ -1,23 +1,25 @@
 import axios, { AxiosInstance } from 'axios';
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://www.api.moonsunpower.com/boogle';
+
+// 일반 요청용
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://www.api.moonsunpower.com/boogle',
+  baseURL: BASE_URL,
+  withCredentials: true,
+});
+
+// refresh 전용 (interceptor 없는 순수 인스턴스)
+const authAxios = axios.create({
+  baseURL: BASE_URL,
   withCredentials: true,
 });
 
 // Access Token 헤더 자동 첨부
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('accessToken');
-
-  console.log('저장된 토큰:', token);
-  console.log('Authorization 헤더:', config.headers.Authorization);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-
-  // ✅ 설정 후에 출력
-  console.log('저장된 토큰:', token);
-  console.log('Authorization 헤더:', config.headers.Authorization);
-
   return config;
 });
 
@@ -26,12 +28,6 @@ axiosInstance.interceptors.response.use(
   (res) => res,
   async (error) => {
     const originalRequest = error.config;
-
-    // refresh 요청이면 무시
-    if (originalRequest.url?.includes('/auth/refresh')) {
-      return Promise.reject(error);
-    }
-
     const errorMessage = error.response?.data;
 
     if (
@@ -42,7 +38,8 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const res = await axiosInstance.post('/auth/refresh');
+        // authAxios 사용 → 만료된 토큰 안 붙음
+        const res = await authAxios.post('/auth/refresh');
         const newToken = res.data.accessToken;
 
         localStorage.setItem('accessToken', newToken);
