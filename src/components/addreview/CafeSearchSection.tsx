@@ -15,6 +15,7 @@ const CafeSearchSection = ({ onSelect }: CafeSearchSectionProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = (keyword: string) => {
+    if (!keyword || keyword === selectedName) return;
     search(keyword);
     setOpen(true);
   };
