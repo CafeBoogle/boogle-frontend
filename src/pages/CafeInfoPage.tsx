@@ -117,9 +117,10 @@ function CafeInfoPage() {
                 .map((review, i) => (
                   <div key={i} className="flex items-start gap-2">
                     <span className="text-[#8B7368] mt-0.5">💬</span>
-                    <p className="text-sm text-gray-700 leading-relaxed">{review.nickname}</p>
-
-                    <p className="text-sm text-gray-700 leading-relaxed">{review.shortReview}</p>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-[#8B7368]">{review.nickname}</span>
+                      <p className="text-sm text-gray-700 leading-relaxed">{review.shortReview}</p>
+                    </div>
                   </div>
                 ))}
             </div>
