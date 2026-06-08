@@ -25,6 +25,7 @@ const AddReviewPage = () => {
   const [comment, setComment] = useState<string>('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [ratings, setRatings] = useState<Record<string, number>>(INITIAL_RATINGS);
+  const [unknowns, setUnknowns] = useState<Record<string, boolean>>({});
 
   const { submitReview } = useSubmitReview();
 
@@ -37,6 +38,10 @@ const AddReviewPage = () => {
 
   const handleRatingChange = (key: string, value: number) => {
     setRatings((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleToggleUnknown = (key: string) => {
+    setUnknowns((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   const handleSelect = async (place: KakaoPlace) => {
@@ -77,7 +82,7 @@ const AddReviewPage = () => {
         <span className="text-red-500 text-s">*</span>
         <div className="flex-1 h-px bg-stone-200" />
       </div>
-      <RatingSliderList ratings={ratings} onChange={handleRatingChange} />
+      <RatingSliderList ratings={ratings} onChange={handleRatingChange} unknowns={unknowns} onToggleUnknown={handleToggleUnknown} />
 
       <div className="mb-8">
         <TextInput placeholder="한 줄 리뷰를 작성해주세요" value={comment} onChange={setComment} />
@@ -88,7 +93,12 @@ const AddReviewPage = () => {
       <Button
         variant="brown4"
         size="full"
-        onClick={() => submitReview({ cafeId, comment, ratings, images: selectedFiles })}
+        onClick={() => {
+          const finalRatings = Object.fromEntries(
+            Object.entries(ratings).map(([k, v]) => [k, unknowns[k] ? -1 : v])
+          );
+          submitReview({ cafeId, comment, ratings: finalRatings, images: selectedFiles });
+        }}
       >
         저장
       </Button>
