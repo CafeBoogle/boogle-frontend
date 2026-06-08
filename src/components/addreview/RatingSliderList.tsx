@@ -12,9 +12,11 @@ const sliderConfig = [
 interface RatingSliderListProps {
   ratings: Record<string, number>;
   onChange: (key: string, value: number) => void;
+  unknowns: Record<string, boolean>;
+  onToggleUnknown: (key: string) => void;
 }
 
-const RatingSliderList = ({ ratings, onChange }: RatingSliderListProps) => {
+const RatingSliderList = ({ ratings, onChange, unknowns, onToggleUnknown }: RatingSliderListProps) => {
   return (
     <div className="space-y-6 mb-8">
       {sliderConfig.map(({ key, label, tip }) => (
@@ -26,6 +28,8 @@ const RatingSliderList = ({ ratings, onChange }: RatingSliderListProps) => {
           max={5}
           value={ratings[key]}
           onChange={(v) => onChange(key, v)}
+          unknown={unknowns[key] ?? false}
+          onToggleUnknown={() => onToggleUnknown(key)}
         />
       ))}
     </div>
