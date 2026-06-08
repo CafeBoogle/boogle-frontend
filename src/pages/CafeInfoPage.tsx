@@ -16,7 +16,7 @@ function CafeInfoPage() {
   const { checkDuplicate } = useSubmitReview();
 
   const handleReviewClick = async () => {
-  if (!cafe?.placeId) return;
+    if (!cafe?.placeId) return;
     const isDuplicate = await checkDuplicate(cafe.placeId);
     if (!isDuplicate) {
       navigate(`/addreview/${cafeId}`);
@@ -109,14 +109,17 @@ function CafeInfoPage() {
         {/* 한줄리뷰 */}
         <div className="bg-white rounded-2xl px-5 py-5">
           <p className="text-sm font-semibold text-gray-800 mb-3">한줄리뷰</p>
-          {cafe.shortReviews && cafe.shortReviews.filter((r) => r.trim().length > 0).length > 0 ? (
+          {cafe.shortReviews &&
+          cafe.shortReviews.filter((r) => r.shortReview.trim().length > 0).length > 0 ? (
             <div className="flex flex-col gap-2">
               {cafe.shortReviews
-                .filter((review) => review.trim().length > 0)
+                .filter((review) => review.shortReview.trim().length > 0)
                 .map((review, i) => (
                   <div key={i} className="flex items-start gap-2">
                     <span className="text-[#8B7368] mt-0.5">💬</span>
-                    <p className="text-sm text-gray-700 leading-relaxed">{review}</p>
+                    <p className="text-sm text-gray-700 leading-relaxed">{review.nickname}</p>
+
+                    <p className="text-sm text-gray-700 leading-relaxed">{review.shortReview}</p>
                   </div>
                 ))}
             </div>
@@ -134,12 +137,7 @@ function CafeInfoPage() {
 
         {/* 버튼 영역 */}
         <div className="flex flex-col gap-2 mt-4">
-          <Button
-            variant="brown4"
-            size="full"
-            textColor="white"
-            onClick={handleReviewClick}
-          >
+          <Button variant="brown4" size="full" textColor="white" onClick={handleReviewClick}>
             ✏️ 리뷰 등록하기
           </Button>
           <div className="flex gap-2">

@@ -11,7 +11,7 @@ type CafeDetail = {
   contact?: string;
   imageName?: string[];
   tags?: string[];
-  shortReviews?: string[];
+  shortReviews?: { nickname: string; shortReview: string }[];
   score: {
     reviewCount: number;
     toiletScoreAvg: number;
