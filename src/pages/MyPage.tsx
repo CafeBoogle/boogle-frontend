@@ -79,7 +79,15 @@ export default function MyPage() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <p className="text-lg font-bold text-gray-900">{user.nickname} 님</p>
+            <div className="flex items-center gap-2">
+              <p className="text-lg font-bold text-gray-900">{user.nickname} 님</p>
+              <button
+                onClick={() => navigate('/mypage/edit-nickname')}
+                className="text-xs text-[#8B7368] border border-[#C9B8A8] rounded-lg px-3 py-0.5 hover:bg-[#F5EDE8] transition"
+              >
+                닉네임 변경
+              </button>
+            </div>
             <span
               className={`text-xs font-semibold px-2 py-0.5 rounded-full w-fit ${
                 user.provider === 'KAKAO' ? 'bg-[#FEE500] text-gray-800' : 'bg-[#03C75A] text-white'
