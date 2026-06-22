@@ -12,6 +12,7 @@ import CafeListPage from '@/pages/CafeListPage';
 import CafeInfoPage from '@/pages/CafeInfoPage';
 import AddReviewPage from '@/pages/AddReviewPage';
 import EditReviewPage from '@/pages/EditReviewPage';
+import EditNicknamePage from '@/pages/EditNicknamePage';
 import AuthSuccess from '@/pages/AuthSuccess';
 import DebugPage from '@/pages/DebugPage';
 
@@ -29,6 +30,7 @@ const publicRoutes = [
 
 const protectedRoutes = [
   { path: '/mypage', element: <MyPage /> },
+  { path: '/mypage/edit-nickname', element: <EditNicknamePage /> },
   { path: '/addreview', element: <AddReviewPage /> },
   { path: '/addreview/:cafeId', element: <AddReviewPage /> },
 ];
