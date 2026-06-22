@@ -7,12 +7,14 @@ import CafeStudyGauge from '@/components/cafe/CafeStudyGauge';
 import CafeScoreCards from '@/components/cafe/CafeScoreCards';
 import { useCafeInfo, toImageUrl } from '@/hooks/useCafeInfo';
 import { useSubmitReview } from '@/hooks/useSubmitReview';
+import ReportModal from '@/components/modals/ReportModal';
 
 function CafeInfoPage() {
   const { cafeId } = useParams<{ cafeId: string }>();
   const navigate = useNavigate();
   const { cafe, isWished, isLoading, handleWishToggle } = useCafeInfo(cafeId);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isReportOpen, setIsReportOpen] = useState(false);
   const { checkDuplicate } = useSubmitReview();
 
   const handleReviewClick = async () => {
@@ -36,38 +38,44 @@ function CafeInfoPage() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)] bg-gray-50">
       {/* 헤더 카드 */}
-      <div className="bg-white px-6 pt-5 pb-5 shadow-sm">
-        <div className="flex items-start justify-between ">
-          <h1 className="text-xl font-bold text-gray-900 leading-snug break-keep">
+      <div className="bg-white px-6 pt-5 pb-4 shadow-sm">
+        {' '}
+        <div className="flex items-start justify-between gap-4">
+          <h1 className="min-w-0 text-xl font-bold leading-snug break-keep text-gray-900">
             ☕ {cafe.name}
           </h1>
+
           {cafe.placeId && (
             <a
               href={`https://place.map.kakao.com/${cafe.placeId}`}
               target="_blank"
               rel="noreferrer"
-              className="shrink-0 flex items-center gap-1 px-3 py-1.5 bg-[#F9E000] text-gray-900 text-xs font-semibold rounded-lg"
+              className="shrink-0 rounded-lg bg-[#F9E000] px-3 py-1.5 text-xs font-semibold text-gray-900"
             >
               Kakao Map ↗
             </a>
           )}
         </div>
-
-        {/* 태그 */}
         {cafe.tags && cafe.tags.length > 0 && (
-          <div className="bg-white rounded-2xl px-1 pt-5">
-            <div className="flex flex-wrap gap-2">
-              {cafe.tags.map((tag, i) => (
-                <span
-                  key={i}
-                  className="text-xs font-semibold text-[#8B7368] bg-[#F5EDE8] px-3 py-1.5 rounded-full"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {cafe.tags.map((tag, i) => (
+              <span
+                key={i}
+                className="rounded-full bg-[#F5EDE8] px-3 py-1.5 text-xs font-normal text-[#8B7368]"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         )}
+        <div className="mt-[-8px] mr-2 flex justify-end">
+          <button
+            onClick={() => setIsReportOpen(true)}
+            className="text-[11px] font-medium text-red-600 underline underline-offset-4 transition hover:cursor-pointer hover:text-red-400"
+          >
+            정보 수정 제안
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-3 px-4 py-4">
@@ -118,7 +126,9 @@ function CafeInfoPage() {
                   <div key={i} className="flex items-start gap-2">
                     <span className="text-[#8B7368] mt-0.5">💬</span>
                     <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-[#8B7368]">{review.nickname}</span>
+                      <span className="text-xs font-semibold text-[#8B7368]">
+                        {review.nickname}
+                      </span>
                       <p className="text-sm text-gray-700 leading-relaxed">{review.shortReview}</p>
                     </div>
                   </div>
@@ -164,6 +174,7 @@ function CafeInfoPage() {
       </div>
 
       <ImageModal image={selectedImage} onClose={() => setSelectedImage(null)} />
+      {isReportOpen && <ReportModal cafeName={cafe.name} onClose={() => setIsReportOpen(false)} />}
     </div>
   );
 }
