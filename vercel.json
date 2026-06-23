@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://www.api.moonsunpower.com/boogle/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
     }
   ]
 }
